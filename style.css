@@ -1,0 +1,90 @@
+body {
+  background: white;
+}
+
+/* navbar */
+.navbar {
+  background: #050a30;
+}
+.container .logo {
+  width: 50px;
+}
+.container .navbar-brand,
+.container .navbar-nav li a {
+  color: white;
+}
+.container .navbar-nav li a.active,
+.container .nav-item a.show {
+  color: white;
+  font-weight: bold;
+}
+.dropdown-menu {
+  background: #050a30;
+  border: solid white;
+}
+
+/* hover */
+.container .dropdown-menu a:hover {
+  color: black;
+}
+/* navbar selesai */
+
+/* content */
+.container .title {
+  border: solid rgb(255, 208, 0);
+  border-radius: 7px;
+  background: rgb(255, 208, 0);
+}
+.container .bg-image {
+  border-radius: 7px 7px 0 0;
+  background-image: url(img/bengkel-kharisma-motor.png);
+  height: 300px;
+  background-size: cover;
+}
+.container .desk {
+  border: 0.5px solid rgb(0, 0, 0, 0.3);
+  border-radius: 7px;
+}
+
+/* nota */
+.content .nota {
+  border: 0.5px solid black;
+}
+
+/* card */
+.container .card {
+  border: 0.7px solid#0275d8;
+}
+.container .card .card-subtitle {
+  font-size: 13px;
+}
+.container .card .card-text {
+  margin-left: 30%;
+}
+.container .card .icon {
+  font-size: 40px;
+  position: absolute;
+  margin-top: -63px;
+  margin-left: 57%;
+  color: #0275d8;
+}
+
+/* label */
+.container label {
+  font-weight: 500;
+}
+
+/* input */
+.container input,
+.container textarea {
+  border: 0.3px solid black;
+}
+
+/* content selesai */
+
+/* responsive */
+@media (max-width: 576px) {
+  .container .desk h6 {
+    font-size: 12px;
+  }
+}
