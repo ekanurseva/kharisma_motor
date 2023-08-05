@@ -1,5 +1,5 @@
 <?php
-include("../function.php");
+include("../controller/controller_pengguna.php");
 $data = query("SELECT * FROM pengguna");
 
 $jumlah_admin = jumlah_data("SELECT * FROM pengguna WHERE level = 'Admin'");
@@ -85,9 +85,10 @@ $jumlah_admin = jumlah_data("SELECT * FROM pengguna WHERE level = 'Admin'");
                         </thead>
                         <tbody class="text-center">
                             <?php
-                            $i = 1;
-                            foreach ($data as $p):
-                                ?>
+                                $i = 1;
+                                foreach ($data as $p):
+                                    $idpengguna = enkripsi($p['idpengguna']);
+                            ?>
                                 <tr>
                                     <th>
                                         <?php echo $i; ?>
@@ -105,14 +106,14 @@ $jumlah_admin = jumlah_data("SELECT * FROM pengguna WHERE level = 'Admin'");
                                         <?php echo $p['level']; ?>
                                     </td>
                                     <td>
-                                        <a href="edit_admin_kasir.php"><i class="bi bi-pencil-fill"></i></a>
+                                        <a href="edit_admin_kasir.php?idpengguna=<?= $idpengguna; ?>"><i class="bi bi-pencil-fill"></i></a>
                                         |
-                                        <a href="#"><i class="bi bi-trash-fill"></i></a>
+                                        <a href="../controller/controller_pengguna.php?idpengguna=<?= $idpengguna; ?>" onclick="return confirm('Apakah anda yakin ingin menghapus data?')"><i class="bi bi-trash-fill"></i></a>
                                     </td>
                                 </tr>
-                                <?php
+                            <?php
                                 $i++;
-                            endforeach
+                                endforeach
                             ?>
                         </tbody>
                     </table>

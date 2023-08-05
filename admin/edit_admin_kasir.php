@@ -1,3 +1,26 @@
+<?php 
+    require_once '../controller/controller_pengguna.php';
+
+    $idpengguna = dekripsi($_GET['idpengguna']);
+
+    $data = query("SELECT * FROM pengguna WHERE idpengguna = $idpengguna")[0];
+
+    if(isset($_POST['submit'])) {
+        if(edit($_POST) > 0) {
+            echo "<script>
+                    alert('Data Pengguna Berhasil Diubah!');
+                    document.location.href='admin_kasir.php';
+                  </script>";
+        } else {
+            echo "<script>
+                    alert('Data Pengguna Gagal Diubah!');
+                    document.location.href='admin_kasir.php';
+                  </script>";
+        }
+    }
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,36 +50,41 @@
                 <h4>EDIT DATA ADMIN DAN KASIR</h4>
             </div>
             <div class="box mt-4 mx-4">
-                <div class="mb-3">
-                    <label for="nama" class="form-label">Nama</label>
-                    <input type="text" class="form-control" id="nama" value="">
-                </div>
-                <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" value="">
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <div class="mb-3">
-                            <label for="pw-1" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="pw-1" value="">
+                <form action="" method="post">
+                    <input type="hidden" name="idpengguna" value="<?= $data['idpengguna']; ?>">
+                    <input type="hidden" name="oldusername" value="<?= $data['username']; ?>">
+                    <input type="hidden" name="oldpassword" value="<?= $data['password']; ?>">
+                    <div class="mb-3">
+                        <label for="nama" class="form-label">Nama</label>
+                        <input type="text" class="form-control" id="nama" value="<?= $data['nama']; ?>" name="nama">
+                    </div>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" value="<?= $data['username']; ?>" name="username">
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="pw-1" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="pw-1" value="<?= $data['password']; ?>" name="pwd">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="pw-2" class="form-label">Konformasi Password</label>
+                                <input type="password" class="form-control" id="pw-2" value="<?= $data['password']; ?>" name="pwd2">
+                            </div>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <div class="mb-3">
-                            <label for="pw-2" class="form-label">Konformasi Password</label>
-                            <input type="password" class="form-control" id="pw-2" value="">
-                        </div>
+                    <div class="mb-3">
+                        <label for="nohp" class="form-label">No. Handphone</label>
+                        <input type="text" class="form-control" id="nohp" value="<?= $data['no_hp']; ?>" name="no_hp">
                     </div>
-                </div>
-                <div class="mb-3">
-                    <label for="nohp" class="form-label">No. Handphone</label>
-                    <input type="text" class="form-control" id="nohp" value="">
-                </div>
-
-                <button type="button" class="btn btn-primary w-100">
-                    Update
-                </button>
+    
+                    <button type="submit" class="btn btn-primary w-100" name="submit">
+                        Update
+                    </button>
+                </form>
             </div>
         </div>
     </div>

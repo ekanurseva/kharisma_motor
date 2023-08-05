@@ -44,7 +44,7 @@ function dekripsi($teks)
 function enkripsi($teks)
 {
     $text = $teks;
-    $kunci = 'pernapasan';
+    $kunci = 'kharisma_motor';
     $key = hash('sha256', $kunci);
     $pkey = "123";
 
