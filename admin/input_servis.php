@@ -1,3 +1,22 @@
+<?php
+require_once('../controller/controller_servis.php');
+
+if (isset($_POST["submit_servis"])) {
+    if (input_servis($_POST) > 0) {
+        echo "
+        <script>
+        alert('Data Berhasil Ditambah');
+        document.location.href='servis.php';
+        </script>
+        ";
+    } else {
+        echo "<script>
+        alert('Data Gagal Ditambah');
+        </script>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,23 +46,27 @@
                 <h4>INPUT DATA SERVIS</h4>
             </div>
             <div class="box mt-4 mx-4">
-                <div class="mb-3">
-                    <label for="jservis" class="form-label">Jenis Servis</label>
-                    <input type="text" class="form-control" id="jservis" placeholder="masukkan jenis servis">
-                </div>
-                <div class="mb-3">
-                    <label for="deskripsi" class="form-label">Deskripsi</label>
-                    <textarea class="form-control" id="deskripsi" rows="3"
-                        placeholder="masukkan deskripsi servis"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="harga" class="form-label">Harga Jasa</label>
-                    <input type="text" class="form-control" id="harga" placeholder="masukkan nominal harga jasa servis">
-                </div>
+                <form method="post" action="">
+                    <div class="mb-3">
+                        <label for="jservis" class="form-label">Jenis Servis</label>
+                        <input type="text" class="form-control" id="jservis" name="jenis"
+                            placeholder="masukkan jenis servis">
+                    </div>
+                    <div class="mb-3">
+                        <label for="deskripsi" class="form-label">Deskripsi</label>
+                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3"
+                            placeholder="masukkan deskripsi servis"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="harga" class="form-label">Harga Jasa</label>
+                        <input type="text" class="form-control" name="harga_jasa" id="harga"
+                            placeholder="masukkan nominal harga jasa servis">
+                    </div>
 
-                <button type="button" class="btn btn-primary w-100">
-                    Submit
-                </button>
+                    <button type="submit" name="submit_servis" class="btn btn-primary w-100">
+                        Submit
+                    </button>
+                </form>
             </div>
         </div>
     </div>

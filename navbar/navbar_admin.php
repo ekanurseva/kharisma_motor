@@ -23,6 +23,7 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="transaksi.php">Transaksi</a></li>
                         <li><a class="dropdown-item" href="servis.php">Data Servis</a></li>
+                        <li><a class="dropdown-item" href="keluhan.php">Data Keluhan</a></li>
                         <li><a class="dropdown-item" href="sparepart.php">Data Sparepart</a></li>
                         <li><a class="dropdown-item" href="status_antrian.php">Status Antrian</a></li>
                         <li>

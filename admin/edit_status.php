@@ -1,3 +1,29 @@
+<?php
+require_once('../controller/controller_status_antrian.php');
+
+$idstatus = dekripsi($_GET['id']);
+$data_status = query("SELECT * FROM status_antrian WHERE idstatus = $idstatus")[0];
+
+if (isset($_POST['submit_status'])) {
+    if (edit_status($_POST) > 0) {
+        echo "
+                <script>
+                alert('Data Berhasil Diubah');
+                document.location.href='status_antrian.php';
+                </script>
+            ";
+    } else {
+        echo "
+                <script>
+                alert('Data Gagal Diubah');
+                document.location.href='status_antrian.php';
+                </script>
+            ";
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,18 +53,25 @@
                 <h4>EDIT STATUS ANTRIAN</h4>
             </div>
             <div class="box mt-4 mx-4">
-                <div class="mb-3">
-                    <label for="status" class="form-label">Status Antrian</label>
-                    <input type="text" class="form-control" id="status" value="">
-                </div>
-                <div class="mb-3">
-                    <label for="deskripsi" class="form-label">Deskripsi</label>
-                    <textarea class="form-control" id="deskripsi" rows="3"></textarea>
-                </div>
+                <form method="post" action="">
+                    <input type="hidden" name="idstatus" value="<?= $data_status['idstatus']; ?>">
+                    <input type="hidden" name="oldstatus" value="<?= $data_status['status']; ?>">
 
-                <button type="button" class="btn btn-primary w-100">
-                    Update
-                </button>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status Antrian</label>
+                        <input type="text" name="status" value="<?php echo $data_status['status']; ?>"
+                            class="form-control" id="status" placeholder="masukkan status antrian">
+                    </div>
+                    <div class="mb-3">
+                        <label for="deskripsi" class="form-label">Deskripsi</label>
+                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3"
+                            placeholder="masukkan deskripsi status antrian"><?php echo $data_status['deskripsi']; ?></textarea>
+                    </div>
+
+                    <button type="submit" name="submit_status" class="btn btn-primary w-100">
+                        Update
+                    </button>
+                </form>
             </div>
         </div>
     </div>

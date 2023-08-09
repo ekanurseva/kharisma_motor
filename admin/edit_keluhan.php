@@ -1,28 +1,31 @@
 <?php
-require_once('../controller/controller_servis.php');
+require_once('../controller/controller_keluhan.php');
 
-$idservis = dekripsi($_GET['id']);
-$data = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
+$idkeluhan = dekripsi($_GET['id']);
+$data = query("SELECT * FROM jenis_keluhan WHERE idjkeluhan = $idkeluhan")[0];
 
-if (isset($_POST['submit_servis'])) {
-    if (edit_servis($_POST) > 0) {
+$idservis = mysqli_query($conn, "SELECT * FROM servis ORDER BY idservis DESC");
+
+if (isset($_POST['submit_keluhan'])) {
+    if (edit_keluhan($_POST) > 0) {
         echo "
                 <script>
                 alert('Data Berhasil Diubah');
-                document.location.href='servis.php';
+                document.location.href='keluhan.php';
                 </script>
             ";
     } else {
         echo "
                 <script>
                 alert('Data Gagal Diubah');
-                document.location.href='servis.php';
+                document.location.href='keluhan.php';
                 </script>
             ";
     }
 }
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -49,31 +52,31 @@ if (isset($_POST['submit_servis'])) {
     <div class="container">
         <div class="content py-3">
             <div class="title text-center text-uppercase">
-                <h4>EDIT DATA SERVIS</h4>
+                <h4>EDIT DATA KELUHAN</h4>
             </div>
             <div class="box mt-4 mx-4">
                 <form method="post" action="">
-                    <input type="hidden" name="idservis" value="<?= $data['idservis']; ?>">
-                    <input type="hidden" name="oldjenis" value="<?= $data['jenis_servis']; ?>">
+                    <input type="hidden" name="idkeluhan" value="<?php echo $data['idjkeluhan']; ?>">
+                    <input type="hidden" name="oldidservis" value="<?php echo $data['idservis']; ?>">
+                    <input type="hidden" name="oldkeluhan" value="<?php echo $data['keluhan']; ?>">
 
                     <div class="mb-3">
-                        <label for="jservis" class="form-label">Jenis Servis</label>
-                        <input type="text" class="form-control" id="jservis"
-                            value="<?php echo $data['jenis_servis']; ?>" name="jenis"
-                            placeholder="masukkan jenis servis">
+                        <label class="form-label">Jenis Servis</label>
+                        <select class="form-control" name="idservis" require style="border: 0.3px solid black;">
+                            <option value="" hidden selected>--Pilih Jenis Servis--</option>
+                            <?php foreach ($idservis as $servis): ?>
+                                <option value="<?php echo $servis['idservis'] ?>" <?php echo ($servis['idservis'] == $data['idservis']) ? 'selected' : ''; ?>><?php echo $servis['jenis_servis'] ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="mb-3">
-                        <label for="deskripsi" class="form-label">Deskripsi</label>
-                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3"
-                            placeholder="masukkan deskripsi servis"><?php echo $data['deskripsi']; ?></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="harga" class="form-label">Harga Jasa</label>
-                        <input type="text" class="form-control" value="<?php echo $data['harga_jasa']; ?>"
-                            name="harga_jasa" id="harga" placeholder="masukkan nominal harga jasa servis">
+                        <label for="keluhan" class="form-label">Jenis Keluhan</label>
+                        <input type="text" name="keluhan" value="<?php echo $data['keluhan']; ?>" class="form-control"
+                            id="keluhan" placeholder="masukkan keluhan">
                     </div>
 
-                    <button type="submit" name="submit_servis" class="btn btn-primary w-100">
+                    <button type="submit" name="submit_keluhan" class="btn btn-primary w-100">
                         Update
                     </button>
                 </form>
@@ -94,8 +97,7 @@ if (isset($_POST['submit_servis'])) {
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
         crossorigin="anonymous"></script>
     <script src="bootstrap-5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="../script.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>\
 </body>
 
 </html>

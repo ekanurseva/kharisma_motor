@@ -1,11 +1,8 @@
 <?php
-include("../controller/controller_pengguna.php");
-$data = query("SELECT * FROM pengguna");
+include("../controller/controller_keluhan.php");
 
-$jumlah_admin = jumlah_data("SELECT * FROM pengguna WHERE level = 'Admin'");
-$jumlah_kasir = jumlah_data("SELECT * FROM pengguna WHERE level = 'Kasir'");
-$jumlah_user = jumlah_data("SELECT * FROM pengguna WHERE level = 'User'");
-
+$data = query("SELECT * FROM jenis_keluhan");
+$jumlah_keluhan = jumlah_data("SELECT * FROM jenis_keluhan");
 ?>
 
 <!DOCTYPE html>
@@ -37,94 +34,62 @@ $jumlah_user = jumlah_data("SELECT * FROM pengguna WHERE level = 'User'");
     <div class="container">
         <div class="content py-3">
             <div class="title text-center text-uppercase">
-                <h4>KELOLA DATA ADMIN DAN KASIR</h4>
+                <h4>KELOLA DATA KELUHAN</h4>
             </div>
             <div class="row">
-                <div class="col-2">
+                <div class="col-3 me-4 ms-4">
                     <div class="card my-4">
                         <div class="card-body">
-                            <a href="input_admin.php" class="fw-medium text-decoration-none">
+                            <a href="input_keluhan.php" class="fw-medium text-decoration-none">
                                 <i class="bi bi-plus-circle"></i>
-                                <span>Admin</span>
+                                <span>Input Data Keluhan</span>
                             </a>
                             <hr style="margin-top: 3px;  color: #0275d8; opacity: 1;">
-                            <h6 class="card-subtitle ms-1">Jumlah Admin</h6>
+                            <h6 class="card-subtitle ms-2">Jumlah Data Keluhan</h6>
                             <p class="card-text fw-bold">
-                                <?php echo $jumlah_admin; ?>
+                                <?php echo $jumlah_keluhan; ?>
                             </p>
-                            <i class="icon bi bi-person-fill-check"></i>
-                        </div>
-                    </div>
-                    <div class="card my-4">
-                        <div class="card-body">
-                            <span class="fw-medium text-primary">
-                                Data Pelanggan
-                            </span>
-                            <hr style="margin-top: 3px;  color: #0275d8; opacity: 1;">
-                            <h6 class="card-subtitle ms-4">Jumlah</h6>
-                            <p class="card-text fw-bold">
-                                <?php echo $jumlah_user; ?>
-                            </p>
-                            <i class="icon bi bi-person-fill-check"></i>
+                            <i class="icon bi bi-grid-3x3-gap"></i>
                         </div>
                     </div>
                 </div>
-                <div class="col-2">
-                    <div class="card my-4">
-                        <div class="card-body">
-                            <a href="input_kasir.php" class="fw-medium text-decoration-none">
-                                <i class="bi bi-plus-circle"></i>
-                                <span>Kasir</span>
-                            </a>
-                            <hr style="margin-top: 3px;  color: #0275d8; opacity: 1;">
-                            <h6 class="card-subtitle ms-2">Jumlah Kasir</h6>
-                            <p class="card-text fw-bold">
-                                <?php echo $jumlah_kasir; ?>
-                            </p>
-                            <i class="icon bi bi-person-fill-check"></i>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="col-8 mt-4">
-                    <table class="table table-hover mt-2" id="example">
+                    <table class="table table-hover mt-3" id="example">
                         <thead>
                             <tr class="text-center">
                                 <th scope="col">No</th>
-                                <th scope="col">Username</th>
-                                <th scope="col">Nama</th>
-                                <th scope="col">No HP</th>
-                                <th scope="col">Level</th>
+                                <th scope="col">Jenis Servis</th>
+                                <th scope="col">Keluhan</th>
                                 <th scope="col">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="text-center">
+                        <tbody class="text-start">
                             <?php
                             $i = 1;
-                            foreach ($data as $p):
-                                $idpengguna = enkripsi($p['idpengguna']);
+                            foreach ($data as $keluhan):
+                                $idkeluhan = enkripsi($keluhan['idjkeluhan']);
                                 ?>
                                 <tr>
                                     <th>
                                         <?php echo $i; ?>
                                     </th>
+
+                                    <?php
+                                    $idservis = $keluhan['idservis'];
+                                    $jenis_servis = query("SELECT jenis_servis FROM servis WHERE idservis = $idservis")[0];
+                                    ?>
                                     <td>
-                                        <?php echo $p['username']; ?>
+                                        <?php echo $jenis_servis['jenis_servis']; ?>
                                     </td>
                                     <td>
-                                        <?php echo $p['nama']; ?>
+                                        <?php echo $keluhan['keluhan']; ?>
                                     </td>
                                     <td>
-                                        <?php echo $p['no_hp']; ?>
-                                    </td>
-                                    <td>
-                                        <?php echo $p['level']; ?>
-                                    </td>
-                                    <td>
-                                        <a href="edit_admin_kasir.php?id=<?= $idpengguna; ?>"><i
+                                        <a href="edit_keluhan.php?id=<?= $idkeluhan; ?>"><i
                                                 class="bi bi-pencil-fill"></i></a>
                                         |
-                                        <a href="../controller/controller_pengguna.php?idpengguna=<?= $idpengguna; ?>"
+                                        <a style="text-decoration: none;"
+                                            href="../controller/controller_keluhan.php?idjkeluhan=<?= $idkeluhan; ?>"
                                             onclick="return confirm('Apakah anda yakin ingin menghapus data?')"><i
                                                 class="bi bi-trash-fill"></i></a>
                                     </td>

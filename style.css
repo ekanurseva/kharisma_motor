@@ -80,6 +80,11 @@ body {
   border: 0.3px solid black;
 }
 
+.boxx {
+  border: solid black;
+  border-radius: 12px;
+  margin: 50px 0;
+}
 /* content selesai */
 
 /* responsive */

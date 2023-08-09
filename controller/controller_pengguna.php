@@ -38,54 +38,62 @@ function register_admin($data)
 }
 // Fungsi Registrasi Admin Selesai
 
-// Fungsi Registrasi Admin
-function edit($data)
+// Fungsi Edit Pengguna
+function edit_pengguna($data)
 {
     global $conn;
 
     $idpengguna = $data['idpengguna'];
-    $oldusername = $data['oldusername'];
-    $oldpassword = $data['oldpassword'];
+    $oldnama = htmlspecialchars($data['oldnama']);
+    $oldusername = strtolower(stripslashes($data["oldusername"]));
+    $oldpassword = mysqli_real_escape_string($conn, $data["oldpwd"]);
     $nama = htmlspecialchars($data['nama']);
     $username = strtolower(stripslashes($data["username"]));
     $password = mysqli_real_escape_string($conn, $data["pwd"]);
     $password2 = mysqli_real_escape_string($conn, $data["pwd2"]);
-    $no_hp = $data['no_hp'];
+    $no_hp = $data['nohp'];
 
-    if($oldusername !== $username) {
-        $result = mysqli_query($conn, "SELECT username FROM pengguna WHERE username = '$username'") or die(mysqli_error($conn));
+    if (isset($data['oldlevel'])) {
+        $level = $data['oldlevel'];
+    } else {
+        $level = $data['level'];
+    }
+
+    if ($username !== $oldusername) {
+        $result = mysqli_query($conn, "SELECT username FROM pengguna WHERE username = '$username'");
+
         if (mysqli_fetch_assoc($result)) {
             echo "<script>
-                    alert('Username Sudah Dipakai! Silahkan gunakan username lain');
-                    document.location.href='../admin/admin_kasir.php';
-                  </script>";
-            exit();
+                alert('Username pengguna Sudah Digunakan! Silahkan pakai username lain.');
+            </script>";
+            return false;
         }
     }
-    if ($password !== $password2) {
-        echo "<script>
-                alert('Password Tidak Sesuai!');
-              </script>";
-        exit();
-    }
 
-    if($oldpassword !== $password) {
+    if ($password !== $oldpassword) {
+        if ($password !== $password2) {
+            echo "<script>
+                    alert('Password Tidak Sesuai!');
+                  </script>";
+            return false;
+        }
+
         $password = password_hash($password2, PASSWORD_DEFAULT);
     }
 
-    // //jika password sama, masukkan data ke database
     $query = "UPDATE pengguna SET 
-        username = '$username',
-        password = '$password',
-        nama = '$nama',
-        no_hp = '$no_hp'
-    WHERE idpengguna = '$idpengguna'
-    ";
+                    username = '$username',
+                    password = '$password',
+                    nama = '$nama',
+                    no_hp = '$no_hp',
+                    level = '$level'
+              WHERE idpengguna = '$idpengguna'
+            ";
     mysqli_query($conn, $query);
 
     return mysqli_affected_rows($conn);
 }
-// Fungsi Registrasi Admin Selesai
+// Fungsi Edit Pengguna Selesai
 
 // Fungsi Registrasi Kasir
 function register_kasir($data)
@@ -123,7 +131,43 @@ function register_kasir($data)
 }
 // Fungsi Registrasi Kasir Selesai
 
-if(isset($_GET['idpengguna'])) {
+// Fungsi Registrasi User
+function register_user($data)
+{
+    global $conn;
+
+    $nama = htmlspecialchars($data['nama']);
+    $username = strtolower(stripslashes($data["username"]));
+    $password = mysqli_real_escape_string($conn, $data["pwd"]);
+    $password2 = mysqli_real_escape_string($conn, $data["pwd2"]);
+    $no_hp = $data['no_hp'];
+    $level = "User";
+
+    $result = mysqli_query($conn, "SELECT username FROM pengguna WHERE username = '$username'") or die(mysqli_error($conn));
+    if (mysqli_fetch_assoc($result)) {
+        echo "<script>
+        alert('Username Sudah Dipakai! Silahkan gunakan username lain');
+    </script>";
+        exit();
+    }
+
+    if ($password !== $password2) {
+        echo "<script>
+        alert('Password Tidak Sesuai!');
+    </script>";
+        exit();
+    }
+
+    //enkripsi password
+    $password = password_hash($password2, PASSWORD_DEFAULT);
+
+    //jika password sama, masukkan data ke database
+    mysqli_query($conn, "INSERT INTO pengguna VALUES (NULL, '$username', '$password', '$nama', '$no_hp', '$level')");
+    return mysqli_affected_rows($conn);
+}
+// Fungsi Registrasi User Selesai
+
+if (isset($_GET['idpengguna'])) {
     global $conn;
     $idpengguna = dekripsi($_GET['idpengguna']);
 
@@ -145,5 +189,4 @@ if(isset($_GET['idpengguna'])) {
             ";
     }
 }
-
 ?>

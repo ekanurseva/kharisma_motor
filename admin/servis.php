@@ -1,3 +1,10 @@
+<?php
+include("../controller/controller_servis.php");
+
+$data = query("SELECT * FROM servis");
+$jumlah_servis = jumlah_data("SELECT * FROM servis");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,6 +14,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kharisma Motor</title>
     <link rel="Icon" href="../img/Logo.png">
+
+    <!-- data tables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 
     <!-- bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -36,81 +46,58 @@
                             </a>
                             <hr style="margin-top: 3px;  color: #0275d8; opacity: 1;">
                             <h6 class="card-subtitle">Jumlah Servis</h6>
-                            <p class="card-text fw-bold">1</p>
+                            <p class="card-text fw-bold">
+                                <?php echo $jumlah_servis; ?>
+                            </p>
                             <i class="icon bi bi-tools"></i>
                         </div>
                     </div>
                 </div>
                 <div class="col-8 mt-4">
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
-
-                    <div class="dataTables_wrapper mt-3">
-                        <div class="dataTables_length">
-                            <label for="">
-                                show
-                                <select name="example_length" aria-controls="example" class="">
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                </select>
-                                entries
-                            </label>
-                        </div>
-                    </div>
-
-                    <table class="table table-hover mt-3">
-                        <thead class="text-center">
-                            <tr>
+                    <table class="table table-hover mt-3" id="example">
+                        <thead>
+                            <tr class="text-start">
                                 <th scope="col">No</th>
                                 <th scope="col">Jenis Servis</th>
                                 <th scope="col">Deskripsi</th>
-                                <th scope="col">Harga Jasa</th>
+                                <th scope="col">Harga Jasa (Rp)</th>
                                 <th scope="col">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="text-center">
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Ban</td>
-                                <td>dknasiodgavsf a</td>
-                                <td>Rp 800.000</td>
-                                <td>
-                                    <a href="edit_servis.php"><i class="bi bi-pencil-fill"></i></a>
-                                    |
-                                    <a href="#"><i class="bi bi-trash-fill"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Ban</td>
-                                <td>dknasiodgavsf a</td>
-                                <td>Rp 800.000</td>
-                                <td>
-                                    <a href="edit_servis.php"><i class="bi bi-pencil-fill"></i></a>
-                                    |
-                                    <a href="#"><i class="bi bi-trash-fill"></i></a>
-                                </td>
-                            </tr>
+                        <tbody class="text-start">
+                            <?php
+                            $i = 1;
+                            foreach ($data as $servis):
+                                $idservis = enkripsi($servis['idservis']);
+                                ?>
+                                <tr>
+                                    <th>
+                                        <?php echo $i; ?>
+                                    </th>
+                                    <td>
+                                        <?php echo $servis['jenis_servis']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $servis['deskripsi']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo number_format($servis['harga_jasa']); ?>
+                                    </td>
+                                    <td>
+                                        <a href="edit_servis.php?id=<?= $idservis; ?>"><i class="bi bi-pencil-fill"></i></a>
+                                        |
+                                        <a style="text-decoration: none;"
+                                            href="../controller/controller_servis.php?idservis=<?= $idservis; ?>"
+                                            onclick="return confirm('Apakah anda yakin ingin menghapus data?')"><i
+                                                class="bi bi-trash-fill"></i></a>
+                                    </td>
+                                </tr>
+                                <?php
+                                $i++;
+                            endforeach
+                            ?>
                         </tbody>
                     </table>
-
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-end">
-                            <li class="page-item disabled">
-                                <a class="page-link">Previous</a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
                 </div>
             </div>
         </div>
@@ -130,7 +117,12 @@
         crossorigin="anonymous"></script>
     <script src="bootstrap-5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="../script.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#example").DataTable();
+        });
+    </script>
 </body>
 
 </html>

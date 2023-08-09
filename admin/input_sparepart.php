@@ -1,3 +1,21 @@
+<?php
+require_once('../controller/controller_sparepart.php');
+
+if (isset($_POST["submit_sparepart"])) {
+    if (input_sparepart($_POST) > 0) {
+        echo "
+        <script>
+        alert('Data Berhasil Ditambah');
+        document.location.href='sparepart.php';
+        </script>
+        ";
+    } else {
+        echo "<script>
+        alert('Data Gagal Ditambah');
+        </script>";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,23 +45,27 @@
                 <h4>INPUR DATA SPAREPART</h4>
             </div>
             <div class="box mt-4 mx-4">
-                <div class="mb-3">
-                    <label for="jsparepart" class="form-label">Jenis Sparepart</label>
-                    <input type="text" class="form-control" id="jsparepart" placeholder="masukkan jenis sparepart">
-                </div>
-                <div class="mb-3">
-                    <label for="deskripsi" class="form-label">Deskripsi</label>
-                    <textarea class="form-control" id="deskripsi" rows="3"
-                        placeholder="masukkan deskripsi sparepart"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="harga" class="form-label">Harga</label>
-                    <input type="text" class="form-control" id="harga" placeholder="masukkan nominal harga sparepart">
-                </div>
+                <form method="post" action="">
+                    <div class="mb-3">
+                        <label for="jsparepart" class="form-label">Jenis Sparepart</label>
+                        <input type="text" class="form-control" name="jenis" id="jsparepart"
+                            placeholder="masukkan jenis sparepart">
+                    </div>
+                    <div class="mb-3">
+                        <label for="deskripsi" class="form-label">Deskripsi</label>
+                        <textarea class="form-control" name="deskripsi" id="deskripsi" rows="3"
+                            placeholder="masukkan deskripsi sparepart"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="harga" class="form-label">Harga</label>
+                        <input type="text" name="harga" class="form-control" id="harga"
+                            placeholder="masukkan nominal harga sparepart">
+                    </div>
 
-                <button type="button" class="btn btn-primary w-100">
-                    Submit
-                </button>
+                    <button type="submit" name="submit_sparepart" class="btn btn-primary w-100">
+                        Submit
+                    </button>
+                </form>
             </div>
         </div>
     </div>

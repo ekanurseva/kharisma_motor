@@ -1,3 +1,15 @@
+<?php
+require_once('../controller/function.php');
+
+// Seluruh data keluhan dibagi menjadi 2 kolom
+$data_keluhan = jumlah_data("SELECT * FROM jenis_keluhan");
+$data1 = ceil($data_keluhan / 2);
+$data2 = $data_keluhan - $data1;
+$kumpul1 = query("SELECT * FROM jenis_keluhan LIMIT $data1");
+$kumpul2 = query("SELECT * FROM jenis_keluhan LIMIT $data2 OFFSET $data1");
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,137 +39,121 @@
                 <h4>INPUT DAFTAR ANTRIAN</h4>
             </div>
             <div class="row">
-                <div class="col-6">
-                    <p style="text-align: justify; padding: 20px 13px;">Pilih Jenis Keluhan Mengenai Permasalahan
+                <div class="mt-2">
+                    <p style="text-align: justify; padding: 0 13px; margin-top: 10px; margin-bottom: 5px;">Pilih Jenis
+                        Keluhan Mengenai Permasalahan
                         Kendaraan Anda, Sistem Akan
                         Mendiagnosa Jenis Servis yang Perlu Dilakukan dan Data Sparepart yang Dibutuhkan yang
                         Ditunjukkan pada Estimasi Nota</p>
                     <div class="row">
                         <div class="col-6">
                             <div class="keluhan px-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="keluhan1" id="keluhan1">
-                                    <label class="form-check-label" for="keluhan1">
-                                        Keluhan 1
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="keluahan2" id="keluahan2"
-                                        checked>
-                                    <label class="form-check-label" for="keluahan2">
-                                        Keluhan 2
-                                    </label>
-                                </div>
+                                <?php
+                                foreach ($kumpul1 as $k1):
+                                    ?>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="keluhan[]"
+                                            data-idjkeluhan="<?php echo $k1['idjkeluhan']; ?>"
+                                            id="keluhan<?php echo $k1['idjkeluhan']; ?>"
+                                            value="<?php echo $k1['idjkeluhan']; ?>">
+                                        <label class="form-check-label" for="keluhan<?php echo $k1['idjkeluhan']; ?>">
+                                            <?php echo $k1['keluhan']; ?>
+                                        </label>
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="keluhan px-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="keluhan3" id="keluhan3">
-                                    <label class="form-check-label" for="keluhan3">
-                                        Keluhan 3
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="keluhan4" id="keluhan4" checked>
-                                    <label class="form-check-label" for="keluhan4">
-                                        Keluhan 4
-                                    </label>
-                                </div>
+                                <?php foreach ($kumpul2 as $k2):
+                                    ?>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="keluhan[]"
+                                            data-idjkeluhan="<?php echo $k2['idjkeluhan']; ?>"
+                                            id="keluhan<?php echo $k2['idjkeluhan']; ?>"
+                                            value="<?php echo $k2['idjkeluhan']; ?>">
+                                        <label class="form-check-label" for="keluhan<?php echo $k2['idjkeluhan']; ?>">
+                                            <?php echo $k2['keluhan']; ?>
+                                        </label>
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
                         </div>
                     </div>
                     <div class="tombol text-center pt-4">
                         <p style="font-size: 12px;">Klik Submit untuk melihat Estimasi Nota</p>
-                        <button type="button" class="btn btn-outline-success w-100 mx-3" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-outline-success w-50 mx-3" style="margin-top: -10px;"
+                            id="submitBtn">
                             Submit
                         </button>
                     </div>
-                    <h6 class="px-3 mt-4">Estimasi Nota</h6>
-                    <div class="nota px-3 ms-3 me-3">
-                        <p class="fw-semibold mt-3">Kharisma Motor</p>
-                        <p class="text-end" style="margin-top: -10px;">Playangan, 01 Juli 2023</p>
-                        <div class="row text-center fw-semibold">
-                            <div class="col-6">
-                                <p>Eka Nurseva</p>
+                    <div style="margin: 0 70px;">
+                        <h5 class="px-3 mt-4">Estimasi Nota</h5>
+                        <div class="nota px-3 ms-3 me-3">
+                            <p class="fw-semibold mt-3">Kharisma Motor</p>
+                            <p class="text-end" style="margin-top: -10px;">Playangan, 01 Juli 2023</p>
+                            <div class="row text-center fw-semibold">
+                                <div class="col-6 text-start fw-bold">
+                                    <p>Eka Nurseva S</p>
+                                </div>
                             </div>
-                            <div class="col-6">
-                                <p>Honda</p>
-                            </div>
+                            <table class="table" id="resultTable">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Jenis Servis</th>
+                                        <th scope="col">Jumlah</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
                         </div>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">No</th>
-                                    <th scope="col">Jenis Servis</th>
-                                    <th scope="col">Sparepart</th>
-                                    <th scope="col">Jumlah</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Benerin Ban</td>
-                                    <td>Ban</td>
-                                    <td>Rp 200.000</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Benerin Ban</td>
-                                    <td>Ban</td>
-                                    <td>Rp 200.000</td>
-                                </tr>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th>Total Pembayaran</th>
-                                    <th>Rp 400.000</th>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
-                <div class="col-6">
-                    <p style="text-align: justify; padding: 20px 13px;">Setelah Memilih Jenis Keluhan, Masukkan
-                        Identitas dan Data Kendaraan Anda Di Sini Untuk Mendaftar Antrian dan Mendapat Nomor Antrian</p>
-                    <div class="identitas px-3">
-                        <div class="mb-3">
-                            <label for="nama" class="form-label">Nama</label>
-                            <input type="text" class="form-control" id="nama" placeholder="masukkan nama anda">
-                        </div>
-                        <div class="mb-3">
-                            <label for="telepon" class="form-label">No. Handphone</label>
-                            <input type="text" class="form-control" id="telepon" placeholder="masukkan nama anda">
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="mb-3">
-                                    <label for="kendaraan" class="form-label">Jenis Kendaraan</label>
-                                    <input type="text" class="form-control" id="kendaraan"
-                                        placeholder="masukkan kendaraan anda">
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="mb-3">
-                                    <label for="no_pol" class="form-label">Nomor Polisi</label>
-                                    <input type="text" class="form-control" id="no_pol"
-                                        placeholder="masukkan no polisi anda">
-                                </div>
+            </div>
+            <div class="mt-3">
+                <p style="text-align: justify; padding: 0 13px; margin-top: 35px;">Setelah Memilih Jenis Keluhan,
+                    Masukkan Identitas dan Data Kendaraan Anda Di Sini Untuk Mendaftar Antrian dan Mendapat Nomor
+                    Antrian</p>
+                <div class="identitas px-3">
+                    <div class="mb-3">
+                        <label for="nama" class="form-label">Nama</label>
+                        <input type="text" class="form-control" id="nama" placeholder="masukkan nama anda">
+                    </div>
+                    <div class="mb-3">
+                        <label for="telepon" class="form-label">No. Handphone</label>
+                        <input type="text" class="form-control" id="telepon" placeholder="masukkan nama anda">
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="kendaraan" class="form-label">Jenis Kendaraan</label>
+                                <input type="text" class="form-control" id="kendaraan"
+                                    placeholder="masukkan kendaraan anda">
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="alamat" class="form-label">Alamat</label>
-                            <textarea class="form-control" id="alamat" rows="3"
-                                placeholder="masukkan alamat anda"></textarea>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="no_pol" class="form-label">Nomor Polisi</label>
+                                <input type="text" class="form-control" id="no_pol"
+                                    placeholder="masukkan no polisi anda">
+                            </div>
                         </div>
                     </div>
-                    <div class="tombol text-center px-3">
-                        <button type="button" class="btn btn-success w-100">
-                            <a href="antrian.php" style="text-decoration: none; color: white;">
-                                Daftar
-                            </a>
-                        </button>
+                    <div class="mb-3">
+                        <label for="alamat" class="form-label">Alamat</label>
+                        <textarea class="form-control" id="alamat" rows="3"
+                            placeholder="masukkan alamat anda"></textarea>
                     </div>
+                </div>
+                <div class="tombol text-center px-3 justify-content-end">
+                    <button type="button" class="btn py-2 btn-success w-50">
+                        <a href="antrian.php" style="text-decoration: none; color: white;">
+                            Daftar
+                        </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -177,7 +173,46 @@
         crossorigin="anonymous"></script>
     <script src="bootstrap-5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="../script.js"></script>
+    <script>
+        document.getElementById("submitBtn").addEventListener("click", function () {
+            // Mendapatkan elemen div yang berisi checkbox yang dipilih
+            var checkboxes = document.querySelectorAll(".keluhan input[type=checkbox]:checked");
+
+            // Mendapatkan elemen tbody dari tabel hasil
+            var resultTableBody = document.getElementById("resultTable").getElementsByTagName('tbody')[0];
+
+            // Menghapus data sebelumnya
+            resultTableBody.innerHTML = "";
+
+            // Counter untuk nomor urut
+            var counter = 1;
+
+            // Loop melalui checkbox yang dipilih
+            checkboxes.forEach(function (checkbox) {
+                // Mendapatkan nilai idjkeluhan dari data-attribute checkbox
+                var idjkeluhan = checkbox.getAttribute("data-idjkeluhan");
+
+                // Mendapatkan data jenis servis dan harga dari database berdasarkan idjkeluhan
+                var jenisServis = $servis['jenis_servis']; // Isi dengan data jenis servis dari database berdasarkan idjkeluhan
+                var harga = $servis['harga_jasa']; // Isi dengan data harga dari database berdasarkan idjkeluhan
+
+                // Membuat baris baru dalam tabel hasil
+                var newRow = resultTableBody.insertRow();
+
+                // Membuat sel-sel dalam baris
+                var noCell = newRow.insertCell(0);
+                var jenisServisCell = newRow.insertCell(1);
+                var jumlahCell = newRow.insertCell(2);
+
+                // Menambahkan data ke dalam sel-sel
+                noCell.innerHTML = counter;
+                jenisServisCell.innerHTML = jenisServis;
+                jumlahCell.innerHTML = "Rp " + harga;
+                counter++;
+            });
+        });
+    </script>
+
 </body>
 
 </html>
