@@ -8,6 +8,41 @@ $data2 = $data_keluhan - $data1;
 $kumpul1 = query("SELECT * FROM jenis_keluhan LIMIT $data1");
 $kumpul2 = query("SELECT * FROM jenis_keluhan LIMIT $data2 OFFSET $data1");
 
+
+if (isset($_POST['submitBtn'])) {
+    // Mengambil data servis dari database
+    $idkeluhan = query("SELECT * FROM jenis_keluhan WHERE idjkeluhan")[0];
+    $sql = "SELECT * FROM servis WHERE idservis = $idkeluhan";
+
+    var_dump($sql);
+    $result = mysqli_query($conn, $sql);
+
+    // Mendapatkan elemen div yang berisi checkbox yang dipilih
+    $selectedCheckboxes = $_POST['keluhan'];
+
+    // Mendapatkan elemen tbody dari tabel hasil
+    $resultTableBody = '';
+
+    // Counter untuk nomor urut
+    $counter = 1;
+
+    // Loop melalui checkbox yang dipilih
+    while ($row = mysqli_fetch_assoc($result)) {
+        if (in_array($row['idservis'], $selectedCheckboxes)) {
+            $jenisServis = $row['jenis_servis'];
+            $harga = $row['harga_servis'];
+
+            // Membuat baris baru dalam tabel hasil
+            $resultTableBody .= '<tr>
+                                    <td>' . $counter . '</td>
+                                    <td>' . $jenisServis . '</td>
+                                    <td>Rp ' . $harga . '</td>
+                                 </tr>';
+
+            $counter++;
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -45,41 +80,43 @@ $kumpul2 = query("SELECT * FROM jenis_keluhan LIMIT $data2 OFFSET $data1");
                         Kendaraan Anda, Sistem Akan
                         Mendiagnosa Jenis Servis yang Perlu Dilakukan dan Data Sparepart yang Dibutuhkan yang
                         Ditunjukkan pada Estimasi Nota</p>
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="keluhan px-3">
-                                <?php
-                                foreach ($kumpul1 as $k1):
-                                    ?>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="keluhan[]"
-                                            data-idjkeluhan="<?php echo $k1['idjkeluhan']; ?>"
-                                            id="keluhan<?php echo $k1['idjkeluhan']; ?>"
-                                            value="<?php echo $k1['idjkeluhan']; ?>">
-                                        <label class="form-check-label" for="keluhan<?php echo $k1['idjkeluhan']; ?>">
-                                            <?php echo $k1['keluhan']; ?>
-                                        </label>
-                                    </div>
-                                <?php endforeach; ?>
+                    <form method="post" action="">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="keluhan px-3">
+                                    <?php
+                                    foreach ($kumpul1 as $k1):
+                                        ?>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="keluhan[]"
+                                                data-idjkeluhan="<?php echo $k1['idjkeluhan']; ?>"
+                                                id="keluhan<?php echo $k1['idjkeluhan']; ?>"
+                                                value="<?php echo $k1['idjkeluhan']; ?>">
+                                            <label class="form-check-label" for="keluhan<?php echo $k1['idjkeluhan']; ?>">
+                                                <?php echo $k1['keluhan']; ?>
+                                            </label>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="keluhan px-3">
+                                    <?php foreach ($kumpul2 as $k2):
+                                        ?>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="keluhan[]"
+                                                data-idjkeluhan="<?php echo $k2['idjkeluhan']; ?>"
+                                                id="keluhan<?php echo $k2['idjkeluhan']; ?>"
+                                                value="<?php echo $k2['idjkeluhan']; ?>">
+                                            <label class="form-check-label" for="keluhan<?php echo $k2['idjkeluhan']; ?>">
+                                                <?php echo $k2['keluhan']; ?>
+                                            </label>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="keluhan px-3">
-                                <?php foreach ($kumpul2 as $k2):
-                                    ?>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="keluhan[]"
-                                            data-idjkeluhan="<?php echo $k2['idjkeluhan']; ?>"
-                                            id="keluhan<?php echo $k2['idjkeluhan']; ?>"
-                                            value="<?php echo $k2['idjkeluhan']; ?>">
-                                        <label class="form-check-label" for="keluhan<?php echo $k2['idjkeluhan']; ?>">
-                                            <?php echo $k2['keluhan']; ?>
-                                        </label>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-                        </div>
-                    </div>
+                    </form>
                     <div class="tombol text-center pt-4">
                         <p style="font-size: 12px;">Klik Submit untuk melihat Estimasi Nota</p>
                         <button type="button" class="btn btn-outline-success w-50 mx-3" style="margin-top: -10px;"
@@ -88,28 +125,32 @@ $kumpul2 = query("SELECT * FROM jenis_keluhan LIMIT $data2 OFFSET $data1");
                         </button>
                     </div>
                     <div style="margin: 0 70px;">
-                        <h5 class="px-3 mt-4">Estimasi Nota</h5>
-                        <div class="nota px-3 ms-3 me-3">
-                            <p class="fw-semibold mt-3">Kharisma Motor</p>
-                            <p class="text-end" style="margin-top: -10px;">Playangan, 01 Juli 2023</p>
-                            <div class="row text-center fw-semibold">
-                                <div class="col-6 text-start fw-bold">
-                                    <p>Eka Nurseva S</p>
-                                </div>
-                            </div>
-                            <table class="table" id="resultTable">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">No</th>
-                                        <th scope="col">Jenis Servis</th>
-                                        <th scope="col">Jumlah</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                        <h5 class="px-3 mt-4 d-flex justify-content-center">Estimasi Nota</h5>
 
-                                </tbody>
-                            </table>
-                        </div>
+                        <?php if (isset($_POST['submitBtn'])): ?>
+                            <div class="nota px-3 ms-3 me-3">
+                                <p class="fw-semibold mt-3">Kharisma Motor</p>
+                                <p class="text-end" style="margin-top: -10px;">Playangan, 01 Juli 2023</p>
+                                <div class="row text-center fw-semibold">
+                                    <div class="col-6 text-start fw-bold">
+                                        <p>Eka Nurseva S</p>
+                                    </div>
+                                </div>
+
+                                <table class="tabel" id="resultTable">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Jenis Servis</th>
+                                            <th>Harga</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php echo $resultTableBody; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -173,7 +214,7 @@ $kumpul2 = query("SELECT * FROM jenis_keluhan LIMIT $data2 OFFSET $data1");
         crossorigin="anonymous"></script>
     <script src="bootstrap-5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script>
+    <!-- <script>
         document.getElementById("submitBtn").addEventListener("click", function () {
             // Mendapatkan elemen div yang berisi checkbox yang dipilih
             var checkboxes = document.querySelectorAll(".keluhan input[type=checkbox]:checked");
@@ -211,7 +252,7 @@ $kumpul2 = query("SELECT * FROM jenis_keluhan LIMIT $data2 OFFSET $data1");
                 counter++;
             });
         });
-    </script>
+    </script> -->
 
 </body>
 
