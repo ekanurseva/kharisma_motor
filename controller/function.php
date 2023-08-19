@@ -57,4 +57,82 @@ function enkripsi($teks)
     return $enkripsi;
 }
 
+function validasi() {
+    global $conn;
+    if (!isset($_COOKIE['KMmz19'])) {
+        echo "<script>
+                document.location.href='logout.php';
+              </script>";
+        exit;
+    }
+    
+    $id = dekripsi($_COOKIE['KMmz19']);
+    
+    $result = mysqli_query($conn, "SELECT * FROM pengguna WHERE idpengguna = '$id'");
+    
+    if (mysqli_num_rows($result) !== 1) {
+        echo "<script>
+                document.location.href='logout.php';
+              </script>";
+        exit;
+    }
+}
+
+function validasi_admin() {
+    global $conn;
+    if (!isset($_COOKIE['KMmz19'])) {
+        echo "<script>
+                document.location.href='../logout.php';
+              </script>";
+        exit;
+    }
+    
+    $id = dekripsi($_COOKIE['KMmz19']);
+
+    $cek = query("SELECT * FROM pengguna WHERE idpengguna = $id") [0];
+    
+    $result = mysqli_query($conn, "SELECT * FROM pengguna WHERE idpengguna = '$id'");
+
+    if (mysqli_num_rows($result) !== 1) {
+        echo "<script>
+                document.location.href='../logout.php';
+              </script>";
+        exit;
+    } elseif($cek['level'] !== "Admin") {
+        echo "<script>
+                document.location.href='../logout.php';
+              </script>";
+        exit;
+    }
+}
+
+
+function validasi_kasir() {
+    global $conn;
+    if (!isset($_COOKIE['KMmz19'])) {
+        echo "<script>
+                document.location.href='../logout.php';
+              </script>";
+        exit;
+    }
+    
+    $id = dekripsi($_COOKIE['KMmz19']);
+
+    $cek = query("SELECT * FROM pengguna WHERE idpengguna = $id") [0];
+    
+    $result = mysqli_query($conn, "SELECT * FROM pengguna WHERE idpengguna = '$id'");
+
+    if (mysqli_num_rows($result) !== 1) {
+        echo "<script>
+                document.location.href='../logout.php';
+              </script>";
+        exit;
+    } elseif($cek['level'] !== "Kasir") {
+        echo "<script>
+                document.location.href='../logout.php';
+              </script>";
+        exit;
+    }
+}
+
 ?>

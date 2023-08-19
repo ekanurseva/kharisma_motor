@@ -1,3 +1,8 @@
+<?php 
+    require_once '../controller/function.php';
+    validasi_kasir();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

@@ -1,3 +1,7 @@
+<?php 
+    require_once '../controller/function.php';
+    validasi_admin();
+?>
 <!DOCTYPE html>
 <html lang="en">
 

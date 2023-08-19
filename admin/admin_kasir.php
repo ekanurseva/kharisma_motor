@@ -1,5 +1,6 @@
 <?php
 include("../controller/controller_pengguna.php");
+validasi_admin();
 $data = query("SELECT * FROM pengguna");
 
 $jumlah_admin = jumlah_data("SELECT * FROM pengguna WHERE level = 'Admin'");
