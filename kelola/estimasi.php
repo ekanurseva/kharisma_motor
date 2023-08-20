@@ -8,6 +8,8 @@ $data2 = $data_keluhan - $data1;
 $kumpul1 = query("SELECT * FROM jenis_keluhan LIMIT $data1");
 $kumpul2 = query("SELECT * FROM jenis_keluhan LIMIT $data2 OFFSET $data1");
 
+$id = dekripsi($_COOKIE['KMmz19']);
+$user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
 
 if (isset($_POST['submitBtn'])) {
     // Mengambil data servis dari database
@@ -63,9 +65,21 @@ if (isset($_POST['submitBtn'])) {
 </head>
 
 <body>
-    <!-- Navbar -->
-    <?php require_once('../navbar/navbar_admin.php') ?>
-    <!-- Navbar Selesai -->
+    <!-- navbar -->
+    <?php
+    // Cek peran pengguna dan masukkan file navbar yang sesuai
+    if ($user['level'] === "User") {
+        require_once('../navbar/navbar_user.php');
+    } elseif ($user['level'] === "Admin") {
+        require_once('../navbar/navbar_admin.php');
+    } elseif ($user['level'] === "Kasir") {
+        require_once('../navbar/navbar_kasir.php');
+    } else {
+        // Jika peran tidak dikenali, Anda dapat menambahkan pesan error atau tindakan lain sesuai kebutuhan
+        echo "Error: Peran pengguna tidak valid.";
+    }
+    ?>
+    <!-- navbar selesai -->
 
     <!-- Content -->
     <div class="container">
@@ -73,13 +87,21 @@ if (isset($_POST['submitBtn'])) {
             <div class="title text-center text-uppercase">
                 <h4>INPUT DAFTAR ANTRIAN</h4>
             </div>
+
+            <h6 class="mt-3">progress-bar</h6>
+            <!-- Previous markup -->
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-label="Basic example" style="width: 25%"
+                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar bg-info" role="progressbar" aria-label="Segment two" style="width: 30%"
+                    aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+
             <div class="row">
                 <div class="mt-2">
                     <p style="text-align: justify; padding: 0 13px; margin-top: 10px; margin-bottom: 5px;">Pilih Jenis
-                        Keluhan Mengenai Permasalahan
-                        Kendaraan Anda, Sistem Akan
-                        Mendiagnosa Jenis Servis yang Perlu Dilakukan dan Data Sparepart yang Dibutuhkan yang
-                        Ditunjukkan pada Estimasi Nota</p>
+                        Keluhan Mengenai PermasalahanKendaraan Anda, Sistem Akan Mendiagnosa Jenis Servis yang Perlu
+                        Dilakukan yang Ditunjukkan pada Estimasi Nota</p>
                     <form method="post" action="">
                         <div class="row">
                             <div class="col-6">
@@ -125,9 +147,8 @@ if (isset($_POST['submitBtn'])) {
                         </button>
                     </div>
                     <div style="margin: 0 70px;">
-                        <h5 class="px-3 mt-4 d-flex justify-content-center">Estimasi Nota</h5>
-
                         <?php if (isset($_POST['submitBtn'])): ?>
+                            <h5 class="px-3 mt-4 d-flex justify-content-center">Estimasi Nota</h5>
                             <div class="nota px-3 ms-3 me-3">
                                 <p class="fw-semibold mt-3">Kharisma Motor</p>
                                 <p class="text-end" style="margin-top: -10px;">Playangan, 01 Juli 2023</p>
@@ -137,7 +158,7 @@ if (isset($_POST['submitBtn'])) {
                                     </div>
                                 </div>
 
-                                <table class="tabel" id="resultTable">
+                                <table class="table" id="resultTable">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -154,50 +175,15 @@ if (isset($_POST['submitBtn'])) {
                     </div>
                 </div>
             </div>
-            <div class="mt-3">
-                <p style="text-align: justify; padding: 0 13px; margin-top: 35px;">Setelah Memilih Jenis Keluhan,
-                    Masukkan Identitas dan Data Kendaraan Anda Di Sini Untuk Mendaftar Antrian dan Mendapat Nomor
-                    Antrian</p>
-                <div class="identitas px-3">
-                    <div class="mb-3">
-                        <label for="nama" class="form-label">Nama</label>
-                        <input type="text" class="form-control" id="nama" placeholder="masukkan nama anda">
-                    </div>
-                    <div class="mb-3">
-                        <label for="telepon" class="form-label">No. Handphone</label>
-                        <input type="text" class="form-control" id="telepon" placeholder="masukkan nama anda">
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <label for="kendaraan" class="form-label">Jenis Kendaraan</label>
-                                <input type="text" class="form-control" id="kendaraan"
-                                    placeholder="masukkan kendaraan anda">
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <label for="no_pol" class="form-label">Nomor Polisi</label>
-                                <input type="text" class="form-control" id="no_pol"
-                                    placeholder="masukkan no polisi anda">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="alamat" class="form-label">Alamat</label>
-                        <textarea class="form-control" id="alamat" rows="3"
-                            placeholder="masukkan alamat anda"></textarea>
-                    </div>
-                </div>
-                <div class="tombol text-center px-3 justify-content-end">
-                    <button type="button" class="btn py-2 btn-success w-50">
-                        <a href="antrian.php" style="text-decoration: none; color: white;">
-                            Daftar
-                        </a>
-                    </button>
-                </div>
+            <div class="tombol text-center px-3 justify-content-end mt-3">
+                <button type="button" name="submit" class="btn py-2 btn-success w-50">
+                    <a style="text-decoration: none; color: white;">
+                        Daftar
+                    </a>
+                </button>
             </div>
         </div>
+    </div>
     </div>
     <!-- Content Selesai -->
 
@@ -214,7 +200,7 @@ if (isset($_POST['submitBtn'])) {
         crossorigin="anonymous"></script>
     <script src="bootstrap-5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <!-- <script>
+    <script>
         document.getElementById("submitBtn").addEventListener("click", function () {
             // Mendapatkan elemen div yang berisi checkbox yang dipilih
             var checkboxes = document.querySelectorAll(".keluhan input[type=checkbox]:checked");
@@ -252,7 +238,7 @@ if (isset($_POST['submitBtn'])) {
                 counter++;
             });
         });
-    </script> -->
+    </script>
 
 </body>
 

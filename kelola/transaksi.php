@@ -1,3 +1,11 @@
+<?php
+require_once "../controller/controller_transaksi.php";
+
+$id = dekripsi($_COOKIE['KMmz19']);
+$user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,12 +21,23 @@
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 </head>
 
 <body>
-    <!-- Navbar -->
-    <?php require_once('../navbar/navbar_admin.php'); ?>
-    <!-- Navbar Selesai -->
+    <!-- navbar -->
+    <?php
+    // Cek peran pengguna dan masukkan file navbar yang sesuai
+    if ($user['level'] === "Admin") {
+        require_once('../navbar/navbar_admin.php');
+    } elseif ($user['level'] === "Kasir") {
+        require_once('../navbar/navbar_kasir.php');
+    } else {
+        // Jika peran tidak dikenali, Anda dapat menambahkan pesan error atau tindakan lain sesuai kebutuhan
+        echo "Error: Peran pengguna tidak valid.";
+    }
+    ?>
+    <!-- navbar selesai -->
 
     <!-- Content -->
     <div class="container">
@@ -40,32 +59,14 @@
                             <i class="icon bi bi-file-earmark-ruled"></i>
                         </div>
                     </div>
-                    <button class="btn btn-success w-100">
-                        <a class="text-decoration-none text-white" href="laporan.php">Laporan</a>
-                    </button>
+                    <a class="text-decoration-none text-white" href="laporan.php">
+                        <button class="btn btn-success w-100">
+                            Laporan
+                        </button>
+                    </a>
                 </div>
                 <div class="col-7 mt-4">
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
-
-                    <div class="dataTables_wrapper mt-3">
-                        <div class="dataTables_length">
-                            <label for="">
-                                show
-                                <select name="example_length" aria-controls="example" class="">
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                </select>
-                                entries
-                            </label>
-                        </div>
-                    </div>
-
-                    <table class="table table-hover mt-3">
+                    <table class="table table-hover mt-3" id="example">
                         <thead class="text-center">
                             <tr>
                                 <th scope="col">No</th>
@@ -84,10 +85,11 @@
                                 <td>01-07-2023</td>
                                 <td>Rp 800.000</td>
                                 <td>
-                                    <button class="btn btn-success">
-                                        <a class="text-decoration-none text-white"
-                                            href="detail_transaksi.php">Detail</a>
-                                    </button>
+                                    <a class="text-decoration-none text-white" href="detail_transaksi.php">
+                                        <button class="btn btn-success">
+                                            Detail
+                                        </button>
+                                    </a>
                                 </td>
                             </tr>
                             <tr>
@@ -97,27 +99,15 @@
                                 <td>01-07-2023</td>
                                 <td>Rp 800.000</td>
                                 <td>
-                                    <button class="btn btn-success">
-                                        <a class="text-decoration-none text-white"
-                                            href="detail_transaksi.php">Detail</a>
-                                    </button>
+                                    <a class="text-decoration-none text-white" href="detail_transaksi.php">
+                                        <button class="btn btn-success">
+                                            Detail
+                                        </button>
+                                    </a>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-end">
-                            <li class="page-item disabled">
-                                <a class="page-link">Previous</a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
                 </div>
             </div>
         </div>
@@ -137,7 +127,12 @@
         crossorigin="anonymous"></script>
     <script src="bootstrap-5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="../script.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#example").DataTable();
+        });
+    </script>
 </body>
 
 </html>

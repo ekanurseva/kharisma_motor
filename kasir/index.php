@@ -1,3 +1,8 @@
+<?php
+require_once '../controller/function.php';
+validasi_kasir();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,7 +29,7 @@
     <div class="container">
         <div class="content py-3">
             <div class="title text-center text-uppercase">
-                <h4>SELAMAT DATANG ADMIN</h4>
+                <h4>SELAMAT DATANG KASIR</h4>
             </div>
             <div class="desk mt-4">
                 <div class="bg-image">

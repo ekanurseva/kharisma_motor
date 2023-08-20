@@ -1,3 +1,13 @@
+<?php
+require_once 'controller/controller_pengguna.php';
+
+if (isset($_POST["login"])) {
+    if (login($_POST) == 1) {
+        $error = true;
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,26 +57,41 @@
                     </div>
                 </div>
                 <div class="col-6">
-                    <div class="desk mt-4 py-5 px-3">
-                        <div class="mb-3 row">
-                            <label for="inputUsername" class="col-sm-2 col-form-label">Username</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="inputUsername">
+                    <form action="" method="post">
+                        <div class="desk mt-4 py-5 px-3">
+                            <?php if (isset($error)): ?>
+                                <div class="alert alert-danger" role="alert">
+                                    Username/Password Salah
+                                </div>
+                            <?php endif; ?>
+                            <div class="mb-3 row">
+                                <label for="inputUsername" class="col-sm-2 col-form-label">Username</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputUsername" name="username">
+                                </div>
                             </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
-                            <div class="col-sm-10">
-                                <input type="password" class="form-control" id="inputPassword">
-                            </div>
-                        </div>
 
-                        <div class="row d-flex justify-content-center mt-5">
-                            <button type="submit" name="submit_keluhan" class="btn btn-primary w-50">
-                                LOGIN
-                            </button>
+                            <div class="mb-3 row">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" id="inputPassword" name="password">
+                                </div>
+                            </div>
+
+                            <div class="row text-end mt-4">
+                                <span>Belum Punya Akun?
+                                    <a type="submit" href="user/registrasi.php" class="text-decoration-none">
+                                        Daftar
+                                    </a>
+                                </span>
+                            </div>
+                            <div class="row d-flex justify-content-center mt-4">
+                                <button type="submit" name="login" class="btn btn-primary w-50">
+                                    LOGIN
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -76,7 +101,7 @@
 
     <!-- Footer -->
     <?php
-    require_once('footer.php');
+    require_once('footer2.php');
     ?>
     <!-- Footer Selesai -->
 

@@ -10,22 +10,21 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="index.php">Home</a>
+                    <a class="nav-link" aria-current="page" href="../admin">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="antrian.php">Antrian</a>
+                    <a class="nav-link" href="../kelola/antrian.php">Antrian</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Menu
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="transaksi.php">Transaksi</a></li>
-                        <li><a class="dropdown-item" href="servis.php">Data Servis</a></li>
-                        <li><a class="dropdown-item" href="keluhan.php">Data Keluhan</a></li>
-                        <li><a class="dropdown-item" href="sparepart.php">Data Sparepart</a></li>
-                        <li><a class="dropdown-item" href="status_antrian.php">Status Antrian</a></li>
+                        <li><a class="dropdown-item" href="../kelola/transaksi.php">Transaksi</a></li>
+                        <li><a class="dropdown-item" href="../admin/servis.php">Data Servis</a></li>
+                        <li><a class="dropdown-item" href="../admin/keluhan.php">Data Keluhan</a></li>
+                        <li><a class="dropdown-item" href="../admin/sparepart.php">Data Sparepart</a></li>
+                        <li><a class="dropdown-item" href="../admin/status_antrian.php">Status Antrian</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
@@ -33,7 +32,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Logout</a>
+                    <a class="nav-link" href="../logout.php">Logout</a>
                 </li>
             </ul>
         </div>

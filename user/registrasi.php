@@ -79,6 +79,13 @@ if (isset($_POST["submit_user"])) {
                                 placeholder="masukkan no handphone">
                         </div>
 
+                        <div class="row text-end mt-4 mb-4 me-1">
+                            <span>Sudah Punya Akun?
+                                <a type="submit" href="../login.php" class="text-decoration-none text-info">
+                                    Login
+                                </a>
+                            </span>
+                        </div>
                         <button type="submit" name="submit_user" class="btn btn-primary w-100">
                             Submit
                         </button>

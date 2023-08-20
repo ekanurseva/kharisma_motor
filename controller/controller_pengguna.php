@@ -189,4 +189,47 @@ if (isset($_GET['idpengguna'])) {
             ";
     }
 }
+
+    function login($data) {
+        global $conn;
+
+        $username = $data["username"];
+        $password = $data["password"];
+
+        //cek username apakah ada di database atau tidak
+        $result = mysqli_query($conn, "SELECT * FROM pengguna WHERE username = '$username'");
+
+        if (mysqli_num_rows($result) === 1) {
+            //cek password
+            $row = mysqli_fetch_assoc($result);
+            //password_verify() untuk mengecek apakah sebuah password itu sama atau tidak dengan hash nya
+            //parameternya yaitu string yang belum diacak dan string yang sudah diacak
+            if (password_verify($password, $row["password"])) {
+                $enkripsi = enkripsi($row['idpengguna']);
+
+                setcookie('KMmz19', $enkripsi, time() + 10800);
+
+                if($row['level'] == "Admin") {
+                    echo "<script>
+                            document.location.href='admin';
+                        </script>";
+                    exit;
+                } elseif($row['level'] == "Kasir") {
+                    echo "<script>
+                            document.location.href='kasir';
+                        </script>";
+                    exit;
+                } else {
+                    echo "<script>
+                            document.location.href='user';
+                        </script>";
+                    exit;
+                }
+            }
+        }
+
+        $error = true;
+
+        return $error;
+    }
 ?>

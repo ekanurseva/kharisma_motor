@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-6 text-md-start text-center pt-2 pb-2">
                 <a href="index.php" style="text-decoration: none;">
-                    <img src="../img/Logo.png" src="img/Logo.png" style="width: 30px">
+                    <img src="img/Logo.png" style="width: 30px">
                 </a>
                 <span class="text-light ps-1">copyright &copy; 2023 by M. Zidan Putra Kharisma</span>
             </div>

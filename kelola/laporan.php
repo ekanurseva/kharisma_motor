@@ -1,3 +1,10 @@
+<?php
+require_once "../controller/controller_transaksi.php";
+
+$id = dekripsi($_COOKIE['KMmz19']);
+$user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,56 +20,74 @@
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 </head>
 
 <body>
-    <!-- Navbar -->
-    <?php require_once('../navbar/navbar_admin.php') ?>
-    <!-- Navbar Selesai -->
+    <!-- navbar -->
+    <?php
+    // Cek peran pengguna dan masukkan file navbar yang sesuai
+    if ($user['level'] === "Admin") {
+        require_once('../navbar/navbar_admin.php');
+    } elseif ($user['level'] === "Kasir") {
+        require_once('../navbar/navbar_kasir.php');
+    } else {
+        // Jika peran tidak dikenali, Anda dapat menambahkan pesan error atau tindakan lain sesuai kebutuhan
+        echo "Error: Peran pengguna tidak valid.";
+    }
+    ?>
+    <!-- navbar selesai -->
 
     <!-- Content -->
     <div class="container">
         <div class="content py-3">
             <div class="title text-center text-uppercase">
-                <h4>DETAIL TRANSAKSI</h4>
+                <h4>LAPORAN DATA TRANSAKSI</h4>
             </div>
             <div class="konten py-4">
                 <div class="row">
                     <div class="col-8">
-                        <div class="row">
-                            <div class="col-3">
-                                <h6>Pelanggan</h6>
-                            </div>
-                            <div class="col-5">
-                                <h6>: Pelanggan 1</h6>
-                            </div>
-                        </div>
+                        <h6>Tampil Berdasarkan</h6>
                     </div>
                     <div class="col-4">
                         <button class="btn btn-success">
-                            <a class="text-decoration-none text-white" href="#">Cetak Struk</a>
+                            <a class="text-decoration-none text-white" href="#">Cetak Laporan</a>
                         </button>
                     </div>
-                    <div class="col-8">
+                    <div class="tahun">
                         <div class="row">
-                            <div class="col-3">
-                                <h6>Kode Transaksi</h6>
+                            <div class="col-auto">
+                                <label>Tahun</label>
                             </div>
-                            <div class="col-5">
-                                <h6>: 001</h6>
+                            <div class="col-auto">
+                                <select class="form-select">
+                                    <option value="">2020</option>
+                                    <option value="">2021</option>
+                                    <option value="">2022</option>
+                                    <option value="">2023</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bulan">
+                        <div class="row">
+                            <div class="col-auto">
+                                <label>Bulan</label>
+                            </div>
+                            <div class="col-auto">
+                                <select class="form-select">
+                                    <option value="">Januari</option>
+                                    <option value="">Februari</option>
+                                    <option value="">Maret</option>
+                                    <option value="">April</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <button type="button" class="btn btn-primary mt-3">
-                    <a href="input_antrian.php" style="text-decoration: none; color: white; padding: 0 20px;">
-                        Input Antrian
-                    </a>
-                </button>
             </div>
 
-            <table class="table table-hover">
+            <table class="table table-hover" id="example">
                 <thead>
                     <tr>
                         <th scope="col">No</th>
@@ -93,15 +118,6 @@
                         <td>Ban</td>
                         <td>Rp 800.000</td>
                     </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <th>Total Pembayaran</th>
-                        <th>Rp 1.600.000</th>
-                    </tr>
                 </tbody>
             </table>
         </div>
@@ -121,7 +137,12 @@
         crossorigin="anonymous"></script>
     <script src="bootstrap-5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="../script.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#example").DataTable();
+        });
+    </script>
 </body>
 
 </html>
