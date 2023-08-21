@@ -54,7 +54,16 @@
                     <div class="title text-center text-uppercase mt-3 mb-1">
                         <h5>DAFTAR ANTRIAN</h5>
                     </div>
-                    <table class="tabel" id="example">
+                    
+                    <div class="card mt-3">
+                        <h5 class="ms-3 mt-3 card-title">Jumlah Antrian Yang Ada</h5>
+                        <div class="d-flex justify-content-between align-items-center mx-3">
+                            <h1>1</h1>
+                            <i class="bi bi-people-fill" style="font-size: 100px;"></i>
+                        </div>
+                        <a href="../kelola/input_antrian.php" class="btn btn-primary mx-1 mb-1">Daftar Antrian</a>
+                    </div>
+                    <!-- <table class="tabel" id="example">
                         <thead>
                             <tr>
                                 <th>No Antrian</th>
@@ -79,7 +88,7 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table> -->
 
                     <!-- Muncul ketika sudah daftar -->
                     <div class="title text-center text-uppercase mt-3 mb-1">

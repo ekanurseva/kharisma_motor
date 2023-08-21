@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Aug 20, 2023 at 03:14 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.0.28
+-- Host: localhost
+-- Waktu pembuatan: 21 Agu 2023 pada 17.12
+-- Versi server: 10.4.22-MariaDB
+-- Versi PHP: 8.0.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,47 +24,78 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `antrian`
+-- Struktur dari tabel `antrian`
 --
 
 CREATE TABLE `antrian` (
   `id_antrian` int(11) NOT NULL,
+  `id_kendaraan` int(11) NOT NULL,
   `no_antrian` int(20) NOT NULL,
-  `id_pengguna` int(11) NOT NULL,
+  `nama_pelanggan` varchar(100) NOT NULL,
+  `no_hp` varchar(20) NOT NULL,
   `tanggal` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `jenis_kendaraan` varchar(50) NOT NULL,
   `nopol` varchar(50) NOT NULL,
   `alamat` text NOT NULL,
-  `id_status` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `status` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `antrian`
+--
+
+INSERT INTO `antrian` (`id_antrian`, `id_kendaraan`, `no_antrian`, `nama_pelanggan`, `no_hp`, `tanggal`, `nopol`, `alamat`, `status`) VALUES
+(1, 2, 20230821, 'Fillah Zaki Alhaqi', '085826389656', '2023-08-21 14:56:45', 'E 1234 ZN', 'Kuningan', 'Menunggu Antrian'),
+(2, 5, 20230821, 'Zaki', '0895326850337', '2023-08-21 15:08:17', 'E 3456 PK', 'Cirebon', 'Menunggu Antrian'),
+(3, 8, 20230821, 'Fillah', '0892891731111', '2023-08-21 15:09:05', 'E 9451 DF', 'Indramayu', 'Menunggu Antrian');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jenis_keluhan`
+-- Struktur dari tabel `jenis_keluhan`
 --
 
 CREATE TABLE `jenis_keluhan` (
   `idjkeluhan` int(11) NOT NULL,
-  `idservis` int(11) NOT NULL,
-  `keluhan` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `jenis_keluhan`
---
-
-INSERT INTO `jenis_keluhan` (`idjkeluhan`, `idservis`, `keluhan`) VALUES
-(1, 6, 'Suara mesin berisik atau tidak wajar saat kendaraan dinyalakan'),
-(2, 6, 'Performa kendaraan menurun atau terasa lambat saat dipercepat.'),
-(3, 8, 'Rem mobil tidak berfungsi dengan baik atau terlalu keras.'),
-(5, 10, 'Transmisi mobil bermasalah, seperti sulit berpindah gigi atau miring saat digunakan.'),
-(6, 6, 'Getaran atau gejala tidak stabil pada kendaraan saat berjalan.');
+  `keluhan` varchar(100) NOT NULL,
+  `idservis` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pengguna`
+-- Struktur dari tabel `jenis_kendaraan`
+--
+
+CREATE TABLE `jenis_kendaraan` (
+  `idkendaraan` int(11) NOT NULL,
+  `nama_kendaraan` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `jenis_kendaraan`
+--
+
+INSERT INTO `jenis_kendaraan` (`idkendaraan`, `nama_kendaraan`) VALUES
+(1, 'Toyota Avanza'),
+(2, 'Daihatsu Xenia'),
+(3, 'Toyota Kijang Innova'),
+(4, 'Honda Mobilio'),
+(5, 'Suzuki Ertiga'),
+(6, 'Mitsubishi Xpander'),
+(7, 'Kia Grand Carnival'),
+(8, 'Hyundai Starex'),
+(9, 'Nissan Livina'),
+(10, 'Chevrolet Spin'),
+(11, 'Ford Grand C-MAX'),
+(12, 'Renault Scenic'),
+(13, 'Mazda5'),
+(14, 'Chrysler Pacifica'),
+(15, 'Volkswagen Touran');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `pengguna`
 --
 
 CREATE TABLE `pengguna` (
@@ -74,23 +105,23 @@ CREATE TABLE `pengguna` (
   `nama` varchar(50) NOT NULL,
   `no_hp` varchar(25) NOT NULL,
   `level` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `pengguna`
+-- Dumping data untuk tabel `pengguna`
 --
 
 INSERT INTO `pengguna` (`idpengguna`, `username`, `password`, `nama`, `no_hp`, `level`) VALUES
-(1, 'eka', '$2y$10$mJ.mmFN1ctsNIJaLalvIveXAc/jHDC7i.6JREJugc3TsTaOjtF6ru', 'Eka Nurseva', '0871268382', 'Admin'),
-(2, 'zidan', '$2y$10$TocCBvpUf9GsfjUpVd7TYejrLkHlaxXiVtscweuNtayyGdbBTDym2', 'Zidan Kharisma', '0831923713', 'Admin'),
-(3, 'fillah', '$2y$10$nWksEXRCVZpOzBPzGW8TS.r9mqItoDlXTMlNdvaI9lVcHfgQWaMq6', 'Fillah Zaki', '08219087262', 'Kasir'),
-(4, 'ali', '$2y$10$Bos4FzwCUP/qjv4IS7nzDOx5S7mOjKVxvzttJGAAZzGom2cp.IIu6', 'Ali Asyidiqiansyah', '087123613182', 'Kasir'),
-(5, 'nur', '$2y$10$0/ZRaryTySK7lkl2s/CZwuMA8/st3Qs1EhTds2GmSuhv8idoPy47C', 'Rachamat Nur Janah', '089829179', 'User');
+(1, 'eka', '$2y$10$gaAwT3zATxganiJjgJYlk.Ydo01F4SZhvpOsp7Wd9lPbH.VKiyFfe', 'Eka Nurseva', '0896182631', 'Admin'),
+(2, 'zidan', '$2y$10$oYd849hLAVXRM1WA76DasOFCJ3KYP0xF6wKLbSYjWRR1neopQxn8C', 'Zidan Kharisma', '08765456786', 'Admin'),
+(4, 'fillah', '$2y$10$UDRlybR2CQfVahlNoJbkaOyuu2BpSN3M6YNs500Uycyuy6qKyrUzO', 'Fillah Zaki Alhaqi', '085826389656', 'User'),
+(5, 'fillah21', '$2y$10$R3MHyjVYsW996.Fj5yBuR.TOAWlY6yEbqFebF2hpj4nh8mocxv7Kq', 'Fillah Zaki Alhaqi', '085826389656', 'Admin'),
+(6, 'kasir', '$2y$10$FGorUm0BpjAQboP4joULBObGa2/dlf92NXZT3RLv3mBVOgT4nxn7S', 'Kasir', '129-9392-3', 'Kasir');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `servis`
+-- Struktur dari tabel `servis`
 --
 
 CREATE TABLE `servis` (
@@ -98,27 +129,12 @@ CREATE TABLE `servis` (
   `jenis_servis` varchar(100) NOT NULL,
   `harga_jasa` bigint(100) NOT NULL,
   `deskripsi` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `servis`
---
-
-INSERT INTO `servis` (`idservis`, `jenis_servis`, `harga_jasa`, `deskripsi`) VALUES
-(1, 'Servis mesin (silinderhead) ', 800000, 'Servis mesin (silinderhead) merupakan jenis servis yang dapat memperbaiki mesin'),
-(2, 'Servis overhoul', 2000000, 'Servis overhoul merupakan'),
-(3, 'Spooring', 150000, 'Spooring merupakan jenis servis'),
-(4, 'Servis Per', 300000, 'Servis Per merupakan jenis servis pada per'),
-(6, 'Servis berkala (tanpa pergantian part)', 150000, 'Servis berkala merupakan suatu jenis servis pemeriksaan rutin'),
-(7, 'Servis tune up', 200000, 'Servis tune up merupakan '),
-(8, 'Servis rem', 200000, 'Servis rem merupakan '),
-(9, 'Servis kelistrikan remot', 250000, 'Servis kelistrikan remot merupakan'),
-(10, 'Servis transmisi (gigi)', 450000, 'Servis transmisi (gigi) merupakan');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sparepart`
+-- Struktur dari tabel `sparepart`
 --
 
 CREATE TABLE `sparepart` (
@@ -126,156 +142,144 @@ CREATE TABLE `sparepart` (
   `sparepart` varchar(50) NOT NULL,
   `harga` bigint(100) NOT NULL,
   `deskripsi` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `sparepart`
---
-
-INSERT INTO `sparepart` (`idsparepart`, `sparepart`, `harga`, `deskripsi`) VALUES
-(1, 'Kepala Silinder', 300000, 'Sebagai ruang bakar, tempat busi, dan tempat mekanisme katup hisap dan katup buang.'),
-(4, 'Noken As', 20000, 'Mengatur buka tutup katup hisap dan katup buang.'),
-(5, 'Katup Hisap', 10000, 'Membuka dan menutup lubang hisap ketika dibutuhkan saat terjadinya pembakaran di dalam ruang bakar.'),
-(7, 'Katup Buang', 21000, 'Membuka lubang pembuangan ketika proses pembakaran telah selesai dan menutup ketika proses hisap, kompresi, dan kerja berlangsung.'),
-(8, 'Rocker Arm', 20000, 'Tempat batang nok menekan katup hisap dan katup buang.'),
-(9, 'Cylinder Head Cover', 100000, 'Cover penutup bagian kepala silinder.'),
-(10, 'Busi', 15000, 'Menghasilkan percikan bunga api ketika proses pembakaran di ruang bakar.'),
-(11, 'Intake Manifold', 100000, 'Saluran masuk udara ke dalam ruang bakar.');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `status_antrian`
---
-
-CREATE TABLE `status_antrian` (
-  `idstatus` int(11) NOT NULL,
-  `status` varchar(50) NOT NULL,
-  `deskripsi` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `status_antrian`
---
-
-INSERT INTO `status_antrian` (`idstatus`, `status`, `deskripsi`) VALUES
-(1, 'Menunggu Antrian', 'Mobil Anda masih menunggu giliran untuk dilayani'),
-(2, 'Diproses', 'Teknisi sedang memeriksa mobil dan mempersiapkan langkah-langkah perbaikan yang diperlukan.'),
-(3, 'Dalam Pengerjaan', 'Mobil Anda sedang diperbaiki.'),
-(4, 'Menunggu suku cadang', ' Mobil Anda membutuhkan suku cadang tertentu yang tidak tersedia di bengkel.'),
-(6, 'Selesai', 'Mobil sudah siap untuk diambil.');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `transaksi`
+-- Struktur dari tabel `transaksi`
 --
 
 CREATE TABLE `transaksi` (
   `idtransaksi` int(11) NOT NULL,
   `idantrian` int(11) NOT NULL,
-  `idservis` int(11) NOT NULL,
-  `idsparepart` int(11) NOT NULL,
-  `harga_total` bigint(100) NOT NULL,
+  `idservis` int(11) DEFAULT NULL,
+  `idsparepart` int(11) DEFAULT NULL,
   `kode_transaksi` varchar(50) NOT NULL,
-  `tanggal` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `tanggal` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `status_transaksi` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `antrian`
+-- Indeks untuk tabel `antrian`
 --
 ALTER TABLE `antrian`
   ADD PRIMARY KEY (`id_antrian`),
-  ADD KEY `id_pengguna` (`id_pengguna`),
-  ADD KEY `id_status` (`id_status`);
+  ADD KEY `id_kendaraan` (`id_kendaraan`);
 
 --
--- Indexes for table `jenis_keluhan`
+-- Indeks untuk tabel `jenis_keluhan`
 --
 ALTER TABLE `jenis_keluhan`
-  ADD PRIMARY KEY (`idjkeluhan`);
+  ADD PRIMARY KEY (`idjkeluhan`),
+  ADD KEY `jenis_keluhan_ibfk_1` (`idservis`);
 
 --
--- Indexes for table `pengguna`
+-- Indeks untuk tabel `jenis_kendaraan`
+--
+ALTER TABLE `jenis_kendaraan`
+  ADD PRIMARY KEY (`idkendaraan`);
+
+--
+-- Indeks untuk tabel `pengguna`
 --
 ALTER TABLE `pengguna`
   ADD PRIMARY KEY (`idpengguna`);
 
 --
--- Indexes for table `servis`
+-- Indeks untuk tabel `servis`
 --
 ALTER TABLE `servis`
   ADD PRIMARY KEY (`idservis`);
 
 --
--- Indexes for table `sparepart`
+-- Indeks untuk tabel `sparepart`
 --
 ALTER TABLE `sparepart`
   ADD PRIMARY KEY (`idsparepart`);
 
 --
--- Indexes for table `status_antrian`
---
-ALTER TABLE `status_antrian`
-  ADD PRIMARY KEY (`idstatus`);
-
---
--- Indexes for table `transaksi`
+-- Indeks untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
   ADD PRIMARY KEY (`idtransaksi`),
-  ADD KEY `idantrian` (`idantrian`),
-  ADD KEY `idservis` (`idservis`,`idsparepart`);
+  ADD KEY `transaksi_ibfk_1` (`idantrian`),
+  ADD KEY `idservis` (`idservis`),
+  ADD KEY `idsparepart` (`idsparepart`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `antrian`
+-- AUTO_INCREMENT untuk tabel `antrian`
 --
 ALTER TABLE `antrian`
-  MODIFY `id_antrian` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_antrian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `jenis_keluhan`
+-- AUTO_INCREMENT untuk tabel `jenis_keluhan`
 --
 ALTER TABLE `jenis_keluhan`
-  MODIFY `idjkeluhan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idjkeluhan` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `pengguna`
+-- AUTO_INCREMENT untuk tabel `jenis_kendaraan`
+--
+ALTER TABLE `jenis_kendaraan`
+  MODIFY `idkendaraan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT untuk tabel `pengguna`
 --
 ALTER TABLE `pengguna`
-  MODIFY `idpengguna` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idpengguna` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `servis`
+-- AUTO_INCREMENT untuk tabel `servis`
 --
 ALTER TABLE `servis`
-  MODIFY `idservis` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `idservis` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `sparepart`
+-- AUTO_INCREMENT untuk tabel `sparepart`
 --
 ALTER TABLE `sparepart`
-  MODIFY `idsparepart` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `idsparepart` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `status_antrian`
---
-ALTER TABLE `status_antrian`
-  MODIFY `idstatus` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT for table `transaksi`
+-- AUTO_INCREMENT untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
   MODIFY `idtransaksi` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+--
+
+--
+-- Ketidakleluasaan untuk tabel `antrian`
+--
+ALTER TABLE `antrian`
+  ADD CONSTRAINT `antrian_ibfk_1` FOREIGN KEY (`id_kendaraan`) REFERENCES `jenis_kendaraan` (`idkendaraan`) ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `jenis_keluhan`
+--
+ALTER TABLE `jenis_keluhan`
+  ADD CONSTRAINT `jenis_keluhan_ibfk_1` FOREIGN KEY (`idservis`) REFERENCES `servis` (`idservis`) ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `transaksi`
+--
+ALTER TABLE `transaksi`
+  ADD CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`idantrian`) REFERENCES `antrian` (`id_antrian`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `transaksi_ibfk_2` FOREIGN KEY (`idservis`) REFERENCES `servis` (`idservis`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `transaksi_ibfk_3` FOREIGN KEY (`idsparepart`) REFERENCES `sparepart` (`idsparepart`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

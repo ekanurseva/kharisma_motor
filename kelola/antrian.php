@@ -1,8 +1,6 @@
 <?php
 require_once "../controller/controller_status_antrian.php";
 
-$status = query("SELECT * FROM status_antrian");
-
 $id = dekripsi($_COOKIE['KMmz19']);
 $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
 
@@ -71,11 +69,7 @@ $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
                         <td>Sedang Dilayani</td>
                         <td>
                             <select class="form-select" aria-label="Default select example" name="status">
-                                <?php foreach ($status as $sa): ?>
-                                    <option value="<?= $sa['idstatus']; ?>">
-                                        <?= $sa['status']; ?>
-                                    </option>
-                                <?php endforeach ?>
+                                <option value="">Contoh</option>
                             </select>
                         </td>
                     </tr>

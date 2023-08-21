@@ -2,6 +2,9 @@
 require_once('../controller/function.php');
 
 // Seluruh data keluhan dibagi menjadi 2 kolom
+$nopol = dekripsi($_GET['key']);
+
+var_dump($nopol);
 $data_keluhan = jumlah_data("SELECT * FROM jenis_keluhan");
 $data1 = ceil($data_keluhan / 2);
 $data2 = $data_keluhan - $data1;
@@ -86,15 +89,6 @@ if (isset($_POST['submitBtn'])) {
         <div class="content py-3">
             <div class="title text-center text-uppercase">
                 <h4>INPUT DAFTAR ANTRIAN</h4>
-            </div>
-
-            <h6 class="mt-3">progress-bar</h6>
-            <!-- Previous markup -->
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-label="Basic example" style="width: 25%"
-                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                <div class="progress-bar bg-info" role="progressbar" aria-label="Segment two" style="width: 30%"
-                    aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
 
             <div class="row">

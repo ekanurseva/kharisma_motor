@@ -1,50 +1,22 @@
 <?php
-require_once('../controller/function.php');
+    require_once('../controller/controller_antrian.php');
 
-// Seluruh data keluhan dibagi menjadi 2 kolom
-$data_keluhan = jumlah_data("SELECT * FROM jenis_keluhan");
-$data1 = ceil($data_keluhan / 2);
-$data2 = $data_keluhan - $data1;
-$kumpul1 = query("SELECT * FROM jenis_keluhan LIMIT $data1");
-$kumpul2 = query("SELECT * FROM jenis_keluhan LIMIT $data2 OFFSET $data1");
+    // Seluruh data keluhan dibagi menjadi 2 kolom
+    $id = dekripsi($_COOKIE['KMmz19']);
+    $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
 
-$id = dekripsi($_COOKIE['KMmz19']);
-$user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
+    $data_kendaraan = query("SELECT * FROM jenis_kendaraan");
 
-if (isset($_POST['submitBtn'])) {
-    // Mengambil data servis dari database
-    $idkeluhan = query("SELECT * FROM jenis_keluhan WHERE idjkeluhan")[0];
-    $sql = "SELECT * FROM servis WHERE idservis = $idkeluhan";
+    $kode = kode_antrian();
 
-    var_dump($sql);
-    $result = mysqli_query($conn, $sql);
-
-    // Mendapatkan elemen div yang berisi checkbox yang dipilih
-    $selectedCheckboxes = $_POST['keluhan'];
-
-    // Mendapatkan elemen tbody dari tabel hasil
-    $resultTableBody = '';
-
-    // Counter untuk nomor urut
-    $counter = 1;
-
-    // Loop melalui checkbox yang dipilih
-    while ($row = mysqli_fetch_assoc($result)) {
-        if (in_array($row['idservis'], $selectedCheckboxes)) {
-            $jenisServis = $row['jenis_servis'];
-            $harga = $row['harga_servis'];
-
-            // Membuat baris baru dalam tabel hasil
-            $resultTableBody .= '<tr>
-                                    <td>' . $counter . '</td>
-                                    <td>' . $jenisServis . '</td>
-                                    <td>Rp ' . $harga . '</td>
-                                 </tr>';
-
-            $counter++;
+    if(isset($_POST['submit_antrian'])) {
+        if(input_antrian($_POST) > 0) {
+            $nopol = enkripsi($_POST['nopol']);
+            header("Location: estimasi.php?key=" . $nopol);
+        } else {
+            header("Location: input_antrian.php");
         }
     }
-}
 ?>
 
 <!DOCTYPE html>
@@ -88,55 +60,57 @@ if (isset($_POST['submitBtn'])) {
                 <h4>INPUT DAFTAR ANTRIAN</h4>
             </div>
 
-            <h6 class="mt-3">progress-bar</h6>
-            <!-- Previous markup -->
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-label="Basic example" style="width: 25%"
-                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-
             <div class="mt-3">
                 <p style="text-align: justify; padding: 0 13px; margin-top: 35px;">Masukkan Identitas dan Data Kendaraan
                     Anda Di Sini Untuk Mendaftar Antrian dan Mendapat Nomor
-                    Antrian</p>
-                <div class="identitas px-3">
-                    <div class="mb-3">
-                        <label for="nama" class="form-label">Nama</label>
-                        <input type="text" class="form-control" id="nama" placeholder="masukkan nama anda">
-                    </div>
-                    <div class="mb-3">
-                        <label for="telepon" class="form-label">No. Handphone</label>
-                        <input type="text" class="form-control" id="telepon" placeholder="masukkan nama anda">
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <label for="kendaraan" class="form-label">Jenis Kendaraan</label>
-                                <input type="text" class="form-control" id="kendaraan"
-                                    placeholder="masukkan kendaraan anda">
+                    Antrian
+                </p>
+                
+                <form action="" method="post">
+                    <input type="hidden" name="no_antrian" value="<?= $kode; ?>">
+                    <div class="identitas px-3">
+                        <div class="mb-3">
+                            <label for="nama" class="form-label">Nama</label>
+                            <?php if($user['level'] == "User") : ?>
+                                <input type="text" class="form-control" style="background-color:gainsboro;" id="nama" value="<?= $user['nama']; ?>" readonly name="nama_pelanggan">
+                            <?php else : ?>
+                                <input type="text" class="form-control" id="nama" placeholder="masukkan nama anda" name="nama_pelanggan" required>
+                            <?php endif; ?>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telepon" class="form-label">No. Handphone</label>
+                            <input type="text" class="form-control" id="telepon" placeholder="masukkan No.Handphone yang bisa dihubungi" name="no_hp" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="kendaraan" class="form-label">Jenis Kendaraan</label>
+                                    <select name="kendaraan" id="" class="form-control" required>
+                                        <option value="" selected hidden>--Pilih Jenis Kendaraan Anda--</option>
+                                        <?php foreach($data_kendaraan as $kendaraan) : ?>
+                                            <option value="<?= $kendaraan['idkendaraan']; ?>"><?= $kendaraan['nama_kendaraan']; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="no_pol" class="form-label">Nomor Polisi</label>
+                                    <input type="text" class="form-control" id="no_pol" placeholder="masukkan no polisi anda" name="nopol" required>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <label for="no_pol" class="form-label">Nomor Polisi</label>
-                                <input type="text" class="form-control" id="no_pol"
-                                    placeholder="masukkan no polisi anda">
-                            </div>
+                        <div class="mb-3">
+                            <label for="alamat" class="form-label">Alamat</label>
+                            <textarea class="form-control" id="alamat" rows="3" placeholder="masukkan alamat anda" name="alamat" required></textarea>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="alamat" class="form-label">Alamat</label>
-                        <textarea class="form-control" id="alamat" rows="3"
-                            placeholder="masukkan alamat anda"></textarea>
-                    </div>
-                </div>
-                <div class="tombol text-center px-3 justify-content-end">
-                    <a href="estimasi.php" style="text-decoration: none; color: white;">
-                        <button type="button" class="btn py-2 btn-success w-50">
+                    <div class="tombol text-center px-3 justify-content-end">
+                        <button type="submit" class="btn py-2 btn-success w-50" name="submit_antrian">
                             NEXT
                         </button>
-                    </a>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
