@@ -1,5 +1,6 @@
 <?php
 include("../controller/controller_sparepart.php");
+validasi_admin();
 
 $data_sparepart = query("SELECT * FROM sparepart");
 $jumlah_sparepart = jumlah_data("SELECT * FROM sparepart");

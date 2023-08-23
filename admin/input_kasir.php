@@ -1,5 +1,6 @@
 <?php
 include("../controller/controller_pengguna.php");
+validasi_admin();
 
 if (isset($_POST["submit_kasir"])) {
     if (register_kasir($_POST) > 0) {

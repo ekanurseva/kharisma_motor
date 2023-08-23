@@ -1,5 +1,6 @@
 <?php
 include("../controller/controller_pengguna.php");
+validasi_admin();
 
 if (isset($_POST["submit_admin"])) {
     if (register_admin($_POST) > 0) {

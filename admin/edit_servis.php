@@ -1,5 +1,6 @@
 <?php
 require_once('../controller/controller_servis.php');
+validasi_admin();
 
 $idservis = dekripsi($_GET['id']);
 $data = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
@@ -69,7 +70,7 @@ if (isset($_POST['submit_servis'])) {
                     </div>
                     <div class="mb-3">
                         <label for="harga" class="form-label">Harga Jasa</label>
-                        <input type="text" class="form-control" value="<?php echo $data['harga_jasa']; ?>"
+                        <input type="number" class="form-control" value="<?php echo $data['harga_jasa']; ?>"
                             name="harga_jasa" id="harga" placeholder="masukkan nominal harga jasa servis">
                     </div>
 

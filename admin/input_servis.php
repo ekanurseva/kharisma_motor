@@ -1,5 +1,6 @@
 <?php
 require_once('../controller/controller_servis.php');
+validasi_admin();
 
 if (isset($_POST["submit_servis"])) {
     if (input_servis($_POST) > 0) {
@@ -12,6 +13,7 @@ if (isset($_POST["submit_servis"])) {
     } else {
         echo "<script>
         alert('Data Gagal Ditambah');
+        document.location.href='servis.php';
         </script>";
     }
 }
@@ -59,7 +61,7 @@ if (isset($_POST["submit_servis"])) {
                     </div>
                     <div class="mb-3">
                         <label for="harga" class="form-label">Harga Jasa</label>
-                        <input type="text" class="form-control" name="harga_jasa" id="harga"
+                        <input type="number" class="form-control" name="harga_jasa" id="harga"
                             placeholder="masukkan nominal harga jasa servis">
                     </div>
 

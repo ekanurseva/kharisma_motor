@@ -1,5 +1,6 @@
 <?php
 require_once('../controller/controller_pengguna.php');
+validasi_admin();
 
 $idpengguna = dekripsi($_GET['id']);
 $data = query("SELECT * FROM pengguna WHERE idpengguna = $idpengguna")[0];

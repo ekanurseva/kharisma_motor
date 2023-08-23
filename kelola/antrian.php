@@ -1,5 +1,5 @@
 <?php
-require_once "../controller/controller_status_antrian.php";
+require_once "../controller/function.php";
 
 $id = dekripsi($_COOKIE['KMmz19']);
 $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];

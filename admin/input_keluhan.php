@@ -1,5 +1,6 @@
 <?php
 require_once('../controller/controller_keluhan.php');
+validasi_admin();
 
 $idservis = mysqli_query($conn, "SELECT * FROM servis ORDER BY idservis DESC");
 

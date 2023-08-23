@@ -14,8 +14,9 @@ function input_servis($data)
     $result = mysqli_query($conn, "SELECT jenis_servis FROM servis WHERE jenis_servis = '$jenis'") or die(mysqli_error($conn));
     if (mysqli_fetch_assoc($result)) {
         echo "<script>
-        alert('jenis servis Sudah Dipakai! Silahkan gunakan jenis servis lain');
-    </script>";
+                alert('jenis servis Sudah Dipakai! Silahkan gunakan jenis servis lain');
+                document.location.href='servis.php';
+            </script>";
         return false;
     }
 
@@ -41,6 +42,7 @@ function edit_servis($data)
         if (mysqli_fetch_assoc($result)) {
             echo "<script>
                 alert('Nama Jenis servis Sudah Ada!');
+                document.location.href='servis.php';
             </script>";
             return false;
         }

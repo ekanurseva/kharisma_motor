@@ -2,7 +2,7 @@
 require_once('../controller/controller_keluhan.php');
 
 $idkeluhan = dekripsi($_GET['id']);
-$data = query("SELECT * FROM jenis_keluhan WHERE idjkeluhan = $idkeluhan")[0];
+$data = query("SELECT * FROM jenis_keluhan WHERE idkeluhan = $idkeluhan")[0];
 
 $idservis = mysqli_query($conn, "SELECT * FROM servis ORDER BY idservis DESC");
 
@@ -56,8 +56,7 @@ if (isset($_POST['submit_keluhan'])) {
             </div>
             <div class="box mt-4 mx-4">
                 <form method="post" action="">
-                    <input type="hidden" name="idkeluhan" value="<?php echo $data['idjkeluhan']; ?>">
-                    <input type="hidden" name="oldidservis" value="<?php echo $data['idservis']; ?>">
+                    <input type="hidden" name="idkeluhan" value="<?php echo $data['idkeluhan']; ?>">
                     <input type="hidden" name="oldkeluhan" value="<?php echo $data['keluhan']; ?>">
 
                     <div class="mb-3">

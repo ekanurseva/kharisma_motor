@@ -13,12 +13,13 @@ function input_keluhan($data)
     $result = mysqli_query($conn, "SELECT keluhan FROM jenis_keluhan WHERE keluhan = '$keluhan'") or die(mysqli_error($conn));
     if (mysqli_fetch_assoc($result)) {
         echo "<script>
-        alert('Keluhan Sudah Ada!');
-    </script>";
+                alert('Keluhan Sudah Ada!');
+                document.location.href='keluhan.php';
+            </script>";
         return false;
     }
 
-    mysqli_query($conn, "INSERT INTO jenis_keluhan VALUES (NULL, '$idservis', '$keluhan')");
+    mysqli_query($conn, "INSERT INTO jenis_keluhan VALUES (NULL, '$keluhan', '$idservis')");
     return mysqli_affected_rows($conn);
 }
 // Fungsi Input keluhan Selesai
@@ -29,7 +30,6 @@ function edit_keluhan($data)
     global $conn;
 
     $idkeluhan = $data['idkeluhan'];
-    $oldidservis = $data['oldidservis'];
     $oldkeluhan = htmlspecialchars($data['oldkeluhan']);
     $idservis = $data['idservis'];
     $keluhan = htmlspecialchars($data['keluhan']);
@@ -40,6 +40,7 @@ function edit_keluhan($data)
         if (mysqli_fetch_assoc($result)) {
             echo "<script>
                 alert('keluhan Antrian Sudah Ada!');
+                document.location.href='keluhan.php';
             </script>";
             return false;
         }
@@ -48,7 +49,7 @@ function edit_keluhan($data)
     $query = "UPDATE jenis_keluhan SET 
                     idservis = '$idservis',
                     keluhan = '$keluhan'
-              WHERE idjkeluhan = '$idkeluhan'
+              WHERE idkeluhan = '$idkeluhan'
             ";
     mysqli_query($conn, $query);
 
@@ -57,11 +58,11 @@ function edit_keluhan($data)
 // Fungsi Edit keluhan Selesai
 
 // Delete
-if (isset($_GET['idjkeluhan'])) {
+if (isset($_GET['idkeluhan'])) {
     global $conn;
-    $idkeluhan = dekripsi($_GET['idjkeluhan']);
+    $idkeluhan = dekripsi($_GET['idkeluhan']);
 
-    mysqli_query($conn, "DELETE FROM jenis_keluhan WHERE idjkeluhan = $idkeluhan");
+    mysqli_query($conn, "DELETE FROM jenis_keluhan WHERE idkeluhan = $idkeluhan");
 
     if (mysqli_affected_rows($conn) > 0) {
         echo "

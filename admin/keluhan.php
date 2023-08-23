@@ -1,5 +1,6 @@
 <?php
 include("../controller/controller_keluhan.php");
+validasi_admin();
 
 $data = query("SELECT * FROM jenis_keluhan");
 $jumlah_keluhan = jumlah_data("SELECT * FROM jenis_keluhan");
@@ -65,18 +66,18 @@ $jumlah_keluhan = jumlah_data("SELECT * FROM jenis_keluhan");
                         </thead>
                         <tbody class="text-start">
                             <?php
-                            $i = 1;
-                            foreach ($data as $keluhan):
-                                $idkeluhan = enkripsi($keluhan['idjkeluhan']);
-                                ?>
+                                $i = 1;
+                                foreach ($data as $keluhan):
+                                $idkeluhan = enkripsi($keluhan['idkeluhan']);
+                            ?>
                                 <tr>
                                     <th>
                                         <?php echo $i; ?>
                                     </th>
 
                                     <?php
-                                    $idservis = $keluhan['idservis'];
-                                    $jenis_servis = query("SELECT jenis_servis FROM servis WHERE idservis = $idservis")[0];
+                                        $idservis = $keluhan['idservis'];
+                                        $jenis_servis = query("SELECT jenis_servis FROM servis WHERE idservis = $idservis")[0];
                                     ?>
                                     <td>
                                         <?php echo $jenis_servis['jenis_servis']; ?>
@@ -89,14 +90,14 @@ $jumlah_keluhan = jumlah_data("SELECT * FROM jenis_keluhan");
                                                 class="bi bi-pencil-fill"></i></a>
                                         |
                                         <a style="text-decoration: none;"
-                                            href="../controller/controller_keluhan.php?idjkeluhan=<?= $idkeluhan; ?>"
+                                            href="../controller/controller_keluhan.php?idkeluhan=<?= $idkeluhan; ?>"
                                             onclick="return confirm('Apakah anda yakin ingin menghapus data?')"><i
                                                 class="bi bi-trash-fill"></i></a>
                                     </td>
                                 </tr>
-                                <?php
+                            <?php
                                 $i++;
-                            endforeach
+                                endforeach
                             ?>
                         </tbody>
                     </table>

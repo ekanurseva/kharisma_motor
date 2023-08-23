@@ -1,5 +1,6 @@
 <?php
 include("../controller/controller_servis.php");
+validasi_admin();
 
 $data = query("SELECT * FROM servis");
 $jumlah_servis = jumlah_data("SELECT * FROM servis");
@@ -81,7 +82,7 @@ $jumlah_servis = jumlah_data("SELECT * FROM servis");
                                         <?php echo $servis['deskripsi']; ?>
                                     </td>
                                     <td>
-                                        <?php echo number_format($servis['harga_jasa']); ?>
+                                        Rp <?php echo number_format($servis['harga_jasa']); ?>
                                     </td>
                                     <td>
                                         <a href="edit_servis.php?id=<?= $idservis; ?>"><i class="bi bi-pencil-fill"></i></a>
