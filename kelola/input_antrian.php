@@ -12,7 +12,7 @@
     if(isset($_POST['submit_antrian'])) {
         if(input_antrian($_POST) > 0) {
             $nopol = enkripsi($_POST['nopol']);
-            header("Location: estimasi.php?key=" . $nopol);
+            header("Location: servis.php?key=" . $nopol);
         } else {
             header("Location: input_antrian.php");
         }

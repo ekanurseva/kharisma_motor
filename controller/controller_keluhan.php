@@ -10,14 +10,14 @@ function input_keluhan($data)
     $keluhan = htmlspecialchars($data['keluhan']);
     $idservis = $data['idservis'];
 
-    $result = mysqli_query($conn, "SELECT keluhan FROM jenis_keluhan WHERE keluhan = '$keluhan'") or die(mysqli_error($conn));
-    if (mysqli_fetch_assoc($result)) {
-        echo "<script>
-                alert('Keluhan Sudah Ada!');
-                document.location.href='keluhan.php';
-            </script>";
-        return false;
-    }
+    // $result = mysqli_query($conn, "SELECT keluhan FROM jenis_keluhan WHERE keluhan = '$keluhan'") or die(mysqli_error($conn));
+    // if (mysqli_fetch_assoc($result)) {
+    //     echo "<script>
+    //             alert('Keluhan Sudah Ada!');
+    //             document.location.href='keluhan.php';
+    //         </script>";
+    //     return false;
+    // }
 
     mysqli_query($conn, "INSERT INTO jenis_keluhan VALUES (NULL, '$keluhan', '$idservis')");
     return mysqli_affected_rows($conn);

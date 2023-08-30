@@ -1,52 +1,34 @@
 <?php
-require_once('../controller/function.php');
+    require_once('../controller/controller_transaksi.php');
+    cek_transaksi();
 
-// Seluruh data keluhan dibagi menjadi 2 kolom
-// $nopol = dekripsi($_GET['key']);
+    // Seluruh data keluhan dibagi menjadi 2 kolom
+    $nopol = dekripsi($_GET['key']);
+    $antrian = query("SELECT * FROM antrian WHERE nopol = '$nopol' AND id_antrian = (SELECT MAX(id_antrian) FROM antrian WHERE nopol = '$nopol')") [0];
+    $idantrian = $antrian['id_antrian'];
 
-$data_keluhan = jumlah_data("SELECT * FROM jenis_keluhan");
-$data1 = ceil($data_keluhan / 2);
-$data2 = $data_keluhan - $data1;
-$kumpul1 = query("SELECT * FROM jenis_keluhan LIMIT $data1");
-$kumpul2 = query("SELECT * FROM jenis_keluhan LIMIT $data2 OFFSET $data1");
+    $kode_transaksi = kode_transaksi();
 
-$id = dekripsi($_COOKIE['KMmz19']);
-$user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
+    $data_servis = jumlah_data("SELECT * FROM servis");
+    $data1 = ceil($data_servis / 2);
+    $data2 = $data_servis - $data1;
+    $kumpul1 = query("SELECT * FROM servis LIMIT $data1");
+    $kumpul2 = query("SELECT * FROM servis LIMIT $data2 OFFSET $data1");
 
-if (isset($_POST['submitBtn'])) {
-    // Mengambil data servis dari database
-    $idkeluhan = query("SELECT * FROM jenis_keluhan WHERE idjkeluhan")[0];
-    $sql = "SELECT * FROM servis WHERE idservis = $idkeluhan";
+    $id = dekripsi($_COOKIE['KMmz19']);
+    $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
 
-    var_dump($sql);
-    $result = mysqli_query($conn, $sql);
-
-    // Mendapatkan elemen div yang berisi checkbox yang dipilih
-    $selectedCheckboxes = $_POST['keluhan'];
-
-    // Mendapatkan elemen tbody dari tabel hasil
-    $resultTableBody = '';
-
-    // Counter untuk nomor urut
-    $counter = 1;
-
-    // Loop melalui checkbox yang dipilih
-    while ($row = mysqli_fetch_assoc($result)) {
-        if (in_array($row['idservis'], $selectedCheckboxes)) {
-            $jenisServis = $row['jenis_servis'];
-            $harga = $row['harga_servis'];
-
-            // Membuat baris baru dalam tabel hasil
-            $resultTableBody .= '<tr>
-                                    <td>' . $counter . '</td>
-                                    <td>' . $jenisServis . '</td>
-                                    <td>Rp ' . $harga . '</td>
-                                 </tr>';
-
-            $counter++;
+    if(isset($_POST['submit'])) {
+        if(create_transaksi($_POST) > 0) {
+            // $nopol = enkripsi($_POST['nopol']);
+            // header("Location: servis.php?key=" . $nopol);
+            header("Location: estimasi.php");
+        } else {
+            // header("Location: input_antrian.php");
+            header("Location: servis.php?key=" . $_GET['key']);
         }
     }
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -96,6 +78,8 @@ if (isset($_POST['submitBtn'])) {
                         Keluhan Mengenai PermasalahanKendaraan Anda, Sistem Akan Mendiagnosa Jenis Servis yang Perlu
                         Dilakukan yang Ditunjukkan pada Estimasi Nota</p>
                     <form method="post" action="">
+                        <input type="hidden" name="idantrian" value="<?= $idantrian; ?>">
+                        <input type="hidden" name="kode_transaksi" value="<?= $kode_transaksi; ?>">
                         <div class="row">
                             <div class="col-6">
                                 <div class="keluhan px-3">
@@ -103,12 +87,9 @@ if (isset($_POST['submitBtn'])) {
                                     foreach ($kumpul1 as $k1):
                                         ?>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="keluhan[]"
-                                                data-idjkeluhan="<?php echo $k1['idkeluhan']; ?>"
-                                                id="keluhan<?php echo $k1['idkeluhan']; ?>"
-                                                value="<?php echo $k1['idkeluhan']; ?>">
-                                            <label class="form-check-label" for="keluhan<?php echo $k1['idkeluhan']; ?>">
-                                                <?php echo $k1['keluhan']; ?>
+                                            <input class="form-check-input" type="checkbox" name="servis[]" id="servis<?php echo $k1['idservis']; ?>" value="<?php echo $k1['idservis']; ?>">
+                                            <label class="form-check-label" for="servis<?php echo $k1['idservis']; ?>">
+                                                <?php echo $k1['jenis_servis']; ?>
                                             </label>
                                         </div>
                                     <?php endforeach; ?>
@@ -119,61 +100,22 @@ if (isset($_POST['submitBtn'])) {
                                     <?php foreach ($kumpul2 as $k2):
                                         ?>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="keluhan[]"
-                                                data-idjkeluhan="<?php echo $k2['idkeluhan']; ?>"
-                                                id="keluhan<?php echo $k2['idkeluhan']; ?>"
-                                                value="<?php echo $k2['idkeluhan']; ?>">
-                                            <label class="form-check-label" for="keluhan<?php echo $k2['idkeluhan']; ?>">
-                                                <?php echo $k2['keluhan']; ?>
+                                            <input class="form-check-input" type="checkbox" name="servis[]" id="servis<?php echo $k2['idservis']; ?>" value="<?php echo $k2['idservis']; ?>">
+                                            <label class="form-check-label" for="servis<?php echo $k2['idservis']; ?>">
+                                                <?php echo $k2['jenis_servis']; ?>
                                             </label>
                                         </div>
                                     <?php endforeach; ?>
                                 </div>
                             </div>
                         </div>
+                        <div class="tombol text-center px-3 justify-content-end mt-3">
+                            <button type="submit" name="submit" class="btn py-2 btn-success w-50">
+                                Lanjutkan
+                            </button>
+                        </div>
                     </form>
-                    <div class="tombol text-center pt-4">
-                        <p style="font-size: 12px;">Klik Submit untuk melihat Estimasi Nota</p>
-                        <button type="button" class="btn btn-outline-success w-50 mx-3" style="margin-top: -10px;"
-                            id="submitBtn">
-                            Submit
-                        </button>
-                    </div>
-                    <div style="margin: 0 70px;">
-                        <?php if (isset($_POST['submitBtn'])): ?>
-                            <h5 class="px-3 mt-4 d-flex justify-content-center">Estimasi Nota</h5>
-                            <div class="nota px-3 ms-3 me-3">
-                                <p class="fw-semibold mt-3">Kharisma Motor</p>
-                                <p class="text-end" style="margin-top: -10px;">Playangan, 01 Juli 2023</p>
-                                <div class="row text-center fw-semibold">
-                                    <div class="col-6 text-start fw-bold">
-                                        <p>Eka Nurseva S</p>
-                                    </div>
-                                </div>
-
-                                <table class="table" id="resultTable">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Jenis Servis</th>
-                                            <th>Harga</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php echo $resultTableBody; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <?php endif; ?>
-                    </div>
                 </div>
-            </div>
-            <div class="tombol text-center px-3 justify-content-end mt-3">
-                <button type="button" name="submit" class="btn py-2 btn-success w-50">
-                    <a style="text-decoration: none; color: white;">
-                        Daftar
-                    </a>
-                </button>
             </div>
         </div>
     </div>
