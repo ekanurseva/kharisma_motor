@@ -54,21 +54,44 @@
         return $kode;
     }
 
+    function cek_estimasi_sparepart($data) {
+        $keluhan = $data['keluhan'];
+
+        foreach($keluhan as $k) {
+            $data_sparepart = query("SELECT * FROM jenis_keluhan WHERE idkeluhan = $k")[0];
+
+            $sparepart[] = $data_sparepart['idsparepart'];
+        }
+
+        $spare = array_values(array_unique($sparepart));
+
+        return $spare;
+    }
+
     function create_transaksi($data) {
         global $conn;
 
         $idantrian = $data['idantrian'];
-        $idservis = $data['servis'];
+        $idkeluhan = $data['keluhan'];
+        $idsparepart = cek_estimasi_sparepart($data);
         $kode_transaksi = $data['kode_transaksi'];
         $status_transaksi = "Belum";
 
-        for ($i = 0; $i < count($idservis); $i++) {
+        for ($i = 0; $i < count($idkeluhan); $i++) {
             $query = "INSERT INTO transaksi
                     VALUES
-                    (NULL, '$idantrian', '$idservis[$i]', NULL, '$kode_transaksi', CURRENT_TIMESTAMP(), '$status_transaksi')";
-            var_dump($query);
+                    (NULL, '$idantrian', '$idkeluhan[$i]', NULL, '$kode_transaksi', CURRENT_TIMESTAMP(), '$status_transaksi')";
+            // var_dump($query);
             mysqli_query($conn, $query);
         }
-        return mysqli_affected_rows($conn);
+
+        for ($j = 0; $j < count($idsparepart); $j++) {
+            $query = "INSERT INTO transaksi
+                    VALUES
+                    (NULL, '$idantrian', NULL, '$idsparepart[$j]', '$kode_transaksi', CURRENT_TIMESTAMP(), '$status_transaksi')";
+            // var_dump($query);
+            mysqli_query($conn, $query);
+        }
     }
+
 ?>

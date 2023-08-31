@@ -1,13 +1,12 @@
 <?php
     require_once('../controller/controller_transaksi.php');
+    validasi();
     cek_transaksi();
 
     // Seluruh data keluhan dibagi menjadi 2 kolom
     $nopol = dekripsi($_GET['key']);
     $antrian = query("SELECT * FROM antrian WHERE nopol = '$nopol' AND id_antrian = (SELECT MAX(id_antrian) FROM antrian WHERE nopol = '$nopol')") [0];
     $idantrian = $antrian['id_antrian'];
-
-    $kode_transaksi = kode_transaksi();
 
     $data_servis = jumlah_data("SELECT * FROM servis");
     $data1 = ceil($data_servis / 2);
@@ -18,16 +17,16 @@
     $id = dekripsi($_COOKIE['KMmz19']);
     $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
 
-    if(isset($_POST['submit'])) {
-        if(create_transaksi($_POST) > 0) {
-            // $nopol = enkripsi($_POST['nopol']);
-            // header("Location: servis.php?key=" . $nopol);
-            header("Location: estimasi.php");
-        } else {
-            // header("Location: input_antrian.php");
-            header("Location: servis.php?key=" . $_GET['key']);
-        }
-    }
+    // if(isset($_POST['submit'])) {
+    //     if(create_transaksi($_POST) > 0) {
+    //         // $nopol = enkripsi($_POST['nopol']);
+    //         // header("Location: servis.php?key=" . $nopol);
+    //         header("Location: estimasi.php");
+    //     } else {
+    //         // header("Location: input_antrian.php");
+    //         header("Location: servis.php?key=" . $_GET['key']);
+    //     }
+    // }
 
 ?>
 
@@ -77,9 +76,8 @@
                     <p style="text-align: justify; padding: 0 13px; margin-top: 10px; margin-bottom: 5px;">Pilih Jenis
                         Keluhan Mengenai PermasalahanKendaraan Anda, Sistem Akan Mendiagnosa Jenis Servis yang Perlu
                         Dilakukan yang Ditunjukkan pada Estimasi Nota</p>
-                    <form method="post" action="">
+                    <form method="post" action="estimasi.php">
                         <input type="hidden" name="idantrian" value="<?= $idantrian; ?>">
-                        <input type="hidden" name="kode_transaksi" value="<?= $kode_transaksi; ?>">
                         <div class="row">
                             <div class="col-6">
                                 <div class="keluhan px-3">
