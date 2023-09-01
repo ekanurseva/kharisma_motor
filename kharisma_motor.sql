@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Waktu pembuatan: 31 Agu 2023 pada 18.33
+-- Waktu pembuatan: 01 Sep 2023 pada 18.13
 -- Versi server: 10.4.22-MariaDB
 -- Versi PHP: 8.0.15
 
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `antrian` (
   `id_antrian` int(11) NOT NULL,
   `id_kendaraan` int(11) NOT NULL,
-  `no_antrian` int(20) NOT NULL,
+  `no_antrian` varchar(20) NOT NULL,
   `nama_pelanggan` varchar(100) NOT NULL,
   `no_hp` varchar(20) NOT NULL,
   `tanggal` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -44,9 +44,9 @@ CREATE TABLE `antrian` (
 --
 
 INSERT INTO `antrian` (`id_antrian`, `id_kendaraan`, `no_antrian`, `nama_pelanggan`, `no_hp`, `tanggal`, `nopol`, `alamat`, `status`) VALUES
-(1, 1, 20230831, 'Fillah Zaki Alhaqi', '085826389656', '2023-08-31 12:52:28', 'E 1234 ZN', 'Kuningan', 'Menunggu Antrian'),
-(2, 2, 20230831, 'Sukiman', '0895326850337', '2023-08-31 16:28:38', 'E 3456 PK', 'asdasdasdas', 'Menunggu Antrian'),
-(3, 1, 20230831, 'Sukijan', '0892891731111', '2023-08-31 16:29:58', 'E 1234 ZN', 'asdsdasas', 'Menunggu Antrian');
+(1, 1, '20230901_1', 'Fillah Zaki Alhaqi', '085826389656', '2023-09-01 15:47:18', 'E 1234 ZN', 'Kuningan', 'Dalam Pengerjaan'),
+(2, 2, '20230901_2', 'Sukiman', '0895326850337', '2023-09-01 14:36:11', 'E 9451 DF', 'asdasd', 'Menunggu Antrian'),
+(3, 1, '20230901_3', 'Fillah Zaki Alhaqi', '085826389656', '2023-09-01 16:03:45', 'E 3456 PK', 'asdasdasdasd', 'Menunggu Antrian');
 
 -- --------------------------------------------------------
 
@@ -316,34 +316,35 @@ CREATE TABLE `servis` (
   `idservis` int(11) NOT NULL,
   `jenis_servis` varchar(100) NOT NULL,
   `harga_jasa` bigint(100) NOT NULL,
-  `deskripsi` text NOT NULL
+  `deskripsi` text NOT NULL,
+  `waktu_pengerjaan` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `servis`
 --
 
-INSERT INTO `servis` (`idservis`, `jenis_servis`, `harga_jasa`, `deskripsi`) VALUES
-(1, 'Servis Berkala (tanpa pergantian part)', 150000, 'asdasd'),
-(2, 'Servis Tune Up Mesin', 200000, 'asdasd'),
-(3, 'Servis Rem', 200000, 'asdasdasd'),
-(4, 'Servis Kelistrikan Remot', 250000, 'asdasdasd'),
-(5, 'Servis Kaki-Kaki', 350000, 'asdassdasd'),
-(6, 'Servis Kaca (Power Window)', 200000, 'asdasdasd'),
-(7, 'Servis Dynamo', 500000, 'asdasdasd'),
-(8, 'Servis Seluruh Kelistrikan', 550000, 'assdassdasd'),
-(9, 'Servis Bemper', 150000, 'asdasdasd'),
-(10, 'Servis Kopling', 400000, 'adadasd'),
-(11, 'Servis Transmisi (Gigi)', 450000, 'asdasdasd'),
-(12, 'Servis Gardan', 300000, 'asdaasd'),
-(13, 'Servis Radiator', 250000, 'asdsadas'),
-(14, 'Servis Sabuk Pengaman', 100000, 'asdasdasd'),
-(15, 'Servis Audio', 200000, 'asdasdad'),
-(16, 'Servis Mesin (Silinder Head)', 800000, 'asdadasd'),
-(17, 'Servis Overhoul', 2000000, 'asdsd'),
-(18, 'Spooring', 150000, 'asdasdasd'),
-(19, 'Servis Per', 300000, 'asdasd'),
-(20, 'Scanning', 100000, 'asdasdasd');
+INSERT INTO `servis` (`idservis`, `jenis_servis`, `harga_jasa`, `deskripsi`, `waktu_pengerjaan`) VALUES
+(1, 'Servis Berkala (tanpa pergantian part)', 150000, 'asdasd', 3600),
+(2, 'Servis Tune Up Mesin', 200000, 'asdasd', 3600),
+(3, 'Servis Rem', 200000, 'asdasdasd', 5400),
+(4, 'Servis Kelistrikan Remot', 250000, 'asdasdasd', 7200),
+(5, 'Servis Kaki-Kaki', 350000, 'asdassdasd', 7200),
+(6, 'Servis Kaca (Power Window)', 200000, 'asdasdasd', 5400),
+(7, 'Servis Dynamo', 500000, 'asdasdasd', 7200),
+(8, 'Servis Seluruh Kelistrikan', 550000, 'assdassdasd', 14400),
+(9, 'Servis Bemper', 150000, 'asdasdasd', 3600),
+(10, 'Servis Kopling', 400000, 'adadasd', 14400),
+(11, 'Servis Transmisi (Gigi)', 450000, 'asdasdasd', 18000),
+(12, 'Servis Gardan', 300000, 'asdaasd', 10800),
+(13, 'Servis Radiator', 250000, 'asdsadas', 12600),
+(14, 'Servis Sabuk Pengaman', 100000, 'asdasdasd', 3600),
+(15, 'Servis Audio', 200000, 'asdasdad', 7200),
+(16, 'Servis Mesin (Silinder Head)', 800000, 'asdadasd', 18000),
+(17, 'Servis Overhoul', 2000000, 'asdsd', 259200),
+(18, 'Spooring', 150000, 'asdasdasd', 3600),
+(19, 'Servis Per', 300000, 'asdasd', 7200),
+(20, 'Scanning', 100000, 'asdasdasd', 1800);
 
 -- --------------------------------------------------------
 
@@ -439,26 +440,24 @@ CREATE TABLE `transaksi` (
 --
 
 INSERT INTO `transaksi` (`idtransaksi`, `idantrian`, `idkeluhan`, `idsparepart`, `kode_transaksi`, `tanggal`, `status_transaksi`) VALUES
-(1, 1, 1, NULL, 'T-20230831-1', '2023-08-31 16:25:52', 'Belum'),
-(2, 1, 2, NULL, 'T-20230831-1', '2023-08-31 16:25:52', 'Belum'),
-(3, 1, 3, NULL, 'T-20230831-1', '2023-08-31 16:25:52', 'Belum'),
-(4, 1, 7, NULL, 'T-20230831-1', '2023-08-31 16:25:52', 'Belum'),
-(5, 1, 10, NULL, 'T-20230831-1', '2023-08-31 16:25:52', 'Belum'),
-(6, 1, NULL, 17, 'T-20230831-1', '2023-08-31 16:25:52', 'Belum'),
-(7, 1, NULL, 19, 'T-20230831-1', '2023-08-31 16:25:52', 'Belum'),
-(8, 1, NULL, 20, 'T-20230831-1', '2023-08-31 16:25:52', 'Belum'),
-(9, 1, NULL, 22, 'T-20230831-1', '2023-08-31 16:25:52', 'Belum'),
-(10, 1, NULL, 24, 'T-20230831-1', '2023-08-31 16:25:52', 'Belum'),
-(11, 2, 35, NULL, 'T-20230831-2', '2023-08-31 16:28:53', 'Belum'),
-(12, 2, 36, NULL, 'T-20230831-2', '2023-08-31 16:28:53', 'Belum'),
-(13, 2, 38, NULL, 'T-20230831-2', '2023-08-31 16:28:53', 'Belum'),
-(14, 2, NULL, 46, 'T-20230831-2', '2023-08-31 16:28:53', 'Belum'),
-(15, 2, NULL, 47, 'T-20230831-2', '2023-08-31 16:28:53', 'Belum'),
-(16, 2, NULL, 52, 'T-20230831-2', '2023-08-31 16:28:53', 'Belum'),
-(17, 3, 26, NULL, 'T-20230831-3', '2023-08-31 16:30:18', 'Belum'),
-(18, 3, 54, NULL, 'T-20230831-3', '2023-08-31 16:30:18', 'Belum'),
-(19, 3, NULL, 34, 'T-20230831-3', '2023-08-31 16:30:18', 'Belum'),
-(20, 3, NULL, 36, 'T-20230831-3', '2023-08-31 16:30:18', 'Belum');
+(1, 1, 24, NULL, 'T-20230901-1', '2023-09-01 14:32:31', 'Lunas'),
+(2, 1, 37, NULL, 'T-20230901-1', '2023-09-01 14:26:04', 'Lunas'),
+(3, 1, NULL, 34, 'T-20230901-1', '2023-09-01 14:26:04', 'Lunas'),
+(5, 1, NULL, 15, 'T-20230901-1', '2023-09-01 14:26:04', 'Lunas'),
+(6, 2, 2, NULL, 'T-20230901-2', '2023-09-01 14:36:38', 'Belum'),
+(7, 2, 3, NULL, 'T-20230901-2', '2023-09-01 14:36:39', 'Belum'),
+(8, 2, 7, NULL, 'T-20230901-2', '2023-09-01 14:36:39', 'Belum'),
+(9, 2, 12, NULL, 'T-20230901-2', '2023-09-01 14:36:39', 'Belum'),
+(10, 2, 13, NULL, 'T-20230901-2', '2023-09-01 14:36:39', 'Belum'),
+(11, 2, 14, NULL, 'T-20230901-2', '2023-09-01 14:36:39', 'Belum'),
+(12, 2, 15, NULL, 'T-20230901-2', '2023-09-01 14:36:39', 'Belum'),
+(13, 2, NULL, 19, 'T-20230901-2', '2023-09-01 14:36:39', 'Belum'),
+(14, 2, NULL, 20, 'T-20230901-2', '2023-09-01 14:36:39', 'Belum'),
+(15, 2, NULL, 22, 'T-20230901-2', '2023-09-01 14:36:39', 'Belum'),
+(16, 2, NULL, 25, 'T-20230901-2', '2023-09-01 14:36:39', 'Belum'),
+(17, 2, NULL, 26, 'T-20230901-2', '2023-09-01 14:36:39', 'Belum'),
+(18, 2, NULL, 27, 'T-20230901-2', '2023-09-01 14:36:39', 'Belum'),
+(19, 2, NULL, 28, 'T-20230901-2', '2023-09-01 14:36:39', 'Belum');
 
 --
 -- Indexes for dumped tables
@@ -570,7 +569,7 @@ ALTER TABLE `sparepart`
 -- AUTO_INCREMENT untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `idtransaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `idtransaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
