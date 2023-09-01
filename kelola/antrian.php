@@ -62,6 +62,7 @@ $antrian = query("SELECT * FROM antrian");
                         <th scope="col">No Antrian</th>
                         <th scope="col">Atas Nama</th>
                         <th scope="col">Status Antrian</th>
+                        <th scope="col">Status Transaksi</th>
                         <th scope="col">Aksi</th>
                     </tr>
                 </thead>
@@ -69,6 +70,8 @@ $antrian = query("SELECT * FROM antrian");
                     <?php
                     foreach ($antrian as $s):
                         $enkripsi = enkripsi($s['id_antrian']);
+                        $idantrian = $s['id_antrian'];
+                        $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = $idantrian")[0];
                         ?>
                         <tr>
                             <th>
@@ -79,6 +82,9 @@ $antrian = query("SELECT * FROM antrian");
                             </td>
                             <td>
                                 <?= $s['status']; ?>
+                            </td>
+                            <td>
+                                <?= $data_transaksi['status_transaksi']; ?>
                             </td>
                             <td>
                                 <a class="btn btn-sm btn-primary"

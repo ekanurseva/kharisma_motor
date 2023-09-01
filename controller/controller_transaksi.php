@@ -140,4 +140,18 @@
         return mysqli_affected_rows($conn);
     }
 
+    function transaksi($data) {
+        global $conn;
+        $idantrian = $data['idantrian'];
+
+        $query = "UPDATE transaksi SET 
+                    status_transaksi = 'Lunas'
+              WHERE idantrian = '$idantrian'
+            ";
+        
+        mysqli_query($conn, $query);
+
+        return mysqli_affected_rows($conn);
+    }
+
 ?>

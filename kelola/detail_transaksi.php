@@ -34,6 +34,33 @@
             ";
         }
     }
+
+    if(isset($_POST['bayar'])) {
+        if($_POST['jumlah'] > $_POST['uang']) {
+            echo "
+                <script>
+                    alert('Jumlah yang dibayarkan kurang');
+                    document.location.href='antrian.php';
+                </script>
+            ";
+        } else {
+            if(transaksi($_POST) > 0) {
+                echo "
+                <script>
+                    alert('Transaksi Berhasil');
+                    document.location.href='antrian.php';
+                </script>
+            ";
+            } else {
+                echo "
+                <script>
+                    alert('Transaksi Gagal');
+                    document.location.href='antrian.php';
+                </script>
+            ";
+            }
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -100,11 +127,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-2">
-                        <button class="btn btn-sm btn-success">
-                            <a class="text-decoration-none text-white" href="#">Cetak Struk</a>
-                        </button>
-                    </div>
+
+                    <?php if($data_transaksi[0]['status_transaksi'] == "Lunas") : ?>
+                        <div class="col-2">
+                            <button class="btn btn-sm btn-success">
+                                <a class="text-decoration-none text-white" href="#">Cetak Struk</a>
+                            </button>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="col-6">
                     <div class="row">
@@ -143,9 +173,11 @@
                     </div>
                 </div>
 
-                <a href="input_detail_transaksi.php?key=<?= $_GET['id']; ?>" class="btn btn-primary mt-3 px-5">
-                    Input Servis & Separepart Tambahan
-                </a>
+                <?php if($data_antrian['status'] != "Selesai") : ?>
+                    <a href="input_detail_transaksi.php?key=<?= $_GET['id']; ?>" class="btn btn-primary mt-3 px-5">
+                        Input Servis & Separepart Tambahan
+                    </a>
+                <?php endif; ?>
             </div>
 
             <table class="table table-hover">
@@ -155,7 +187,9 @@
                         <th>Servis</th>
                         <th>Sparepart</th>
                         <th>Total</th>
-                        <th>Aksi</th>
+                        <?php if($data_antrian['status'] != "Selesai") : ?>
+                            <th>Aksi</th>
+                        <?php endif; ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -169,11 +203,13 @@
                             <td><?= $data_servis['jenis_servis']; ?></td>
                             <td>-</td>
                             <td>Rp <?= number_format($data_servis['harga_jasa']); ?></td>
-                            <td>
-                                <a style="text-decoration: none;" href="#"
-                                    onclick="return confirm('Apakah anda yakin ingin menghapus data?')">
-                                    <i class="bi bi-trash-fill"></i></a>
-                            </td>
+                            <?php if($data_antrian['status'] != "Selesai") : ?>
+                                <td>
+                                    <a style="text-decoration: none;" href="#"
+                                        onclick="return confirm('Apakah anda yakin ingin menghapus data?')">
+                                        <i class="bi bi-trash-fill"></i></a>
+                                </td>
+                            <?php endif; ?>
                             <?php $total += $data_servis['harga_jasa']; ?>
                         </tr>
                     <?php 
@@ -194,11 +230,13 @@
                             <td>-</td>
                             <td><?= $data_sparepart['sparepart']; ?></td>
                             <td>Rp <?= number_format($data_harga['harga']); ?></td>
-                            <td>
-                                <a style="text-decoration: none;" href="#"
-                                    onclick="return confirm('Apakah anda yakin ingin menghapus data?')">
-                                    <i class="bi bi-trash-fill"></i></a>
-                            </td>
+                            <?php if($data_antrian['status'] != "Selesai") : ?>
+                                <td>
+                                    <a style="text-decoration: none;" href="#"
+                                        onclick="return confirm('Apakah anda yakin ingin menghapus data?')">
+                                        <i class="bi bi-trash-fill"></i></a>
+                                </td>
+                            <?php endif; ?>
                             <?php $total += $data_harga['harga']; ?>
                         </tr>
                     <?php 
@@ -214,9 +252,11 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="d-flex justify-content-end">
-                <button class="btn btn-success">Bayar</button>
-            </div>
+            <?php if($data_transaksi[0]['status_transaksi'] == "Belum") : ?>
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#bayar">Bayar</button>
+                </div>
+            <?php endif; ?>
 
             <h3>Keluhan</h3>
             <ul>
@@ -268,6 +308,36 @@
         </div>
     </div>
     <!-- Modal Status selesai -->
+
+    <!-- Modal Bayar -->
+    <div class="modal fade modal-dialog-scrollable" id="bayar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Pembayaran</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="idantrian" value="<?= $data_antrian['id_antrian']; ?>">
+                        <input type="hidden" name="jumlah" value="<?= $total; ?>">
+
+                        <label for="jumlah2" class="form-label">Jumlah yang harus dibayar</label>
+                        <input type="text" class="form-control" id="jumlah2" name="jumlah2" readonly placeholder="" value="Rp <?= number_format($total); ?>">
+                        
+                        <label for="uang" class="form-label">Uang yang dibayarkan</label>
+                        <input type="number" class="form-control" id="uang" name="uang">
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" name="bayar">Bayar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Bayar selesai -->
 
     <!-- Footer -->
     <?php
