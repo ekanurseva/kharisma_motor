@@ -62,7 +62,17 @@ if (isset($_POST['submit_keluhan'])) {
                     <div class="mb-3">
                         <label class="form-label">Jenis Servis</label>
                         <select class="form-control" name="idservis" require style="border: 0.3px solid black;">
-                            <option value="" hidden selected>--Pilih Jenis Servis--</option>
+                            <option value="" hidden selected>Servis 1</option>
+                            <?php foreach ($idservis as $servis): ?>
+                                <option value="<?php echo $servis['idservis'] ?>" <?php echo ($servis['idservis'] == $data['idservis']) ? 'selected' : ''; ?>><?php echo $servis['jenis_servis'] ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Jenis Sparepart</label>
+                        <select class="form-control" name="idservis" require style="border: 0.3px solid black;">
+                            <option value="" hidden selected>Sparepart 1</option>
                             <?php foreach ($idservis as $servis): ?>
                                 <option value="<?php echo $servis['idservis'] ?>" <?php echo ($servis['idservis'] == $data['idservis']) ? 'selected' : ''; ?>><?php echo $servis['jenis_servis'] ?>
                                 </option>
@@ -71,8 +81,8 @@ if (isset($_POST['submit_keluhan'])) {
                     </div>
                     <div class="mb-3">
                         <label for="keluhan" class="form-label">Jenis Keluhan</label>
-                        <input type="text" name="keluhan" value="<?php echo $data['keluhan']; ?>" class="form-control"
-                            id="keluhan" placeholder="masukkan keluhan">
+                        <textarea type="text" name="keluhan" rows="3" class="form-control" id="keluhan"
+                            placeholder="masukkan keluhan"><?php echo $data['keluhan']; ?></textarea>
                     </div>
 
                     <button type="submit" name="submit_keluhan" class="btn btn-primary w-100">
