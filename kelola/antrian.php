@@ -68,11 +68,14 @@ $antrian = query("SELECT * FROM antrian");
                 </thead>
                 <tbody>
                     <?php
-                    foreach ($antrian as $s):
-                        $enkripsi = enkripsi($s['id_antrian']);
-                        $idantrian = $s['id_antrian'];
-                        $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = $idantrian")[0];
-                        ?>
+                        foreach ($antrian as $s):
+                            $enkripsi = enkripsi($s['id_antrian']);
+                            $idantrian = $s['id_antrian'];
+                            $jumlah_data = jumlah_data("SELECT * FROM transaksi WHERE idantrian = $idantrian");
+
+                            if($jumlah_data > 0) :
+                                $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = $idantrian")[0];        
+                    ?>
                         <tr>
                             <th>
                                 <?php echo $s['no_antrian']; ?>
@@ -91,8 +94,9 @@ $antrian = query("SELECT * FROM antrian");
                                     href="detail_transaksi.php?id=<?= $enkripsi; ?>">DETAIL</a>
                             </td>
                         </tr>
-                        <?php
-                    endforeach
+                    <?php
+                            endif;
+                        endforeach;
                     ?>
                 </tbody>
             </table>

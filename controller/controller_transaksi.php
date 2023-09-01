@@ -145,7 +145,8 @@
         $idantrian = $data['idantrian'];
 
         $query = "UPDATE transaksi SET 
-                    status_transaksi = 'Lunas'
+                    status_transaksi = 'Lunas',
+                    tanggal_pelunasan = CURRENT_TIMESTAMP()
               WHERE idantrian = '$idantrian'
             ";
         
@@ -157,7 +158,9 @@
     function estimasi_waktu($data) {
         $waktu = 0;
 
-        $waktu_sekarang = strtotime($data['tanggal']);
+        $waktuSekarang = date("Y-m-d H:i:s");
+
+        $waktu_sekarang = strtotime($waktuSekarang);
 
         $idantrian = $data['id_antrian'];
 
@@ -189,7 +192,9 @@
         $servis = $post['servis'];
         $waktu = 0;
 
-        $waktu_sekarang = strtotime($data['tanggal']);
+        $waktuSekarang = date("Y-m-d H:i:s");
+
+        $waktu_sekarang = strtotime($waktuSekarang);
 
         $idantrian = $data['id_antrian'];
 

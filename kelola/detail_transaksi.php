@@ -164,18 +164,34 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="row">
-                        <div class="col-3">
-                            <h6>Estimasi Tanggal Selesai</h6>
-                        </div>
-                        <div class="col-5">
-                            <h6>:
-                                <?= $waktu; ?>
-                            </h6>
+
+                <?php if($data_transaksi[0]['status_transaksi'] != "Lunas") : ?>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-3">
+                                <h6>Estimasi Tanggal Selesai</h6>
+                            </div>
+                            <div class="col-5">
+                                <h6>:
+                                    <?= $waktu; ?>
+                                </h6>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php else : ?>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-3">
+                                <h6>Tanggal Pelunasan</h6>
+                            </div>
+                            <div class="col-5">
+                                <h6>:
+                                    <?= $data_transaksi[0]['tanggal_pelunasan']; ?>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
 
                 <?php if($data_antrian['status'] != "Selesai") : ?>
                     <a href="input_detail_transaksi.php?key=<?= $_GET['id']; ?>" class="btn btn-primary mt-3 px-5">
@@ -209,7 +225,7 @@
                             <td>Rp <?= number_format($data_servis['harga_jasa']); ?></td>
                             <?php if($data_antrian['status'] != "Selesai") : ?>
                                 <td>
-                                    <a style="text-decoration: none;" href="#"
+                                    <a style="text-decoration: none;" href="delete.php?idtransaksi="
                                         onclick="return confirm('Apakah anda yakin ingin menghapus data?')">
                                         <i class="bi bi-trash-fill"></i></a>
                                 </td>
@@ -226,6 +242,7 @@
                             if($trans['idsparepart'] != NULL) :
                                 $idsparepart = $trans['idsparepart'];
                                 $data_sparepart = query("SELECT * FROM sparepart WHERE idsparepart = $idsparepart")[0];
+                                $enkripsi_idtrans = enkripsi($trans['idtransaksi']);
 
                                 $data_harga = query("SELECT * FROM harga_sparepart WHERE idkendaraan = $idkendaraan AND idsparepart = $idsparepart")[0];
                     ?>
@@ -236,7 +253,7 @@
                             <td>Rp <?= number_format($data_harga['harga']); ?></td>
                             <?php if($data_antrian['status'] != "Selesai") : ?>
                                 <td>
-                                    <a style="text-decoration: none;" href="#"
+                                    <a style="text-decoration: none;" href="delete.php?idtransaksi=<?= $enkripsi_idtrans; ?>"
                                         onclick="return confirm('Apakah anda yakin ingin menghapus data?')">
                                         <i class="bi bi-trash-fill"></i></a>
                                 </td>
