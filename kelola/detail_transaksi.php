@@ -16,6 +16,17 @@
     $servis = cari_servis($data_transaksi);
 
     $total = 0;
+
+    if(isset($_POST['status_antrian'])) {
+        if(ubah_status($_POST) > 0) {
+            echo "
+                <script>
+                    alert('Status berhasil diubah');
+                    document.location.href='antrian.php';
+                </script>
+            ";
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -76,9 +87,8 @@
                                 <h6>Status Antrian</h6>
                             </div>
                             <div class="col-7">
-                                <h6>: Menunggu Antrian
-                                    <button style="border: none; background: none;"><i
-                                            class="bi bi-pencil-fill"></i></button>
+                                <h6>: <?= $data_antrian['status']; ?>
+                                    <button type="button" style="border: none; background: none;" data-bs-toggle="modal" data-bs-target="#statusModal"><i class="bi bi-pencil-fill"></i></button>
                                 </h6>
                             </div>
                         </div>
@@ -220,6 +230,39 @@
         </div>
     </div>
     <!-- Content Selesai -->
+
+    <!-- Modal Status -->
+    <div class="modal fade modal-dialog-scrollable" id="statusModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Ubah Status Antrian</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="idantrian" value="<?= $data_antrian['id_antrian']; ?>">
+
+                        <label for="status" class="form-label">Pilih status antrian</label>
+                        <select class="form-select" aria-label="Default select example" name="status">
+                            <option selected hidden value="<?= $data_antrian['status']; ?>"><?= $data_antrian['status']; ?></option>
+                            <option value="Menunggu Antrian">Menunggu Antrian</option>
+                            <option value="Diproses">Diproses</option>
+                            <option value="Dalam Pengerjaan">Dalam Pengerjaan</option>
+                            <option value="Menunggu Suku Cadang">Menunggu Suku Cadang</option>
+                            <option value="Selesai">Selesai</option>
+                        </select>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" name="status_antrian">Pilih</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Status selesai -->
 
     <!-- Footer -->
     <?php

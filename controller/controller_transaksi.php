@@ -109,4 +109,19 @@
         return $idservis;
     }
 
+    function ubah_status($data) {
+        global $conn;
+        $idantrian = $data['idantrian'];
+        $status = $data['status'];
+
+        $query = "UPDATE antrian SET 
+                    status = '$status'
+              WHERE id_antrian = '$idantrian'
+            ";
+        
+        mysqli_query($conn, $query);
+
+        return mysqli_affected_rows($conn);
+    }
+
 ?>
