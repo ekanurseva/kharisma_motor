@@ -94,4 +94,19 @@
         }
     }
 
+    function cari_servis($data) {
+        foreach($data as $dt) {
+            if($dt['idkeluhan'] != NULL) {
+                $idkeluhan = $dt['idkeluhan'];
+                $data_keluhan = query("SELECT * FROM jenis_keluhan WHERE idkeluhan = $idkeluhan")[0];
+
+                $idsevis_array[] = $data_keluhan['idservis'];
+            }
+        }
+        
+        $idservis = array_values(array_unique($idsevis_array));
+
+        return $idservis;
+    }
+
 ?>

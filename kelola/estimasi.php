@@ -21,7 +21,7 @@
 
     $kode_transaksi = kode_transaksi();
 
-    if(isset($_POST['cek_estimasi'])) {
+    if(isset($_POST['cek_estimasi']) && isset($_POST['keluhan'])) {
         $sparepart = cek_estimasi_sparepart($_POST);
     }
 
@@ -219,34 +219,36 @@
                                         </tbody>
                                     </table>
 
-                                    <table class="table" id="resultTable">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Sparepart</th>
-                                                <th>Harga</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php 
-                                                for($k = 0; $k < count($sparepart); $k++) :
-                                                    $idsparepart = $sparepart[$k];
-                                                    $data_sparepart = query("SELECT * FROM sparepart WHERE idsparepart = $idsparepart")[0];
-
-                                                    $data_harga = query("SELECT * FROM harga_sparepart WHERE idkendaraan = '$idkendaraan' AND idsparepart = '$idsparepart'")[0];
-
-                                            ?>
+                                    <?php if(isset($_POST['keluhan'])) : ?>
+                                        <table class="table" id="resultTable">
+                                            <thead>
                                                 <tr>
-                                                    <td><?= $k + 1; ?></td>
-                                                    <td><?= $data_sparepart['sparepart']; ?></td>
-                                                    <td>Rp <?= number_format($data_harga['harga']); ?></td>
+                                                    <th>No</th>
+                                                    <th>Sparepart</th>
+                                                    <th>Harga</th>
                                                 </tr>
-                                            <?php 
-                                                $total += $data_harga['harga'];
-                                                endfor; 
-                                            ?>
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                <?php 
+                                                    for($k = 0; $k < count($sparepart); $k++) :
+                                                        $idsparepart = $sparepart[$k];
+                                                        $data_sparepart = query("SELECT * FROM sparepart WHERE idsparepart = $idsparepart")[0];
+
+                                                        $data_harga = query("SELECT * FROM harga_sparepart WHERE idkendaraan = '$idkendaraan' AND idsparepart = '$idsparepart'")[0];
+
+                                                ?>
+                                                    <tr>
+                                                        <td><?= $k + 1; ?></td>
+                                                        <td><?= $data_sparepart['sparepart']; ?></td>
+                                                        <td>Rp <?= number_format($data_harga['harga']); ?></td>
+                                                    </tr>
+                                                <?php 
+                                                    $total += $data_harga['harga'];
+                                                    endfor; 
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    <?php endif; ?>
 
                                     <h4 class="text-end my-3">Total : Rp <?= number_format($total); ?></h4>
                                 </div>

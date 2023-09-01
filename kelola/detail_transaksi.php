@@ -1,16 +1,21 @@
 <?php
-require_once "../controller/controller_transaksi.php";
-include("../controller/controller_servis.php");
+    require_once "../controller/controller_transaksi.php";
+    validasi_no_user();
 
-$id = dekripsi($_COOKIE['KMmz19']);
-$user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
+    $id = dekripsi($_COOKIE['KMmz19']);
+    $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
 
-$idtransaksi = $_GET['id'];
-$data_antrian = query("SELECT * FROM antrian WHERE id_antrian = '$idtransaksi'")[0];
+    $idtransaksi = dekripsi($_GET['id']);
+    $data_antrian = query("SELECT * FROM antrian WHERE id_antrian = '$idtransaksi'")[0];
 
-$idantrian = $data_antrian['id_antrian'];
-$data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = '$idantrian'")[0];
+    $idkendaraan = $data_antrian['id_kendaraan'];
 
+    $idantrian = $data_antrian['id_antrian'];
+    $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = '$idantrian'");
+    
+    $servis = cari_servis($data_transaksi);
+
+    $total = 0;
 ?>
 
 <!DOCTYPE html>
@@ -91,7 +96,7 @@ $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = '$idantrian'"
                         </div>
                         <div class="col-5">
                             <h6>:
-                                <?= $data_transaksi['kode_transaksi']; ?>
+                                <?= $data_transaksi[0]['kode_transaksi']; ?>
                             </h6>
                         </div>
                     </div>
@@ -99,11 +104,11 @@ $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = '$idantrian'"
                 <div class="col-6">
                     <div class="row">
                         <div class="col-3">
-                            <h6>Tanggal</h6>
+                            <h6>Tanggal Pendaftaran</h6>
                         </div>
                         <div class="col-5">
                             <h6>:
-                                <?= $data_transaksi['tanggal']; ?>
+                                <?= $data_antrian['tanggal']; ?>
                             </h6>
                         </div>
                     </div>
@@ -115,7 +120,7 @@ $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = '$idantrian'"
                         </div>
                         <div class="col-5">
                             <h6>:
-                                <?= $data_transaksi['tanggal']; ?>
+                                <?= $data_transaksi[0]['tanggal']; ?>
                             </h6>
                         </div>
                     </div>
@@ -139,39 +144,79 @@ $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = '$idantrian'"
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th>1</th>
-                        <td>Ban</td>
-                        <td>Ban</td>
-                        <td>Rp 800.000</td>
-                        <td>
-                            <a style="text-decoration: none;" href="#"
-                                onclick="return confirm('Apakah anda yakin ingin menghapus data?')">
-                                <i class="bi bi-trash-fill"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>2</th>
-                        <td>Ban</td>
-                        <td>Ban</td>
-                        <td>Rp 800.000</td>
-                        <td>
-                            <a style="text-decoration: none;" href="#"
-                                onclick="return confirm('Apakah anda yakin ingin menghapus data?')">
-                                <i class="bi bi-trash-fill"></i></a>
-                        </td>
-                    </tr>
+                    <?php 
+                        $i = 1;
+                        foreach ($servis as $ser) : 
+                            $data_servis = query("SELECT * FROM servis WHERE idservis = $ser")[0];
+                    ?>
+                        <tr>
+                            <th><?= $i; ?></th>
+                            <td><?= $data_servis['jenis_servis']; ?></td>
+                            <td>-</td>
+                            <td>Rp <?= number_format($data_servis['harga_jasa']); ?></td>
+                            <td>
+                                <a style="text-decoration: none;" href="#"
+                                    onclick="return confirm('Apakah anda yakin ingin menghapus data?')">
+                                    <i class="bi bi-trash-fill"></i></a>
+                            </td>
+                            <?php $total += $data_servis['harga_jasa']; ?>
+                        </tr>
+                    <?php 
+                        $i++;
+                        endforeach; 
+                    ?>
+
+                    <?php 
+                        foreach($data_transaksi as $trans) : 
+                            if($trans['idsparepart'] != NULL) :
+                                $idsparepart = $trans['idsparepart'];
+                                $data_sparepart = query("SELECT * FROM sparepart WHERE idsparepart = $idsparepart")[0];
+
+                                $data_harga = query("SELECT * FROM harga_sparepart WHERE idkendaraan = $idkendaraan AND idsparepart = $idsparepart")[0];
+                    ?>
+                        <tr>
+                            <th><?= $i; ?></th>
+                            <td>-</td>
+                            <td><?= $data_sparepart['sparepart']; ?></td>
+                            <td>Rp <?= number_format($data_harga['harga']); ?></td>
+                            <td>
+                                <a style="text-decoration: none;" href="#"
+                                    onclick="return confirm('Apakah anda yakin ingin menghapus data?')">
+                                    <i class="bi bi-trash-fill"></i></a>
+                            </td>
+                            <?php $total += $data_harga['harga']; ?>
+                        </tr>
+                    <?php 
+                            $i++;
+                            endif;
+                        endforeach;
+                    ?>
                     <tr>
                         <td></td>
                         <td></td>
                         <th>Total Pembayaran</th>
-                        <th>Rp 1.600.000</th>
+                        <th>Rp <?= number_format($total); ?></th>
                     </tr>
                 </tbody>
             </table>
             <div class="d-flex justify-content-end">
                 <button class="btn btn-success">Bayar</button>
             </div>
+
+            <h3>Keluhan</h3>
+            <ul>
+                <?php 
+                    foreach($data_transaksi as $datrans) : 
+                        if($datrans['idkeluhan'] != NULL) :
+                            $idkeluhan = $datrans['idkeluhan'];
+                            $keluhan = query("SELECT * FROM jenis_keluhan WHERE idkeluhan = $idkeluhan")[0];
+                ?>
+                    <li><?= $keluhan['keluhan']; ?></li>
+                <?php 
+                        endif;
+                    endforeach; 
+                ?>
+            </ul>
         </div>
     </div>
     <!-- Content Selesai -->

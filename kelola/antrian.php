@@ -1,5 +1,6 @@
 <?php
 require_once "../controller/function.php";
+validasi_no_user();
 
 $id = dekripsi($_COOKIE['KMmz19']);
 $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
@@ -67,6 +68,7 @@ $antrian = query("SELECT * FROM antrian");
                 <tbody>
                     <?php
                     foreach ($antrian as $s):
+                        $enkripsi = enkripsi($s['id_antrian']);
                         ?>
                         <tr>
                             <th>
@@ -80,7 +82,7 @@ $antrian = query("SELECT * FROM antrian");
                             </td>
                             <td>
                                 <a class="btn btn-sm btn-primary"
-                                    href="detail_transaksi.php?id=<?= $s['id_antrian'] ?>">DETAIL</a>
+                                    href="detail_transaksi.php?id=<?= $enkripsi; ?>">DETAIL</a>
                             </td>
                         </tr>
                         <?php
