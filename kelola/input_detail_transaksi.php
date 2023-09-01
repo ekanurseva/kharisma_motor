@@ -1,11 +1,34 @@
 <?php
-require_once "../controller/controller_transaksi.php";
+    require_once "../controller/controller_transaksi.php";
+    validasi_no_user();
 
-$id = dekripsi($_COOKIE['KMmz19']);
-$user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
+    $id = dekripsi($_COOKIE['KMmz19']);
+    $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
 
-$sparepart = query("SELECT * FROM sparepart");
-$servis = query("SELECT * FROM servis");
+    $sparepart = query("SELECT * FROM sparepart");
+    $servis = query("SELECT * FROM servis");
+
+    $idantrian = dekripsi($_GET['key']);
+    
+    $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = $idantrian")[0];
+
+    if(isset($_POST['submit_sparepart'])) {
+        if(tambah_sparepart($_POST) > 0) {
+            echo "
+                <script>
+                    alert('Sparepart berhasil ditambahkan');
+                    document.location.href='antrian.php';
+                </script>
+            ";
+        } else {
+            echo "
+                <script>
+                    alert('Sparepart gagal ditambahkan');
+                    document.location.href='antrian.php';
+                </script>
+            ";
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,47 +65,62 @@ $servis = query("SELECT * FROM servis");
     <!-- Content -->
     <div class="container">
         <div class="content py-3">
-            <div class="title text-center text-uppercase">
-                <h4>INPUT DETAIL TRANSAKSI</h4>
-            </div>
-            <form method="post" action="">
-                <div class="box mt-4 mx-4">
-                    <div class="row g-3 align-items-center">
-                        <div class="col-2">
-                            <label for="jservis" class="form-label">Jenis Servis</label>
-                        </div>
-                        <div class="col-4">
-                            <select class="form-select" aria-label="Default select example" name="servis">
-                                <?php foreach ($servis as $s): ?>
-                                    <option value="<?= $s['idservis']; ?>">
-                                        <?= $s['jenis_servis']; ?>
-                                    </option>
-                                <?php endforeach ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row g-3 align-items-center mt-2">
-                        <div class="col-2">
-                            <label for="jservis" class="form-label">Sparepart</label>
-                        </div>
-                        <div class="col-4">
-                            <select class="form-select" aria-label="Default select example" name="sparepart">
-                                <?php foreach ($sparepart as $spr): ?>
-                                    <option value="<?= $spr['idsparepart']; ?>">
-                                        <?= $spr['sparepart']; ?>
-                                    </option>
-                                <?php endforeach ?>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-6 mt-5">
-                        <button type="button" class="btn btn-primary w-100">
-                            Submit
-                        </button>
-                    </div>
+            <div class="row">
+                <div class="title text-center text-uppercase">
+                    <h4>INPUT DETAIL TRANSAKSI</h4>
                 </div>
-            </form>
+                <div class="box mt-4 mx-4">
+                    <form method="post" action="">
+                        <input type="hidden" name="idantrian" value="<?= $idantrian; ?>">
+                        <input type="hidden" name="kode_transaksi" value="<?= $data_transaksi['kode_transaksi']; ?>">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-2">
+                                <label for="jservis" class="form-label">Jenis Servis</label>
+                            </div>
+                            <div class="col-4">
+                                <select class="form-select" aria-label="Default select example" name="servis">
+                                    <?php foreach ($servis as $s): ?>
+                                        <option value="<?= $s['idservis']; ?>">
+                                            <?= $s['jenis_servis']; ?>
+                                        </option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-6 mt-3 mb-5">
+                            <button type="button" class="btn btn-primary w-100">
+                                Tambah Servis
+                            </button>
+                        </div>
+                    </form>
+
+                    <form action="" method="post">
+                        <input type="hidden" name="idantrian" value="<?= $idantrian; ?>">
+                        <input type="hidden" name="kode_transaksi" value="<?= $data_transaksi['kode_transaksi']; ?>">
+                        <div class="row g-3 align-items-center mt-2">
+                            <div class="col-2">
+                                <label for="jservis" class="form-label">Sparepart</label>
+                            </div>
+                            <div class="col-4">
+                                <select class="form-select" aria-label="Default select example" name="sparepart">
+                                    <?php foreach ($sparepart as $spr): ?>
+                                        <option value="<?= $spr['idsparepart']; ?>">
+                                            <?= $spr['sparepart']; ?>
+                                        </option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-6 mt-3">
+                            <button type="submit" class="btn btn-primary w-100" name="submit_sparepart">
+                                Tambah Sparepart
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
     <!-- Content Selesai -->

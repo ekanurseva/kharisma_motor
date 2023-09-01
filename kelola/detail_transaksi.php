@@ -25,6 +25,13 @@
                     document.location.href='antrian.php';
                 </script>
             ";
+        } else {
+            echo "
+                <script>
+                    alert('Status gagal diubah');
+                    document.location.href='antrian.php';
+                </script>
+            ";
         }
     }
 ?>
@@ -136,11 +143,9 @@
                     </div>
                 </div>
 
-                <button type="button" class="btn btn-primary mt-3">
-                    <a href="input_detail_transaksi.php" style="text-decoration: none; color: white; padding: 0 20px;">
-                        Input Servis & Separepart Tambahan
-                    </a>
-                </button>
+                <a href="input_detail_transaksi.php?key=<?= $_GET['id']; ?>" class="btn btn-primary mt-3 px-5">
+                    Input Servis & Separepart Tambahan
+                </a>
             </div>
 
             <table class="table table-hover">

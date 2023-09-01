@@ -124,4 +124,20 @@
         return mysqli_affected_rows($conn);
     }
 
+    function tambah_sparepart($data) {
+        global $conn;
+
+        $idantrian = $data['idantrian'];
+        $kode_transaksi = $data['kode_transaksi'];
+        $sparepart = $data['sparepart'];
+        $status_transaksi = "Belum";
+
+        $query = "INSERT INTO transaksi
+                    VALUES
+                    (NULL, '$idantrian', NULL, '$sparepart', '$kode_transaksi', CURRENT_TIMESTAMP(), '$status_transaksi')";
+        mysqli_query($conn, $query);
+
+        return mysqli_affected_rows($conn);
+    }
+
 ?>
