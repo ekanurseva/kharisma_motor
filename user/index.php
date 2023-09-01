@@ -1,3 +1,26 @@
+<?php 
+    require_once '../controller/controller_transaksi.php';
+    validasi();
+
+    $jumlah_antrian = jumlah_data("SELECT * FROM antrian WHERE status <> 'Selesai'");
+
+    $id = dekripsi($_COOKIE['KMmz19']);
+    $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
+
+    $nama = $user['nama'];
+
+    $antrian = query("SELECT * FROM antrian WHERE nama_pelanggan = '$nama' AND id_antrian = (SELECT MAX(id_antrian) FROM antrian WHERE nama_pelanggan = '$nama')") [0];
+    $idantrian = $antrian['id_antrian'];
+    $idkendaraan = $antrian['id_kendaraan'];
+
+    $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = $idantrian");
+
+    $servis = cari_servis($data_transaksi);
+
+    $total = 0;
+
+?> 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,7 +81,7 @@
                     <div class="card mt-3">
                         <h5 class="ms-3 mt-3 card-title">Jumlah Antrian Yang Ada</h5>
                         <div class="d-flex justify-content-between align-items-center mx-3">
-                            <h1>1</h1>
+                            <h1><?= $jumlah_antrian; ?></h1>
                             <i class="bi bi-people-fill" style="font-size: 100px;"></i>
                         </div>
                         <a href="../kelola/input_antrian.php" class="btn btn-primary mx-1 mb-1">Daftar Antrian</a>
@@ -92,7 +115,7 @@
 
                     <!-- Muncul ketika sudah daftar -->
                     <div class="title text-center text-uppercase mt-3 mb-1">
-                        <h5>ANTRIAN SAYA</h5>
+                        <h5>ANTRIAN TERAKHIR SAYA</h5>
                     </div>
                     <div class="row">
                         <div class="col-4">
@@ -100,18 +123,15 @@
                                 <h6>No Antrian</h6>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <h6>1</h6>
+                                <h6><?= $antrian['no_antrian']; ?></h6>
                             </div>
                             <div class="d-flex justify-content-center mt-2">
                                 <h6>Status Antrian</h6>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <span style="font-size: 13px; font-weight: 600;">Dalam Pengerjaan</span>
+                                <span style="font-size: 13px; font-weight: 600;"><?= $antrian['status']; ?></span>
                             </div>
-                            <div class="text-center">
-                                <span style="font-size: 13px; font-weight: 600;">Mobil Anda sedang
-                                    diperbaiki.</span>
-                            </div>
+                            
                         </div>
                         <div class="col-8">
                             <h5 class="px-3 mt-4 d-flex justify-content-center">Estimasi Nota</h5>
@@ -124,20 +144,57 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php
+                                        $i = 1; 
+                                        foreach($servis as $s) :
+                                            $data_servis = query("SELECT * FROM servis WHERE idservis = $s")[0];
+                                    ?>
+                                        <tr>
+                                            <td><?= $i; ?></td>
+                                            <td><?= $data_servis['jenis_servis']; ?></td>
+                                            <td>Rp <?= number_format($data_servis['harga_jasa']); ?></td>
+                                        </tr>
+                                    <?php
+                                        $total += $data_servis['harga_jasa'];
+                                        $i++; 
+                                        endforeach; 
+                                    ?>
+                                </tbody>
+                            </table>
+
+                            <table class="table">
+                                <thead>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Servis Per</td>
-                                        <td>Rp 300.000</td>
+                                        <th>No</th>
+                                        <th>Sparepart</th>
+                                        <th>Harga</th>
                                     </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Spooring</td>
-                                        <td>Rp 150.000</td>
-                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                        $j = 1;
+                                        foreach($data_transaksi as $dt) :
+                                            if($dt['idsparepart'] != NULL) :
+                                                $idsparepart = $dt['idsparepart'];
+                                                $data_sparepart = query("SELECT * FROM sparepart WHERE idsparepart = $idsparepart")[0];
+
+                                                $data_harga = query("SELECT * FROM harga_sparepart WHERE idkendaraan = $idkendaraan AND idsparepart = $idsparepart")[0];
+                                    ?>
+                                        <tr>
+                                            <td><?= $j; ?></td>
+                                            <td><?= $data_sparepart['sparepart']; ?></td>
+                                            <td>Rp <?= number_format($data_harga['harga']); ?></td>
+                                        </tr>
+                                    <?php
+                                            $total += $data_harga['harga'];
+                                            $j++; 
+                                            endif;
+                                        endforeach; 
+                                    ?>
                                     <tr>
                                         <td></td>
-                                        <th>Total</th>
-                                        <td>Rp 450.000</td>
+                                        <td>Total</td>
+                                        <td>Rp <?= number_format($total); ?></td>
                                     </tr>
                                 </tbody>
                             </table>
