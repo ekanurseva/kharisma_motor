@@ -154,4 +154,72 @@
         return mysqli_affected_rows($conn);
     }
 
+    function estimasi_waktu($data) {
+        $waktu = 0;
+
+        $waktu_sekarang = strtotime($data['tanggal']);
+
+        $idantrian = $data['id_antrian'];
+
+        $semua_antrian = query("SELECT * FROM antrian WHERE id_antrian <= $idantrian AND status <> 'Selesai'");
+
+        foreach($semua_antrian as $seman) {
+            $idant = $seman['id_antrian'];
+            $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = $idant");
+
+            foreach($data_transaksi as $datran) {
+                if($datran['idkeluhan'] != NULL) {
+                    $idkeluhan = $datran['idkeluhan'];
+                    $data_keluhan = query("SELECT * FROM jenis_keluhan WHERE idkeluhan = $idkeluhan")[0];
+
+                    $idservis = $data_keluhan['idservis'];
+                    $data_servis = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
+
+                    $waktu += $data_servis['waktu_pengerjaan'];
+                }
+            }
+        }
+
+        $waktu += $waktu_sekarang;
+
+        return $waktu;
+    }
+
+    function cek_estimasi_waktu($post ,$data) {
+        $servis = $post['servis'];
+        $waktu = 0;
+
+        $waktu_sekarang = strtotime($data['tanggal']);
+
+        $idantrian = $data['id_antrian'];
+
+        $semua_antrian = query("SELECT * FROM antrian WHERE id_antrian <= $idantrian AND status <> 'Selesai'");
+
+        foreach($semua_antrian as $seman) {
+            $idant = $seman['id_antrian'];
+            $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = $idant");
+
+            foreach($data_transaksi as $datran) {
+                if($datran['idkeluhan'] != NULL) {
+                    $idkeluhan = $datran['idkeluhan'];
+                    $data_keluhan = query("SELECT * FROM jenis_keluhan WHERE idkeluhan = $idkeluhan")[0];
+
+                    $idservis = $data_keluhan['idservis'];
+                    $data_servis = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
+
+                    $waktu += $data_servis['waktu_pengerjaan'];
+                }
+            }
+        }
+
+        foreach($servis as $ser) {
+            $data_servis2 = query("SELECT * FROM servis WHERE idservis = $ser")[0];
+
+            $waktu += $data_servis2['waktu_pengerjaan'];
+        }
+
+        $waktu += $waktu_sekarang;
+
+        return $waktu;
+    }
 ?>

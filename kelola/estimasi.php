@@ -21,6 +21,10 @@
 
     $kode_transaksi = kode_transaksi();
 
+    $estimasi_waktu = cek_estimasi_waktu($_POST, $data_antrian);
+
+    $waktu_estimasi = date('Y-m-d H:i:s', $estimasi_waktu);
+
     if(isset($_POST['cek_estimasi']) && isset($_POST['keluhan'])) {
         $sparepart = cek_estimasi_sparepart($_POST);
     }
@@ -192,6 +196,8 @@
                                             <p><?= $data_antrian['nama_pelanggan']; ?></p>
                                         </div>
                                     </div>
+
+                                    <p class="text-end">Estimasi selesai : <?= $waktu_estimasi; ?></p>
     
                                     <table class="table" id="resultTable">
                                         <thead>

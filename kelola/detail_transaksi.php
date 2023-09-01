@@ -17,6 +17,10 @@
 
     $total = 0;
 
+    $estimasi_waktu = estimasi_waktu($data_antrian);
+
+    $waktu = date('Y-m-d H:i:s', $estimasi_waktu);
+
     if(isset($_POST['status_antrian'])) {
         if(ubah_status($_POST) > 0) {
             echo "
@@ -163,11 +167,11 @@
                 <div class="col-6">
                     <div class="row">
                         <div class="col-3">
-                            <h6>Estimasi Waktu Pengerjaan</h6>
+                            <h6>Estimasi Tanggal Selesai</h6>
                         </div>
                         <div class="col-5">
                             <h6>:
-                                <?= $data_transaksi[0]['tanggal']; ?>
+                                <?= $waktu; ?>
                             </h6>
                         </div>
                     </div>
