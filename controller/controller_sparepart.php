@@ -7,19 +7,12 @@ function input_sparepart($data_sparepart)
 {
     global $conn;
 
-    $jenis = htmlspecialchars($data_sparepart['jenis']);
+    $idkendaraan = $data_sparepart['kendaraan'];
+    $sparepart = htmlspecialchars($data_sparepart['sparepart']);
     $harga = $data_sparepart['harga'];
     $deskripsi = $data_sparepart['deskripsi'];
 
-    $result = mysqli_query($conn, "SELECT sparepart FROM sparepart WHERE sparepart = '$jenis'") or die(mysqli_error($conn));
-    if (mysqli_fetch_assoc($result)) {
-        echo "<script>
-        alert('Jenis Sparepart Sudah Dipakai! Silahkan gunakan jenis sparepart lain');
-    </script>";
-        return false;
-    }
-
-    mysqli_query($conn, "INSERT INTO sparepart VALUES (NULL, '$jenis', '$harga', '$deskripsi')");
+    mysqli_query($conn, "INSERT INTO sparepart VALUES (NULL,'$idkendaraan', '$sparepart', '$harga', '$deskripsi')");
     return mysqli_affected_rows($conn);
 }
 // Fungsi Input Sparepart Selesai

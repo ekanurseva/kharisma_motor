@@ -5,8 +5,12 @@ include("../controller/controller_servis.php");
 $id = dekripsi($_COOKIE['KMmz19']);
 $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
 
-$data = query("SELECT * FROM servis");
-$jumlah_servis = jumlah_data("SELECT * FROM servis");
+$idtransaksi = $_GET['id'];
+$data_antrian = query("SELECT * FROM antrian WHERE id_antrian = '$idtransaksi'")[0];
+
+$idantrian = $data_antrian['id_antrian'];
+$data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = '$idantrian'")[0];
+
 ?>
 
 <!DOCTYPE html>
@@ -49,39 +53,70 @@ $jumlah_servis = jumlah_data("SELECT * FROM servis");
             </div>
             <div class="konten py-4">
                 <div class="row">
-                    <div class="col-8 mt-2">
+                    <div class="col-6 mt-2">
                         <div class="row">
                             <div class="col-3">
                                 <h6>Pelanggan</h6>
                             </div>
                             <div class="col-5">
-                                <h6>: Mark</h6>
+                                <h6>:
+                                    <?= $data_antrian['nama_pelanggan']; ?>
+                                </h6>
                             </div>
                         </div>
                     </div>
                     <div class="col-4">
-                        <button class="btn btn-success">
+                        <div class="row">
+                            <div class="col-3">
+                                <h6>Status Antrian</h6>
+                            </div>
+                            <div class="col-7">
+                                <h6>: Menunggu Antrian
+                                    <button style="border: none; background: none;"><i
+                                            class="bi bi-pencil-fill"></i></button>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-sm btn-success">
                             <a class="text-decoration-none text-white" href="#">Cetak Struk</a>
                         </button>
                     </div>
                 </div>
-                <div class="col-8">
+                <div class="col-6">
                     <div class="row">
                         <div class="col-3">
                             <h6>Kode Transaksi</h6>
                         </div>
                         <div class="col-5">
-                            <h6>: 001</h6>
+                            <h6>:
+                                <?= $data_transaksi['kode_transaksi']; ?>
+                            </h6>
                         </div>
                     </div>
                 </div>
-                <div class="col-8">
+                <div class="col-6">
                     <div class="row">
                         <div class="col-3">
                             <h6>Tanggal</h6>
                         </div>
                         <div class="col-5">
-                            <h6>: 01/07/2023</h6>
+                            <h6>:
+                                <?= $data_transaksi['tanggal']; ?>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-3">
+                            <h6>Estimasi Waktu Pengerjaan</h6>
+                        </div>
+                        <div class="col-5">
+                            <h6>:
+                                <?= $data_transaksi['tanggal']; ?>
+                            </h6>
                         </div>
                     </div>
                 </div>
@@ -110,8 +145,6 @@ $jumlah_servis = jumlah_data("SELECT * FROM servis");
                         <td>Ban</td>
                         <td>Rp 800.000</td>
                         <td>
-                            <a href="edit_detail_transaksi.php"><i class="bi bi-pencil-fill"></i></a>
-                            |
                             <a style="text-decoration: none;" href="#"
                                 onclick="return confirm('Apakah anda yakin ingin menghapus data?')">
                                 <i class="bi bi-trash-fill"></i></a>
@@ -123,8 +156,6 @@ $jumlah_servis = jumlah_data("SELECT * FROM servis");
                         <td>Ban</td>
                         <td>Rp 800.000</td>
                         <td>
-                            <a href="edit_detail_transaksi.php"><i class="bi bi-pencil-fill"></i></a>
-                            |
                             <a style="text-decoration: none;" href="#"
                                 onclick="return confirm('Apakah anda yakin ingin menghapus data?')">
                                 <i class="bi bi-trash-fill"></i></a>
@@ -138,6 +169,9 @@ $jumlah_servis = jumlah_data("SELECT * FROM servis");
                     </tr>
                 </tbody>
             </table>
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-success">Bayar</button>
+            </div>
         </div>
     </div>
     <!-- Content Selesai -->

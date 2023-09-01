@@ -20,7 +20,7 @@
                         Menu
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="../kelola/transaksi.php">Transaksi</a></li>
+                        <li><a class="dropdown-item" href="../admin/kendaraan.php">Data Kendaraan</a></li>
                         <li><a class="dropdown-item" href="../admin/servis.php">Data Servis</a></li>
                         <li><a class="dropdown-item" href="../admin/keluhan.php">Data Keluhan</a></li>
                         <li><a class="dropdown-item" href="../admin/sparepart.php">Data Sparepart</a></li>

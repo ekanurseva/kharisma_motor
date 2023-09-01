@@ -3,6 +3,9 @@ require_once "../controller/controller_transaksi.php";
 
 $id = dekripsi($_COOKIE['KMmz19']);
 $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
+$jumlah_transaksi = jumlah_data("SELECT * FROM transaksi");
+
+$transaksi = query("SELECT * FROM transaksi");
 
 ?>
 
@@ -48,14 +51,11 @@ $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
             <div class="row">
                 <div class="col-3 me-2" style="margin-left: 80px;">
                     <div class="card my-4">
-                        <div class="card-body">
-                            <a href="input_servis.php" class="fw-medium text-decoration-none">
-                                <i class="bi bi-plus-circle"></i>
-                                <span>Input Transaksi</span>
-                            </a>
-                            <hr style="margin-top: 3px;  color: #0275d8; opacity: 1;">
+                        <div class="card-body mt-3">
                             <h6 class="card-subtitle ms-4">Jumlah Transaksi</h6>
-                            <p class="card-text fw-bold">2</p>
+                            <p class="card-text fw-bold">
+                                <?= $jumlah_transaksi; ?>
+                            </p>
                             <i class="icon bi bi-file-earmark-ruled"></i>
                         </div>
                     </div>

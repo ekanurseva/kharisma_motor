@@ -4,6 +4,8 @@ require_once "../controller/function.php";
 $id = dekripsi($_COOKIE['KMmz19']);
 $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
 
+$antrian = query("SELECT * FROM antrian");
+
 ?>
 
 <!DOCTYPE html>
@@ -59,20 +61,31 @@ $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
                         <th scope="col">No Antrian</th>
                         <th scope="col">Atas Nama</th>
                         <th scope="col">Status Antrian</th>
-                        <th scope="col">Ubah Status</th>
+                        <th scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Sedang Dilayani</td>
-                        <td>
-                            <select class="form-select" aria-label="Default select example" name="status">
-                                <option value="">Contoh</option>
-                            </select>
-                        </td>
-                    </tr>
+                    <?php
+                    foreach ($antrian as $s):
+                        ?>
+                        <tr>
+                            <th>
+                                <?php echo $s['no_antrian']; ?>
+                            </th>
+                            <td>
+                                <?php echo $s['nama_pelanggan']; ?>
+                            </td>
+                            <td>
+                                <?= $s['status']; ?>
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-primary"
+                                    href="detail_transaksi.php?id=<?= $s['id_antrian'] ?>">DETAIL</a>
+                            </td>
+                        </tr>
+                        <?php
+                    endforeach
+                    ?>
                 </tbody>
             </table>
         </div>

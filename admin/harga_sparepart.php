@@ -1,12 +1,12 @@
 <?php
-include("../controller/controller_keluhan.php");
+include("../controller/controller_sparepart.php");
 validasi_admin();
 
-$keluhan = query("SELECT * FROM jenis_keluhan");
-$jumlah_keluhan = jumlah_data("SELECT * FROM jenis_keluhan");
+$data_sparepart = query("SELECT * FROM harga_sparepart");
+$jumlah_sparepart = jumlah_data("SELECT * FROM harga_sparepart");
 
 $sparepart = query("SELECT * FROM sparepart");
-$servis = query("SELECT * FROM servis");
+$kendaraan = query("SELECT * FROM jenis_kendaraan");
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +38,7 @@ $servis = query("SELECT * FROM servis");
     <div class="container">
         <div class="content py-3">
             <div class="title text-center text-uppercase">
-                <h4>KELOLA DATA KELUHAN</h4>
+                <h4>KELOLA DATA HARGA SPAREPART</h4>
             </div>
             <div class="row">
                 <div class="col-3 me-4 ms-4">
@@ -46,12 +46,12 @@ $servis = query("SELECT * FROM servis");
                         <div class="card-body">
                             <a class="fw-medium text-decoration-none" data-bs-toggle="modal" data-bs-target="#myModal">
                                 <i class="bi bi-plus-circle"></i>
-                                <span>Input Keluhan</span>
+                                <span>Input Sparepart</span>
                             </a>
                             <hr style="margin-top: 3px;  color: #0275d8; opacity: 1;">
                             <h6 class="card-subtitle ms-4">Jumlah Data</h6>
                             <p class="card-text fw-bold">
-                                <?php echo $jumlah_keluhan; ?>
+                                <?php echo $jumlah_sparepart; ?>
                             </p>
                             <i class="icon bi bi-gear"></i>
                         </div>
@@ -63,37 +63,37 @@ $servis = query("SELECT * FROM servis");
                         <thead class="text-center">
                             <tr>
                                 <th scope="col">No</th>
-                                <th scope="col">Jenis Servis</th>
                                 <th scope="col">Jenis Sparepart</th>
-                                <th scope="col">Keluhan</th>
+                                <th scope="col">Jenis Kendaraan</th>
+                                <th scope="col">Harga</th>
                                 <th scope="col">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="text-start">
                             <?php
                             $i = 1;
-                            foreach ($keluhan as $s):
-                                $idkeluhan = enkripsi($s['idkeluhan']);
+                            foreach ($data_sparepart as $s):
+                                $idsparepart = enkripsi($s['idharga']);
                                 ?>
                                 <tr>
                                     <th>
                                         <?php echo $i; ?>
                                     </th>
                                     <td>
-                                        <?php echo $s['keluhan']; ?>
+                                        <?php echo $s['harga']; ?>
                                     </td>
                                     <td>
-                                        <?php echo $s['keluhan']; ?>
+                                        <?php echo $s['harga']; ?>
                                     </td>
                                     <td>
-                                        <?php echo $s['keluhan']; ?>
+                                        <?php echo $s['harga']; ?>
                                     </td>
                                     <td>
-                                        <a href="edit_sparepart.php?id=<?= $idkeluhan; ?>"><i
+                                        <a href="edit_sparepart.php?id=<?= $idsparepart; ?>"><i
                                                 class="bi bi-pencil-fill"></i></a>
                                         |
                                         <a style="text-decoration: none;"
-                                            href="../controller/controller_sparepart.php?idharga=<?= $idkeluhan; ?>"
+                                            href="../controller/controller_sparepart.php?idharga=<?= $idsparepart; ?>"
                                             onclick="return confirm('Apakah anda yakin ingin menghapus data?')"><i
                                                 class="bi bi-trash-fill"></i></a>
                                     </td>
@@ -114,21 +114,12 @@ $servis = query("SELECT * FROM servis");
 
                         <!-- Modal Header -->
                         <div class="modal-header">
-                            <h4 class="modal-title">Input Keluhan</h4>
+                            <h4 class="modal-title">Input Harga Sparepart</h4>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <form action="" method="post">
                             <!-- Modal body -->
                             <div class="modal-body">
-                                <label for="kriteria">Jenis Servis</label>
-                                <select class="form-select" id="kriteria" aria-label="Default select example"
-                                    name="kriteria">
-                                    <option selected hidden value="">-- Pilih Servis --</option>
-                                    <?php foreach ($servis as $k): ?>
-                                        <option value="<?= $k['idservis']; ?>"><?= $k['jenis_servis']; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <br>
                                 <label for="kriteria">Jenis Sparepart</label>
                                 <select class="form-select" id="kriteria" aria-label="Default select example"
                                     name="kriteria">
@@ -138,8 +129,17 @@ $servis = query("SELECT * FROM servis");
                                     <?php endforeach; ?>
                                 </select>
                                 <br>
-                                <label for="indikator">Keluhan :</label>
-                                <textarea class="form-control" rows="3" id="indikator" name="indikator"></textarea>
+                                <label for="kriteria">Jenis Kendaraan</label>
+                                <select class="form-select" id="kriteria" aria-label="Default select example"
+                                    name="kriteria">
+                                    <option selected hidden value="">-- Pilih Kendaraan --</option>
+                                    <?php foreach ($kendaraan as $k): ?>
+                                        <option value="<?= $k['idkendaraan']; ?>"><?= $k['nama_kendaraan']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <br>
+                                <label for="indikator">Harga :</label>
+                                <input class="form-control" id="indikator" name="indikator">
 
                             </div>
 

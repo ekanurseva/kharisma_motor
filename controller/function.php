@@ -73,7 +73,7 @@ function validasi()
 
     if (mysqli_num_rows($result) !== 1) {
         echo "<script>
-                document.location.href='logout.php';
+                document.location.href='../logout.php';
               </script>";
         exit;
     }

@@ -1,9 +1,9 @@
 <?php
-include("../controller/controller_sparepart.php");
+include("../controller/controller_kendaraan.php");
 validasi_admin();
 
-$data_sparepart = query("SELECT * FROM sparepart");
-$jumlah_sparepart = jumlah_data("SELECT * FROM sparepart");
+$data_kendaraan = query("SELECT * FROM jenis_kendaraan");
+$jumlah_kendaraan = jumlah_data("SELECT * FROM jenis_kendaraan");
 ?>
 
 <!DOCTYPE html>
@@ -35,20 +35,20 @@ $jumlah_sparepart = jumlah_data("SELECT * FROM sparepart");
     <div class="container">
         <div class="content py-3">
             <div class="title text-center text-uppercase">
-                <h4>KELOLA DATA SPAREPART</h4>
+                <h4>KELOLA DATA Kendaraan</h4>
             </div>
             <div class="row">
                 <div class="col-3 me-4 ms-4">
                     <div class="card my-4">
                         <div class="card-body">
-                            <a href="input_sparepart.php" class="fw-medium text-decoration-none">
+                            <a href="input_kendaraan.php" class="fw-medium text-decoration-none">
                                 <i class="bi bi-plus-circle"></i>
-                                <span>Input Sparepart</span>
+                                <span>Input Kendaraan</span>
                             </a>
                             <hr style="margin-top: 3px;  color: #0275d8; opacity: 1;">
-                            <h6 class="card-subtitle ms-4">Jumlah Sparepart</h6>
+                            <h6 class="card-subtitle ms-4">Jumlah Kendaraan</h6>
                             <p class="card-text fw-bold">
-                                <?php echo $jumlah_sparepart; ?>
+                                <?php echo $jumlah_kendaraan; ?>
                             </p>
                             <i class="icon bi bi-gear"></i>
                         </div>
@@ -59,29 +59,29 @@ $jumlah_sparepart = jumlah_data("SELECT * FROM sparepart");
                         <thead class="text-center">
                             <tr>
                                 <th scope="col">No</th>
-                                <th scope="col">Jenis Sparepart</th>
+                                <th scope="col">Jenis kendaraan</th>
                                 <th scope="col">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="text-start">
                             <?php
                             $i = 1;
-                            foreach ($data_sparepart as $s):
-                                $idsparepart = enkripsi($s['idsparepart']);
+                            foreach ($data_kendaraan as $s):
+                                $idkendaraan = enkripsi($s['idkendaraan']);
                                 ?>
                                 <tr>
                                     <th>
                                         <?php echo $i; ?>
                                     </th>
                                     <td>
-                                        <?php echo $s['sparepart']; ?>
+                                        <?php echo $s['nama_kendaraan']; ?>
                                     </td>
                                     <td>
-                                        <a href="edit_sparepart.php?id=<?= $idsparepart; ?>"><i
+                                        <a href="edit_kendaraan.php?id=<?= $idkendaraan; ?>"><i
                                                 class="bi bi-pencil-fill"></i></a>
                                         |
                                         <a style="text-decoration: none;"
-                                            href="../controller/controller_sparepart.php?idsparepart=<?= $idsparepart; ?>"
+                                            href="../controller/controller_kendaraan.php?idkendaraan=<?= $idkendaraan; ?>"
                                             onclick="return confirm('Apakah anda yakin ingin menghapus data?')"><i
                                                 class="bi bi-trash-fill"></i></a>
                                     </td>
