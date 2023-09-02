@@ -146,21 +146,6 @@
         }
     }
 
-    function cari_servis($data) {
-        foreach($data as $dt) {
-            if($dt['idkeluhan'] != NULL) {
-                $idkeluhan = $dt['idkeluhan'];
-                $data_keluhan = query("SELECT * FROM jenis_keluhan WHERE idkeluhan = $idkeluhan")[0];
-
-                $idsevis_array[] = $data_keluhan['idservis'];
-            }
-        }
-        
-        $idservis = array_values(array_unique($idsevis_array));
-
-        return $idservis;
-    }
-
     function ubah_status($data) {
         global $conn;
         $idantrian = $data['idantrian'];
@@ -192,6 +177,22 @@
         return mysqli_affected_rows($conn);
     }
 
+    function tambah_servis($data) {
+        global $conn;
+
+        $idantrian = $data['idantrian'];
+        $kode_transaksi = $data['kode_transaksi'];
+        $servis = $data['servis'];
+        $status_transaksi = "Belum";
+
+        $query = "INSERT INTO transaksi
+                    VALUES
+                    (NULL, '$idantrian', '$servis', NULL, '$kode_transaksi', CURRENT_TIMESTAMP(), '$status_transaksi')";
+        mysqli_query($conn, $query);
+
+        return mysqli_affected_rows($conn);
+    }
+
     function transaksi($data) {
         global $conn;
         $idantrian = $data['idantrian'];
@@ -208,39 +209,6 @@
     }
 
     function estimasi_waktu($data) {
-        $waktu = 0;
-
-        $waktuSekarang = date("Y-m-d H:i:s");
-
-        $waktu_sekarang = strtotime($waktuSekarang);
-
-        $idantrian = $data['id_antrian'];
-
-        $semua_antrian = query("SELECT * FROM antrian WHERE id_antrian <= $idantrian AND status <> 'Selesai'");
-
-        foreach($semua_antrian as $seman) {
-            $idant = $seman['id_antrian'];
-            $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = $idant");
-
-            foreach($data_transaksi as $datran) {
-                if($datran['idkeluhan'] != NULL) {
-                    $idkeluhan = $datran['idkeluhan'];
-                    $data_keluhan = query("SELECT * FROM jenis_keluhan WHERE idkeluhan = $idkeluhan")[0];
-
-                    $idservis = $data_keluhan['idservis'];
-                    $data_servis = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
-
-                    $waktu += $data_servis['waktu_pengerjaan'];
-                }
-            }
-        }
-
-        $waktu += $waktu_sekarang;
-
-        return $waktu;
-    }
-
-    function cek_estimasi_waktu($post ,$data) {
         $waktu = 0;
 
         $waktuSekarang = date("Y-m-d H:i:s");

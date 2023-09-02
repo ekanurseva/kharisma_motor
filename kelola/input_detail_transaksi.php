@@ -29,6 +29,24 @@
             ";
         }
     }
+
+    if(isset($_POST['submit_servis'])) {
+        if(tambah_servis($_POST) > 0) {
+            echo "
+                <script>
+                    alert('Servis berhasil ditambahkan');
+                    document.location.href='antrian.php';
+                </script>
+            ";
+        } else {
+            echo "
+                <script>
+                    alert('Servis gagal ditambahkan');
+                    document.location.href='antrian.php';
+                </script>
+            ";
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -89,7 +107,7 @@
                         </div>
 
                         <div class="col-6 mt-3 mb-5">
-                            <button type="button" class="btn btn-primary w-100">
+                            <button type="submit" class="btn btn-primary w-100" name="submit_servis">
                                 Tambah Servis
                             </button>
                         </div>

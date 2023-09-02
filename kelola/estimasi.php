@@ -47,7 +47,7 @@
     
     
     if(isset($_POST['cek_estimasi'])) {
-        $estimasi_waktu = cek_estimasi_waktu($_POST, $data_antrian);
+        $estimasi_waktu = estimasi_waktu($data_antrian);
         $waktu_estimasi = date('Y-m-d H:i:s', $estimasi_waktu);
         if(isset($_POST['keluhan'])) {
             $sparepart = cek_estimasi_sparepart($_POST);

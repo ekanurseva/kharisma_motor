@@ -12,8 +12,12 @@
 
     $idantrian = $data_antrian['id_antrian'];
     $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = '$idantrian'");
-    
-    $servis = cari_servis($data_transaksi);
+
+    $jumlah_keluhan = jumlah_data("SELECT * FROM transaksi_keluhan WHERE idantrian = $idantrian");
+
+    if($jumlah_keluhan > 0) {
+        $data_keluhan = query("SELECT * FROM transaksi_keluhan WHERE idantrian = $idantrian");
+    }
 
     $total = 0;
 
@@ -215,8 +219,11 @@
                 <tbody>
                     <?php 
                         $i = 1;
-                        foreach ($servis as $ser) : 
-                            $data_servis = query("SELECT * FROM servis WHERE idservis = $ser")[0];
+                        foreach ($data_transaksi as $daksi) : 
+                            if($daksi['idservis'] != NULL) :
+                                $idservis = $daksi['idservis'];
+                                $data_servis = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
+                                $enkripsi_id = enkripsi($daksi['idtransaksi']);
                     ?>
                         <tr>
                             <th><?= $i; ?></th>
@@ -225,7 +232,7 @@
                             <td>Rp <?= number_format($data_servis['harga_jasa']); ?></td>
                             <?php if($data_antrian['status'] != "Selesai") : ?>
                                 <td>
-                                    <a style="text-decoration: none;" href="delete.php?idtransaksi="
+                                    <a style="text-decoration: none;" href="delete.php?idtransaksi=<?= $enkripsi_id; ?>"
                                         onclick="return confirm('Apakah anda yakin ingin menghapus data?')">
                                         <i class="bi bi-trash-fill"></i></a>
                                 </td>
@@ -233,7 +240,8 @@
                             <?php $total += $data_servis['harga_jasa']; ?>
                         </tr>
                     <?php 
-                        $i++;
+                                $i++;
+                            endif;
                         endforeach; 
                     ?>
 
@@ -282,15 +290,16 @@
             <h3>Keluhan</h3>
             <ul>
                 <?php 
-                    foreach($data_transaksi as $datrans) : 
-                        if($datrans['idkeluhan'] != NULL) :
-                            $idkeluhan = $datrans['idkeluhan'];
+                    if($jumlah_keluhan > 0) :
+                        foreach($data_keluhan as $dakel) : 
+                            $idkeluhan = $dakel['idkeluhan'];
                             $keluhan = query("SELECT * FROM jenis_keluhan WHERE idkeluhan = $idkeluhan")[0];
                 ?>
                     <li><?= $keluhan['keluhan']; ?></li>
                 <?php 
-                        endif;
-                    endforeach; 
+                            
+                        endforeach; 
+                    endif;
                 ?>
             </ul>
         </div>
