@@ -21,8 +21,6 @@
         if($cari_transaksi > 0) {
             $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = $idantrian");
         
-            $servis = cari_servis($data_transaksi);
-        
             $total = 0;
         }
     }
@@ -158,8 +156,10 @@
                                         <tbody>
                                             <?php
                                                 $i = 1; 
-                                                foreach($servis as $s) :
-                                                    $data_servis = query("SELECT * FROM servis WHERE idservis = $s")[0];
+                                                foreach($data_transaksi as $dat) :
+                                                    if($dat['idservis'] != NULL) :
+                                                        $idservis = $dat['idservis'];
+                                                        $data_servis = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
                                             ?>
                                                 <tr>
                                                     <td><?= $i; ?></td>
@@ -167,8 +167,9 @@
                                                     <td>Rp <?= number_format($data_servis['harga_jasa']); ?></td>
                                                 </tr>
                                             <?php
-                                                $total += $data_servis['harga_jasa'];
-                                                $i++; 
+                                                        $total += $data_servis['harga_jasa'];
+                                                    $i++;
+                                                    endif; 
                                                 endforeach; 
                                             ?>
                                         </tbody>
@@ -205,8 +206,8 @@
                                             ?>
                                             <tr>
                                                 <td></td>
-                                                <td>Total</td>
-                                                <td>Rp <?= number_format($total); ?></td>
+                                                <td class="fw-bold">Total</td>
+                                                <td class="fw-bold">Rp <?= number_format($total); ?></td>
                                             </tr>
                                         </tbody>
                                     </table>
