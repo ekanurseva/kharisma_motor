@@ -54,6 +54,58 @@
         return $kode;
     }
 
+    function create_servis($data) {
+        global $conn;
+
+        $id = dekripsi($_COOKIE['KMmz19']);
+        $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
+        
+        if(!isset($data['servis'])) {
+            echo "
+                <script>
+                    alert('Harap isi servis terlebih dahulu');
+                </script>
+            ";
+
+            if ($user['level'] === "User") {
+                echo "
+                    <script>
+                        document.location.href='../user';
+                    </script>
+                ";
+            } elseif ($user['level'] === "Admin") {
+                echo "
+                    <script>
+                        document.location.href='../admin';
+                    </script>
+                ";
+            } elseif ($user['level'] === "Kasir") {
+                echo "
+                    <script>
+                        document.location.href='../kasir';
+                    </script>
+                ";
+            }
+        } else {
+            $servis = $data['servis'];
+            $idantrian = $data['idantrian'];
+            $status_transaksi = "Belum";
+            $kode_transaksi = $data['kode_transaksi'];
+
+            for ($i = 0; $i < count($servis); $i++) {
+                $query = "INSERT INTO transaksi
+                        VALUES
+                        (NULL, '$idantrian', '$servis[$i]', NULL, '$kode_transaksi', CURRENT_TIMESTAMP(), '$status_transaksi')";
+                // var_dump($query);
+                mysqli_query($conn, $query);
+            }
+
+            return mysqli_affected_rows($conn);
+        }
+
+
+    }
+
     function cek_estimasi_sparepart($data) {
         $keluhan = $data['keluhan'];
 
@@ -78,9 +130,9 @@
         $status_transaksi = "Belum";
 
         for ($i = 0; $i < count($idkeluhan); $i++) {
-            $query = "INSERT INTO transaksi
+            $query = "INSERT INTO transaksi_keluhan
                     VALUES
-                    (NULL, '$idantrian', '$idkeluhan[$i]', NULL, '$kode_transaksi', CURRENT_TIMESTAMP(), '$status_transaksi')";
+                    (NULL, '$idantrian', '$idkeluhan[$i]')";
             // var_dump($query);
             mysqli_query($conn, $query);
         }
@@ -189,7 +241,6 @@
     }
 
     function cek_estimasi_waktu($post ,$data) {
-        $servis = $post['servis'];
         $waktu = 0;
 
         $waktuSekarang = date("Y-m-d H:i:s");
@@ -205,22 +256,23 @@
             $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = $idant");
 
             foreach($data_transaksi as $datran) {
-                if($datran['idkeluhan'] != NULL) {
-                    $idkeluhan = $datran['idkeluhan'];
-                    $data_keluhan = query("SELECT * FROM jenis_keluhan WHERE idkeluhan = $idkeluhan")[0];
-
-                    $idservis = $data_keluhan['idservis'];
+                if($datran['idservis'] != NULL) {
+                    $idservis = $datran['idservis'];
                     $data_servis = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
 
                     $waktu += $data_servis['waktu_pengerjaan'];
                 }
             }
         }
+        $data_transaksi2 = query("SELECT * FROM transaksi WHERE idantrian = $idantrian");
 
-        foreach($servis as $ser) {
-            $data_servis2 = query("SELECT * FROM servis WHERE idservis = $ser")[0];
-
-            $waktu += $data_servis2['waktu_pengerjaan'];
+        foreach($data_transaksi2 as $data_trans) {
+            if($data_trans['idservis'] != NULL) {
+                $idservis = $data_trans['idservis'];
+                $data_servis2 = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
+    
+                $waktu += $data_servis2['waktu_pengerjaan'];
+            }
         }
 
         $waktu += $waktu_sekarang;
