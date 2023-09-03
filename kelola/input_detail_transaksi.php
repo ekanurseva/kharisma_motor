@@ -1,52 +1,52 @@
 <?php
-    require_once "../controller/controller_transaksi.php";
-    validasi_no_user();
+require_once "../controller/controller_transaksi.php";
+validasi_no_user();
 
-    $id = dekripsi($_COOKIE['KMmz19']);
-    $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
+$id = dekripsi($_COOKIE['KMmz19']);
+$user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
 
-    $sparepart = query("SELECT * FROM sparepart");
-    $servis = query("SELECT * FROM servis");
+$sparepart = query("SELECT * FROM sparepart");
+$servis = query("SELECT * FROM servis");
 
-    $idantrian = dekripsi($_GET['key']);
-    
-    $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = $idantrian")[0];
+$idantrian = dekripsi($_GET['key']);
 
-    if(isset($_POST['submit_sparepart'])) {
-        if(tambah_sparepart($_POST) > 0) {
-            echo "
+$data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = $idantrian")[0];
+
+if (isset($_POST['submit_sparepart'])) {
+    if (tambah_sparepart($_POST) > 0) {
+        echo "
                 <script>
                     alert('Sparepart berhasil ditambahkan');
                     document.location.href='antrian.php';
                 </script>
             ";
-        } else {
-            echo "
+    } else {
+        echo "
                 <script>
                     alert('Sparepart gagal ditambahkan');
                     document.location.href='antrian.php';
                 </script>
             ";
-        }
     }
+}
 
-    if(isset($_POST['submit_servis'])) {
-        if(tambah_servis($_POST) > 0) {
-            echo "
+if (isset($_POST['submit_servis'])) {
+    if (tambah_servis($_POST) > 0) {
+        echo "
                 <script>
                     alert('Servis berhasil ditambahkan');
                     document.location.href='antrian.php';
                 </script>
             ";
-        } else {
-            echo "
+    } else {
+        echo "
                 <script>
                     alert('Servis gagal ditambahkan');
                     document.location.href='antrian.php';
                 </script>
             ";
-        }
     }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -96,7 +96,8 @@
                                 <label for="jservis" class="form-label">Jenis Servis</label>
                             </div>
                             <div class="col-4">
-                                <select class="form-select" aria-label="Default select example" name="servis">
+                                <select style="border: 0.5px solid black;" class="form-select"
+                                    aria-label="Default select example" name="servis">
                                     <?php foreach ($servis as $s): ?>
                                         <option value="<?= $s['idservis']; ?>">
                                             <?= $s['jenis_servis']; ?>
@@ -104,13 +105,13 @@
                                     <?php endforeach ?>
                                 </select>
                             </div>
+                            <div class="col-5 ms-3">
+                                <button type="submit" class="btn btn-primary w-50" name="submit_servis">
+                                    Tambah Servis
+                                </button>
+                            </div>
                         </div>
 
-                        <div class="col-6 mt-3 mb-5">
-                            <button type="submit" class="btn btn-primary w-100" name="submit_servis">
-                                Tambah Servis
-                            </button>
-                        </div>
                     </form>
 
                     <form action="" method="post">
@@ -121,7 +122,8 @@
                                 <label for="jservis" class="form-label">Sparepart</label>
                             </div>
                             <div class="col-4">
-                                <select class="form-select" aria-label="Default select example" name="sparepart">
+                                <select style="border: 0.5px solid black;" class="form-select"
+                                    aria-label="Default select example" name="sparepart">
                                     <?php foreach ($sparepart as $spr): ?>
                                         <option value="<?= $spr['idsparepart']; ?>">
                                             <?= $spr['sparepart']; ?>
@@ -129,12 +131,11 @@
                                     <?php endforeach ?>
                                 </select>
                             </div>
-                        </div>
-
-                        <div class="col-6 mt-3">
-                            <button type="submit" class="btn btn-primary w-100" name="submit_sparepart">
-                                Tambah Sparepart
-                            </button>
+                            <div class="col-5 ms-3">
+                                <button type="submit" class="btn btn-primary w-50" name="submit_sparepart">
+                                    Tambah Sparepart
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>

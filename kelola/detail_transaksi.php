@@ -134,7 +134,7 @@ if (isset($_POST['bayar'])) {
                             <div class="col-4">
                                 <h6>Status Antrian</h6>
                             </div>
-                            <div class="col-6">
+                            <div class="col-8">
                                 <h6>:
                                     <?= $data_antrian['status']; ?>
                                     <button type="button" style="border: none; background: none;" data-bs-toggle="modal"
@@ -319,7 +319,7 @@ if (isset($_POST['bayar'])) {
                     <li>
                         <?= $keluhan['keluhan']; ?>
                     </li>
-                <?php
+                    <?php
 
                 endforeach;
             endif;
