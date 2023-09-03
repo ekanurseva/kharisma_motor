@@ -1,11 +1,33 @@
 <?php
-require_once 'controller/controller_pengguna.php';
+    require_once 'controller/controller_pengguna.php';
 
-if (isset($_POST["login"])) {
-    if (login($_POST) == 1) {
-        $error = true;
+    if (isset($_POST["login"])) {
+        if (login($_POST) == 1) {
+            $error = true;
+        }
     }
-}
+
+    if(isset($_COOKIE['KMmz19'])) {
+        $id = dekripsi($_COOKIE['KMmz19']);
+        $cek = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
+
+        if($cek['level'] == "Admin") {
+            echo "<script>
+                    document.location.href='admin';
+                </script>";
+            exit;
+        } elseif($cek['level'] == "Kasir") {
+            echo "<script>
+                    document.location.href='kasir';
+                </script>";
+            exit;
+        } else {
+            echo "<script>
+                    document.location.href='user';
+                </script>";
+            exit;
+        }
+    }
 ?>
 
 <!DOCTYPE html>

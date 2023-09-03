@@ -1,7 +1,7 @@
 <?php
 include("controller/controller_pengguna.php");
 
-if (!isset($_COOKIE['KMmz19'])) {
+if (isset($_COOKIE['KMmz19'])) {
     echo "<script>
                 document.location.href='login.php';
               </script>";
