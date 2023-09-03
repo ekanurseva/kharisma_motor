@@ -255,6 +255,7 @@ if (isset($_POST['bayar'])) {
                             </tr>
                             <?php
                             $i++;
+                            $total += $data_servis['harga_jasa'];
                         endif;
                     endforeach;
                     ?>
