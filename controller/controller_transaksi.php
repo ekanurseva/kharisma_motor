@@ -247,4 +247,45 @@
 
         return $waktu;
     }
+
+    function jumlah_transaksi() {
+        $antrian = query("SELECT * FROM antrian");
+        $jumlah_lunas = 0;
+
+        foreach($antrian as $an) {
+            $idantrian = $an['id_antrian'];
+            $jumlah = jumlah_data("SELECT * FROM transaksi WHERE idantrian = $idantrian");
+
+            if($jumlah > 0 ) {
+                $transaksi = query("SELECT * FROM transaksi WHERE idantrian = $idantrian");
+
+                if($transaksi[0]['status_transaksi'] == "Lunas") {
+                    $jumlah_lunas += 1;
+                }
+            }
+        }
+
+        return $jumlah_lunas;
+    }
+
+    function total($id, $data) {
+        $total = 0;
+        foreach($data as $da) {
+            if($da['idservis'] != NULL) {
+                $idservis = $da['idservis'];
+
+                $datser = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
+
+                $total += $datser['harga_jasa'];
+            } elseif($da['idsparepart'] != NULL) {
+                $idsparepart = $da['idsparepart'];
+
+                $dahar = query("SELECT * FROM harga_sparepart WHERE idkendaraan = $id AND idsparepart = $idsparepart")[0];
+
+                $total += $dahar['harga'];
+            }
+        }
+
+        return $total;
+    }
 ?>
