@@ -1,29 +1,32 @@
 <?php
-require_once('../controller/controller_servis.php');
-validasi_admin();
+    require_once('../controller/controller_servis.php');
+    validasi_admin();
 
-$idservis = dekripsi($_GET['id']);
-$data = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
+    $idservis = dekripsi($_GET['id']);
+    $data = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
 
-if (isset($_POST['submit_servis'])) {
-    if (edit_servis($_POST) > 0) {
-        echo "
-                <script>
-                alert('Data Berhasil Diubah');
-                document.location.href='servis.php';
-                </script>
-            ";
-    } else {
-        echo "
-                <script>
-                alert('Data Gagal Diubah');
-                document.location.href='servis.php';
-                </script>
-            ";
+    $waktu = $data['waktu_pengerjaan'] / 60;
+
+    if (isset($_POST['submit_servis'])) {
+        if (edit_servis($_POST) > 0) {
+            echo "
+                    <script>
+                    alert('Data Berhasil Diubah');
+                    document.location.href='servis.php';
+                    </script>
+                ";
+        } else {
+            echo "
+                    <script>
+                    alert('Data Gagal Diubah');
+                    document.location.href='servis.php';
+                    </script>
+                ";
+        }
     }
-}
-
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -63,15 +66,23 @@ if (isset($_POST['submit_servis'])) {
                             value="<?php echo $data['jenis_servis']; ?>" name="jenis"
                             placeholder="masukkan jenis servis">
                     </div>
+
                     <div class="mb-3">
                         <label for="deskripsi" class="form-label">Deskripsi</label>
                         <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3"
                             placeholder="masukkan deskripsi servis"><?php echo $data['deskripsi']; ?></textarea>
                     </div>
+
                     <div class="mb-3">
                         <label for="harga" class="form-label">Harga Jasa</label>
                         <input type="number" class="form-control" value="<?php echo $data['harga_jasa']; ?>"
                             name="harga_jasa" id="harga" placeholder="masukkan nominal harga jasa servis">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="waktu_pengerjaan" class="form-label">Waktu Pengerjaan (dalam menit)</label>
+                        <input type="number" class="form-control" value="<?php echo $waktu; ?>"
+                            name="waktu_pengerjaan" id="waktu_pengerjaan" placeholder="masukkan nominal harga jasa servis">
                     </div>
 
                     <button type="submit" name="submit_servis" class="btn btn-primary w-100">

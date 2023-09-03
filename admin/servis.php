@@ -1,9 +1,9 @@
 <?php
-include("../controller/controller_servis.php");
-validasi_admin();
+    include("../controller/controller_servis.php");
+    validasi_admin();
 
-$data = query("SELECT * FROM servis");
-$jumlah_servis = jumlah_data("SELECT * FROM servis");
+    $data = query("SELECT * FROM servis");
+    $jumlah_servis = jumlah_data("SELECT * FROM servis");
 ?>
 
 <!DOCTYPE html>
@@ -60,17 +60,18 @@ $jumlah_servis = jumlah_data("SELECT * FROM servis");
                             <tr class="text-start">
                                 <th scope="col">No</th>
                                 <th scope="col">Jenis Servis</th>
-                                <th scope="col">Deskripsi</th>
                                 <th scope="col">Harga Jasa (Rp)</th>
+                                <th scope="col">Waktu Pengerjaan</th>
                                 <th scope="col">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="text-start">
                             <?php
-                            $i = 1;
-                            foreach ($data as $servis):
-                                $idservis = enkripsi($servis['idservis']);
-                                ?>
+                                $i = 1;
+                                foreach ($data as $servis):
+                                    $idservis = enkripsi($servis['idservis']);
+                                    $waktu = ($servis['waktu_pengerjaan'] / 60) / 60;
+                            ?>
                                 <tr>
                                     <th>
                                         <?php echo $i; ?>
@@ -79,10 +80,11 @@ $jumlah_servis = jumlah_data("SELECT * FROM servis");
                                         <?php echo $servis['jenis_servis']; ?>
                                     </td>
                                     <td>
-                                        <?php echo $servis['deskripsi']; ?>
-                                    </td>
-                                    <td>
                                         Rp <?php echo number_format($servis['harga_jasa']); ?>
+                                    </td>
+
+                                    <td>
+                                        <?php echo $waktu; ?> Jam
                                     </td>
                                     <td>
                                         <a href="edit_servis.php?id=<?= $idservis; ?>"><i class="bi bi-pencil-fill"></i></a>
@@ -93,9 +95,9 @@ $jumlah_servis = jumlah_data("SELECT * FROM servis");
                                                 class="bi bi-trash-fill"></i></a>
                                     </td>
                                 </tr>
-                                <?php
-                                $i++;
-                            endforeach
+                            <?php
+                                    $i++;
+                                endforeach
                             ?>
                         </tbody>
                     </table>

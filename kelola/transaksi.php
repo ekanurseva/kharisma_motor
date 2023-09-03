@@ -1,11 +1,13 @@
 <?php
-require_once "../controller/controller_transaksi.php";
+    require_once "../controller/controller_transaksi.php";
 
-$id = dekripsi($_COOKIE['KMmz19']);
-$user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
-$jumlah_transaksi = jumlah_data("SELECT * FROM transaksi");
+    validasi_no_user();
 
-$transaksi = query("SELECT * FROM transaksi");
+    $id = dekripsi($_COOKIE['KMmz19']);
+    $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
+    $jumlah_transaksi = jumlah_data("SELECT * FROM transaksi");
+
+    $transaksi = query("SELECT * FROM transaksi");
 
 ?>
 

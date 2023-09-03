@@ -1,12 +1,28 @@
 <?php
-include("../controller/controller_keluhan.php");
-validasi_admin();
+    include("../controller/controller_keluhan.php");
+    validasi_admin();
 
-$keluhan = query("SELECT * FROM jenis_keluhan");
-$jumlah_keluhan = jumlah_data("SELECT * FROM jenis_keluhan");
+    $keluhan = query("SELECT * FROM jenis_keluhan");
+    $jumlah_keluhan = jumlah_data("SELECT * FROM jenis_keluhan");
 
-$sparepart = query("SELECT * FROM sparepart");
-$servis = query("SELECT * FROM servis");
+    $sparepart = query("SELECT * FROM sparepart");
+    $servis = query("SELECT * FROM servis");
+
+    if(isset($_POST['submit'])) {
+        if (input_keluhan($_POST) > 0) {
+            echo "
+            <script>
+            alert('Data Berhasil Ditambah');
+            document.location.href='keluhan.php';
+            </script>
+            ";
+        } else {
+            echo "<script>
+            alert('Data Gagal Ditambah');
+            document.location.href='keluhan.php';
+            </script>";
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -71,36 +87,41 @@ $servis = query("SELECT * FROM servis");
                         </thead>
                         <tbody class="text-start">
                             <?php
-                            $i = 1;
-                            foreach ($keluhan as $s):
-                                $idkeluhan = enkripsi($s['idkeluhan']);
-                                ?>
+                                $i = 1;
+                                foreach ($keluhan as $s):
+                                    $idkeluhan = enkripsi($s['idkeluhan']);
+                                    $idservis = $s['idservis'];
+                                    $idsparepart = $s['idsparepart'];
+
+                                    $data_servis = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
+                                    $data_sparepart = query("SELECT * FROM sparepart WHERE idsparepart = $idsparepart")[0];
+                            ?>
                                 <tr>
                                     <th>
                                         <?php echo $i; ?>
                                     </th>
                                     <td>
-                                        <?php echo $s['keluhan']; ?>
+                                        <?php echo $data_servis['jenis_servis']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $data_sparepart['sparepart']; ?>
                                     </td>
                                     <td>
                                         <?php echo $s['keluhan']; ?>
                                     </td>
                                     <td>
-                                        <?php echo $s['keluhan']; ?>
-                                    </td>
-                                    <td>
-                                        <a href="edit_sparepart.php?id=<?= $idkeluhan; ?>"><i
+                                        <a href="edit_keluhan.php?id=<?= $idkeluhan; ?>"><i
                                                 class="bi bi-pencil-fill"></i></a>
                                         |
                                         <a style="text-decoration: none;"
-                                            href="../controller/controller_sparepart.php?idharga=<?= $idkeluhan; ?>"
+                                            href="../controller/controller_keluhan.php?idkeluhan=<?= $idkeluhan; ?>"
                                             onclick="return confirm('Apakah anda yakin ingin menghapus data?')"><i
                                                 class="bi bi-trash-fill"></i></a>
                                     </td>
                                 </tr>
-                                <?php
-                                $i++;
-                            endforeach
+                            <?php
+                                    $i++;
+                                endforeach
                             ?>
                         </tbody>
                     </table>
@@ -120,26 +141,28 @@ $servis = query("SELECT * FROM servis");
                         <form action="" method="post">
                             <!-- Modal body -->
                             <div class="modal-body">
-                                <label for="kriteria">Jenis Servis</label>
-                                <select class="form-select" id="kriteria" aria-label="Default select example"
-                                    name="kriteria">
+                                <label for="idservis">Jenis Servis</label>
+                                <select class="form-select" id="idservis" aria-label="Default select example"
+                                    name="idservis">
                                     <option selected hidden value="">-- Pilih Servis --</option>
                                     <?php foreach ($servis as $k): ?>
                                         <option value="<?= $k['idservis']; ?>"><?= $k['jenis_servis']; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                                 <br>
-                                <label for="kriteria">Jenis Sparepart</label>
-                                <select class="form-select" id="kriteria" aria-label="Default select example"
-                                    name="kriteria">
+
+                                <label for="idsparepart">Jenis Sparepart</label>
+                                <select class="form-select" id="idsparepart" aria-label="Default select example"
+                                    name="idsparepart">
                                     <option selected hidden value="">-- Pilih Sparepart --</option>
                                     <?php foreach ($sparepart as $s): ?>
                                         <option value="<?= $s['idsparepart']; ?>"><?= $s['sparepart']; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                                 <br>
-                                <label for="indikator">Keluhan :</label>
-                                <textarea class="form-control" rows="3" id="indikator" name="indikator"></textarea>
+
+                                <label for="keluhan">Keluhan :</label>
+                                <textarea class="form-control" rows="3" id="keluhan" name="keluhan"></textarea>
 
                             </div>
 

@@ -65,6 +65,12 @@ if (isset($_POST["submit_servis"])) {
                             placeholder="masukkan nominal harga jasa servis">
                     </div>
 
+                    <div class="mb-3">
+                        <label for="waktu_pengerjaan" class="form-label">Waktu Pengerjaan (dalam menit)</label>
+                        <input type="number" class="form-control" name="waktu_pengerjaan" id="waktu_pengerjaan"
+                            placeholder="masukkan waktu pengerjaan servis dalam menit">
+                    </div>
+
                     <button type="submit" name="submit_servis" class="btn btn-primary w-100">
                         Submit
                     </button>

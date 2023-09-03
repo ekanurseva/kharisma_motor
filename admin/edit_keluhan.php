@@ -1,28 +1,30 @@
 <?php
-require_once('../controller/controller_keluhan.php');
+    require_once('../controller/controller_keluhan.php');
+    validasi_admin();
 
-$idkeluhan = dekripsi($_GET['id']);
-$data = query("SELECT * FROM jenis_keluhan WHERE idkeluhan = $idkeluhan")[0];
+    $idkeluhan = dekripsi($_GET['id']);
+    $data = query("SELECT * FROM jenis_keluhan WHERE idkeluhan = $idkeluhan")[0];
 
-$idservis = mysqli_query($conn, "SELECT * FROM servis ORDER BY idservis DESC");
+    $idservis = mysqli_query($conn, "SELECT * FROM servis ORDER BY idservis DESC");
+    $idsparepart = mysqli_query($conn, "SELECT * FROM sparepart ORDER BY idsparepart DESC");
 
-if (isset($_POST['submit_keluhan'])) {
-    if (edit_keluhan($_POST) > 0) {
-        echo "
-                <script>
-                alert('Data Berhasil Diubah');
-                document.location.href='keluhan.php';
-                </script>
-            ";
-    } else {
-        echo "
-                <script>
-                alert('Data Gagal Diubah');
-                document.location.href='keluhan.php';
-                </script>
-            ";
+    if (isset($_POST['submit_keluhan'])) {
+        if (edit_keluhan($_POST) > 0) {
+            echo "
+                    <script>
+                    alert('Data Berhasil Diubah');
+                    document.location.href='keluhan.php';
+                    </script>
+                ";
+        } else {
+            echo "
+                    <script>
+                    alert('Data Gagal Diubah');
+                    document.location.href='keluhan.php';
+                    </script>
+                ";
+        }
     }
-}
 
 ?>
 
@@ -57,12 +59,10 @@ if (isset($_POST['submit_keluhan'])) {
             <div class="box mt-4 mx-4">
                 <form method="post" action="">
                     <input type="hidden" name="idkeluhan" value="<?php echo $data['idkeluhan']; ?>">
-                    <input type="hidden" name="oldkeluhan" value="<?php echo $data['keluhan']; ?>">
 
                     <div class="mb-3">
                         <label class="form-label">Jenis Servis</label>
                         <select class="form-control" name="idservis" require style="border: 0.3px solid black;">
-                            <option value="" hidden selected>Servis 1</option>
                             <?php foreach ($idservis as $servis): ?>
                                 <option value="<?php echo $servis['idservis'] ?>" <?php echo ($servis['idservis'] == $data['idservis']) ? 'selected' : ''; ?>><?php echo $servis['jenis_servis'] ?>
                                 </option>
@@ -71,10 +71,9 @@ if (isset($_POST['submit_keluhan'])) {
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Jenis Sparepart</label>
-                        <select class="form-control" name="idservis" require style="border: 0.3px solid black;">
-                            <option value="" hidden selected>Sparepart 1</option>
-                            <?php foreach ($idservis as $servis): ?>
-                                <option value="<?php echo $servis['idservis'] ?>" <?php echo ($servis['idservis'] == $data['idservis']) ? 'selected' : ''; ?>><?php echo $servis['jenis_servis'] ?>
+                        <select class="form-control" name="idsparepart" require style="border: 0.3px solid black;">
+                            <?php foreach ($idsparepart as $sparepart): ?>
+                                <option value="<?php echo $sparepart['idsparepart'] ?>" <?php echo ($sparepart['idsparepart'] == $data['idsparepart']) ? 'selected' : ''; ?>><?php echo $sparepart['sparepart'] ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>

@@ -1,9 +1,6 @@
 <?php
     require_once('../controller/controller_sparepart.php');
-
-    $kendaraan = query("SELECT * FROM jenis_kendaraan");
-
-    $keluhan = query("SELECT * FROM jenis_keluhan");
+    validasi_admin();
 
     if (isset($_POST["submit_sparepart"])) {
         if (input_sparepart($_POST) > 0) {
@@ -51,20 +48,7 @@
                 <h4>INPUR DATA SPAREPART</h4>
             </div>
             <div class="box mt-4 mx-4">
-                <form method="post" action="">
-                    
-                    <div class="mb-3">
-                        <label for="kendaraan" class="form-label">Jenis Kendaraan</label>
-                        <select class="form-control" name="kendaraan" require style="border: 0.3px solid black;" id="kendaraan">
-                            <option hidden selected>--Pilih Jenis Kendaraan--</option>
-                            <?php foreach ($kendaraan as $k): ?>
-                                <option value="<?= $k['idkendaraan'] ?>"><?= $k['nama_kendaraan'] ?>
-                            </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    
-
+                <form method="post" action="">    
                     <div class="mb-3">
                         <label for="sparepart" class="form-label">Sparepart</label>
                         <input type="text" name="sparepart" class="form-control" id="sparepart"
@@ -76,13 +60,7 @@
                         <textarea class="form-control" name="deskripsi" id="deskripsi" rows="3"
                             placeholder="masukkan deskripsi sparepart"></textarea>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="harga" class="form-label">Harga</label>
-                        <input type="number" name="harga" class="form-control" id="harga"
-                            placeholder="masukkan nominal harga sparepart">
-                    </div>
-
+                    
                     <button type="submit" name="submit_sparepart" class="btn btn-primary w-100">
                         Submit
                     </button>

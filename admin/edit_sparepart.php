@@ -1,27 +1,27 @@
 <?php
-require_once('../controller/controller_sparepart.php');
+    require_once('../controller/controller_sparepart.php');
+    validasi_admin();
 
-$idsparepart = dekripsi($_GET['id']);
-$data_sparepart = query("SELECT * FROM sparepart WHERE idsparepart = $idsparepart")[0];
+    $idsparepart = dekripsi($_GET['id']);
+    $data_sparepart = query("SELECT * FROM sparepart WHERE idsparepart = $idsparepart")[0];
 
-if (isset($_POST['submit_sparepart'])) {
-    if (edit_sparepart($_POST) > 0) {
-        echo "
-                <script>
-                alert('Data Berhasil Diubah');
-                document.location.href='sparepart.php';
-                </script>
-            ";
-    } else {
-        echo "
-                <script>
-                alert('Data Gagal Diubah');
-                document.location.href='sparepart.php';
-                </script>
-            ";
+    if (isset($_POST['submit_sparepart'])) {
+        if (edit_sparepart($_POST) > 0) {
+            echo "
+                    <script>
+                    alert('Data Berhasil Diubah');
+                    document.location.href='sparepart.php';
+                    </script>
+                ";
+        } else {
+            echo "
+                    <script>
+                    alert('Data Gagal Diubah');
+                    document.location.href='sparepart.php';
+                    </script>
+                ";
+        }
     }
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -66,12 +66,6 @@ if (isset($_POST['submit_sparepart'])) {
                         <label for="deskripsi" class="form-label">Deskripsi</label>
                         <textarea class="form-control" name="deskripsi" id="deskripsi" rows="3"
                             placeholder="masukkan deskripsi sparepart"><?php echo $data_sparepart['deskripsi']; ?></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="harga" class="form-label">Harga</label>
-                        <input type="text" name="harga" class="form-control"
-                            value="<?php echo $data_sparepart['harga']; ?>" id="harga"
-                            placeholder="masukkan nominal harga sparepart">
                     </div>
 
                     <button type="submit" name="submit_sparepart" class="btn btn-primary w-100">

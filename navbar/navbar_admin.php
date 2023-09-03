@@ -25,7 +25,6 @@
                         <li><a class="dropdown-item" href="../admin/keluhan.php">Data Keluhan</a></li>
                         <li><a class="dropdown-item" href="../admin/sparepart.php">Data Sparepart</a></li>
                         <li><a class="dropdown-item" href="../admin/harga_sparepart.php">Data Harga Sparepart</a></li>
-                        <li><a class="dropdown-item" href="../admin/status_antrian.php">Status Antrian</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>

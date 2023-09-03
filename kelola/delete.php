@@ -1,5 +1,6 @@
 <?php 
     require_once '../controller/function.php';
+    validasi_no_user();
 
     if(isset($_GET['idtransaksi'])) {
         $idtransaksi = dekripsi($_GET['idtransaksi']);

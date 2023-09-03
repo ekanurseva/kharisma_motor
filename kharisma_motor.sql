@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Waktu pembuatan: 02 Sep 2023 pada 16.05
+-- Waktu pembuatan: 03 Sep 2023 pada 09.26
 -- Versi server: 10.4.22-MariaDB
 -- Versi PHP: 8.0.15
 
@@ -33,7 +33,7 @@ CREATE TABLE `antrian` (
   `no_antrian` varchar(20) NOT NULL,
   `nama_pelanggan` varchar(100) NOT NULL,
   `no_hp` varchar(20) NOT NULL,
-  `tanggal` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `tanggal` timestamp NOT NULL DEFAULT current_timestamp(),
   `nopol` varchar(50) NOT NULL,
   `alamat` text NOT NULL,
   `status` varchar(50) NOT NULL
@@ -44,7 +44,9 @@ CREATE TABLE `antrian` (
 --
 
 INSERT INTO `antrian` (`id_antrian`, `id_kendaraan`, `no_antrian`, `nama_pelanggan`, `no_hp`, `tanggal`, `nopol`, `alamat`, `status`) VALUES
-(1, 1, '20230902_1', 'Fillah Zaki Alhaqi', '085826389656', '2023-09-02 12:28:09', 'E 1234 ZN', 'Kuningan', 'Menunggu Antrian');
+(1, 1, '20230902_1', 'Fillah Zaki Alhaqi', '085826389656', '2023-09-02 15:13:50', 'E 1234 ZN', 'Kuningan', 'Selesai'),
+(2, 2, '20230902_2', 'Sukiman', '082312321312', '2023-09-02 14:27:09', 'E 3456 PK', 'asdsadasd', 'Menunggu Antrian'),
+(3, 1, '20230902_3', 'Sukijan', '0892891731111', '2023-09-02 15:16:45', 'E 9451 DF', 'asdasdasd', 'Diproses');
 
 -- --------------------------------------------------------
 
@@ -276,7 +278,8 @@ INSERT INTO `jenis_kendaraan` (`idkendaraan`, `nama_kendaraan`) VALUES
 (12, 'Renault Scenic'),
 (13, 'Mazda5'),
 (14, 'Chrysler Pacifica'),
-(15, 'Volkswagen Touran');
+(15, 'Volkswagen Touran'),
+(17, 'Daihatsu Sigra');
 
 -- --------------------------------------------------------
 
@@ -415,7 +418,8 @@ INSERT INTO `sparepart` (`idsparepart`, `sparepart`, `deskripsi`) VALUES
 (52, 'Kipas Radiator', 'asdasdasd'),
 (53, 'Karet Piston', 'adsadsa'),
 (54, 'Dinamo', 'asdsadsa'),
-(55, 'Sabuk pengaman', 'asdassd');
+(55, 'Sabuk pengaman', 'asdassd'),
+(57, 'Stir', 'asdasdassd');
 
 -- --------------------------------------------------------
 
@@ -438,14 +442,29 @@ CREATE TABLE `transaksi` (
 --
 
 INSERT INTO `transaksi` (`idtransaksi`, `idantrian`, `idservis`, `idsparepart`, `kode_transaksi`, `tanggal_pelunasan`, `status_transaksi`) VALUES
-(1, 1, 1, NULL, 'T-20230902-1', '2023-09-02 13:34:34', 'Belum'),
-(2, 1, 2, NULL, 'T-20230902-1', '2023-09-02 13:34:34', 'Belum'),
-(3, 1, 3, NULL, 'T-20230902-1', '2023-09-02 13:34:34', 'Belum'),
-(4, 1, 12, NULL, 'T-20230902-1', '2023-09-02 13:34:34', 'Belum'),
-(5, 1, NULL, 17, 'T-20230902-2', '2023-09-02 14:04:36', 'Belum'),
-(6, 1, NULL, 19, 'T-20230902-2', '2023-09-02 14:04:36', 'Belum'),
-(7, 1, NULL, 22, 'T-20230902-2', '2023-09-02 14:04:37', 'Belum'),
-(8, 1, NULL, 47, 'T-20230902-2', '2023-09-02 14:04:37', 'Belum');
+(1, 1, 1, NULL, 'T-20230902-1', '2023-09-02 15:13:22', 'Lunas'),
+(2, 1, 2, NULL, 'T-20230902-1', '2023-09-02 15:13:22', 'Lunas'),
+(3, 1, 3, NULL, 'T-20230902-1', '2023-09-02 15:13:22', 'Lunas'),
+(4, 1, 12, NULL, 'T-20230902-1', '2023-09-02 15:13:22', 'Lunas'),
+(5, 1, NULL, 17, 'T-20230902-2', '2023-09-02 15:13:22', 'Lunas'),
+(6, 1, NULL, 19, 'T-20230902-2', '2023-09-02 15:13:22', 'Lunas'),
+(7, 1, NULL, 22, 'T-20230902-2', '2023-09-02 15:13:22', 'Lunas'),
+(8, 1, NULL, 47, 'T-20230902-2', '2023-09-02 15:13:22', 'Lunas'),
+(9, 2, 5, NULL, 'T-20230902-3', '2023-09-02 14:27:13', 'Belum'),
+(10, 2, 11, NULL, 'T-20230902-3', '2023-09-02 14:27:13', 'Belum'),
+(11, 2, 12, NULL, 'T-20230902-3', '2023-09-02 14:27:13', 'Belum'),
+(12, 2, 14, NULL, 'T-20230902-3', '2023-09-02 14:27:13', 'Belum'),
+(13, 2, NULL, 30, 'T-20230902-4', '2023-09-02 14:27:33', 'Belum'),
+(14, 2, NULL, 44, 'T-20230902-4', '2023-09-02 14:27:33', 'Belum'),
+(15, 2, NULL, 47, 'T-20230902-4', '2023-09-02 14:27:33', 'Belum'),
+(17, 2, 15, NULL, 'T-20230902-3', '2023-09-02 14:50:48', 'Belum'),
+(18, 3, 6, NULL, 'T-20230902-5', '2023-09-02 15:16:55', 'Belum'),
+(19, 3, 7, NULL, 'T-20230902-5', '2023-09-02 15:16:55', 'Belum'),
+(20, 3, 16, NULL, 'T-20230902-5', '2023-09-02 15:16:55', 'Belum'),
+(21, 3, NULL, 34, 'T-20230902-6', '2023-09-02 15:17:00', 'Belum'),
+(22, 3, NULL, 35, 'T-20230902-6', '2023-09-02 15:17:00', 'Belum'),
+(23, 3, NULL, 37, 'T-20230902-6', '2023-09-02 15:17:00', 'Belum'),
+(24, 3, NULL, 2, 'T-20230902-6', '2023-09-02 15:17:00', 'Belum');
 
 -- --------------------------------------------------------
 
@@ -467,7 +486,14 @@ INSERT INTO `transaksi_keluhan` (`idtransaksi_keluhan`, `idantrian`, `idkeluhan`
 (1, 1, 1),
 (2, 1, 2),
 (3, 1, 7),
-(4, 1, 36);
+(4, 1, 36),
+(5, 2, 19),
+(6, 2, 33),
+(7, 2, 36),
+(8, 3, 24),
+(9, 3, 53),
+(10, 3, 56),
+(11, 3, 41);
 
 --
 -- Indexes for dumped tables
@@ -545,25 +571,25 @@ ALTER TABLE `transaksi_keluhan`
 -- AUTO_INCREMENT untuk tabel `antrian`
 --
 ALTER TABLE `antrian`
-  MODIFY `id_antrian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_antrian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `harga_sparepart`
 --
 ALTER TABLE `harga_sparepart`
-  MODIFY `idharga` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `idharga` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
 
 --
 -- AUTO_INCREMENT untuk tabel `jenis_keluhan`
 --
 ALTER TABLE `jenis_keluhan`
-  MODIFY `idkeluhan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `idkeluhan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT untuk tabel `jenis_kendaraan`
 --
 ALTER TABLE `jenis_kendaraan`
-  MODIFY `idkendaraan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `idkendaraan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT untuk tabel `pengguna`
@@ -575,25 +601,25 @@ ALTER TABLE `pengguna`
 -- AUTO_INCREMENT untuk tabel `servis`
 --
 ALTER TABLE `servis`
-  MODIFY `idservis` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `idservis` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT untuk tabel `sparepart`
 --
 ALTER TABLE `sparepart`
-  MODIFY `idsparepart` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `idsparepart` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `idtransaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `idtransaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT untuk tabel `transaksi_keluhan`
 --
 ALTER TABLE `transaksi_keluhan`
-  MODIFY `idtransaksi_keluhan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idtransaksi_keluhan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
