@@ -17,7 +17,7 @@ if (isset($_POST['submit_kendaraan'])) {
         echo "
                 <script>
                 alert('Data Gagal Diubah');
-                document.location.href='kendaraan.php';
+                document.location.href='edit_kendaraan.php?id=" . $_GET['id'] . "';
                 </script>
             ";
     }

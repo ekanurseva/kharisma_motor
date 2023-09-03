@@ -31,13 +31,15 @@
         $idsparepartold = $data['idsparepartold'];
         $harga = $data['harga'];
 
+        $id = enkripsi($idharga);
+
         if($idkendaraaanold != $idkendaraan || $idsparepartold != $idsparepart) {
             $result = mysqli_query($conn, "SELECT * FROM harga_sparepart WHERE idkendaraan = '$idkendaraan' AND idsparepart = '$idsparepart'");
 
             if (mysqli_fetch_assoc($result)) {
                 echo "<script>
                     alert('Sparepart tersebut sudah memiliki harga di kendaraan tersebut!');
-                    document.location.href='harga_sparepart.php';
+                    document.location.href='edit_harga.php?id=" . $id . "';
                 </script>";
                 return false;
             }

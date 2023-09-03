@@ -19,7 +19,7 @@
             echo "
                     <script>
                     alert('Data Gagal Diubah');
-                    document.location.href='servis.php';
+                    document.location.href='edit_servis.php?id=" . $_GET['id'] . "';
                     </script>
                 ";
         }
