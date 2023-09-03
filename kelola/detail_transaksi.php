@@ -139,7 +139,7 @@
                     <?php if($data_transaksi[0]['status_transaksi'] == "Lunas") : ?>
                         <div class="col-2">
                             <button class="btn btn-sm btn-success">
-                                <a class="text-decoration-none text-white" href="#">Cetak Struk</a>
+                                <a class="text-decoration-none text-white" href="../cetak_struk.php?id=<?= $_GET['id']; ?>" target="_blank">Cetak Struk</a>
                             </button>
                         </div>
                     <?php endif; ?>

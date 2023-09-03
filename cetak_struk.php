@@ -7,7 +7,18 @@
     $dompdf = new Dompdf();
 
     // Konten HTML yang akan diubah menjadi PDF
-    $html = '<html><body><h1>Hello, World!</h1></body></html>';
+    $html = '<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <h1 style="margin = 0px;">"KHARISMA MOTOR"</h1>
+        <h4>Bengkel Mobil Bensin & Diesel</h4>
+    </body>
+    </html>';
 
     // Memasukkan konten HTML ke Dompdf
     $dompdf->loadHtml($html);
