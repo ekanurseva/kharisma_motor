@@ -48,7 +48,7 @@ $html = '<!DOCTYPE html>
                 </style>
     </head>
     <body>
-        <h1 style="margin: 0;">LAPORAN TRANSAKSI</h1>
+        <h1 style="margin: 0; text-align: center">LAPORAN TRANSAKSI</h1><br>
 
         <table>
         <tr>
