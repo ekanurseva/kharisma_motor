@@ -4,9 +4,9 @@
     $id = dekripsi($_COOKIE['KMmz19']);
     $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
     $antrian = query("SELECT * FROM antrian");
-
+    
     if(isset($_POST['cek_tanggal'])) {
-        var_dump($_POST);
+        $antrian = cari_antrian($_POST);
     }
 ?>
 <!DOCTYPE html>

@@ -288,4 +288,26 @@
 
         return $total;
     }
+
+    function cari_antrian($data) {
+        global $conn;
+        $dari = $data['dari'];
+        $sampai = date('Y-m-d', strtotime($data['sampai']) + 86400);
+
+        $transaksi = query("SELECT * FROM transaksi WHERE status_transaksi = 'Lunas' AND tanggal_pelunasan BETWEEN '$dari' AND '$sampai';");
+
+        foreach($transaksi as $trans) {
+            $idantrian[] = $trans['idantrian'];
+        }
+
+        $id = array_values(array_unique($idantrian));
+
+        foreach($id as $i) {
+            $data_antrian = query("SELECT * FROM antrian WHERE id_antrian = $i")[0];
+
+            $antrian[] = $data_antrian;
+        }
+
+        return $antrian;
+    }
 ?>
