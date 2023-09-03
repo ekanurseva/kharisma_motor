@@ -1,12 +1,13 @@
 <?php
 require_once "../controller/controller_transaksi.php";
 
+validasi_no_user();
+
 $id = dekripsi($_COOKIE['KMmz19']);
 $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
-$jumlah_transaksi = jumlah_data("SELECT * FROM transaksi");
+$antrian = query("SELECT * FROM antrian");
 
-$transaksi = query("SELECT * FROM transaksi");
-
+$jumlah_transaksi = jumlah_transaksi();
 ?>
 
 <!DOCTYPE html>
@@ -72,40 +73,56 @@ $transaksi = query("SELECT * FROM transaksi");
                                 <th scope="col">No</th>
                                 <th scope="col">Kode Transaksi</th>
                                 <th scope="col">Pelanggan</th>
-                                <th scope="col">Tanggal</th>
+                                <th scope="col">Tanggal Pelunasan</th>
                                 <th scope="col">Total</th>
                                 <th scope="col">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="text-center">
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>001</td>
-                                <td>Mark</td>
-                                <td>01-07-2023</td>
-                                <td>Rp 800.000</td>
-                                <td>
-                                    <a class="text-decoration-none text-white" href="detail_transaksi.php">
-                                        <button class="btn btn-success">
-                                            Detail
-                                        </button>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>002</td>
-                                <td>Mark</td>
-                                <td>01-07-2023</td>
-                                <td>Rp 800.000</td>
-                                <td>
-                                    <a class="text-decoration-none text-white" href="detail_transaksi.php">
-                                        <button class="btn btn-success">
-                                            Detail
-                                        </button>
-                                    </a>
-                                </td>
-                            </tr>
+                            <?php
+                            $i = 1;
+                            foreach ($antrian as $ant):
+                                $idantrian = $ant['id_antrian'];
+                                $jumlah = jumlah_data("SELECT * FROM transaksi WHERE idantrian = $idantrian");
+
+                                if ($jumlah > 0):
+                                    $transaksi = query("SELECT * FROM transaksi WHERE idantrian = $idantrian");
+                                    $idkendaraan = $ant['id_kendaraan'];
+
+                                    if ($transaksi[0]['status_transaksi'] == "Lunas"):
+                                        $total = total($idkendaraan, $transaksi);
+                                        $tanggal = date("H:i:s / d-m-Y", strtotime($transaksi[0]['tanggal_pelunasan']));
+                                        $idenkripsi = enkripsi($idantrian);
+                                        ?>
+                                        <tr>
+                                            <th scope="row">
+                                                <?= $i; ?>
+                                            </th>
+                                            <td>
+                                                <?= $transaksi[0]['kode_transaksi']; ?>
+                                            </td>
+                                            <td>
+                                                <?= $ant['nama_pelanggan']; ?>
+                                            </td>
+                                            <td>
+                                                <?= $tanggal; ?>
+                                            </td>
+                                            <td>Rp
+                                                <?= number_format($total); ?>
+                                            </td>
+                                            <td>
+                                                <a class="text-decoration-none btn btn-success"
+                                                    href="detail_transaksi.php?id=<?= $idenkripsi; ?>">
+                                                    Detail
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                        $i++;
+                                    endif;
+                                endif;
+                            endforeach;
+                            ?>
                         </tbody>
                     </table>
                 </div>

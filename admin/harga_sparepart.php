@@ -1,5 +1,5 @@
 <?php
-include("../controller/controller_sparepart.php");
+include("../controller/controller_harga.php");
 validasi_admin();
 
 $data_sparepart = query("SELECT * FROM harga_sparepart");
@@ -7,6 +7,24 @@ $jumlah_sparepart = jumlah_data("SELECT * FROM harga_sparepart");
 
 $sparepart = query("SELECT * FROM sparepart");
 $kendaraan = query("SELECT * FROM jenis_kendaraan");
+
+if (isset($_POST['submit'])) {
+    if (input_harga($_POST) > 0) {
+        echo "
+                    <script>
+                    alert('Data Berhasil Ditambah');
+                    document.location.href='harga_sparepart.php';
+                    </script>
+                ";
+    } else {
+        echo "
+                    <script>
+                    alert('Data Gagal Ditambah');
+                    document.location.href='harga_sparepart.php';
+                    </script>
+                ";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -44,9 +62,10 @@ $kendaraan = query("SELECT * FROM jenis_kendaraan");
                 <div class="col-3 me-4 ms-4">
                     <div class="card my-4">
                         <div class="card-body">
-                            <a class="fw-medium text-decoration-none" data-bs-toggle="modal" data-bs-target="#myModal">
+                            <a class="fw-medium text-decoration-none btn text-primary p-0" data-bs-toggle="modal"
+                                data-bs-target="#myModal">
                                 <i class="bi bi-plus-circle"></i>
-                                <span>Input Sparepart</span>
+                                <span>Input Harga Sparepart</span>
                             </a>
                             <hr style="margin-top: 3px;  color: #0275d8; opacity: 1;">
                             <h6 class="card-subtitle ms-4">Jumlah Data</h6>
@@ -73,27 +92,32 @@ $kendaraan = query("SELECT * FROM jenis_kendaraan");
                             <?php
                             $i = 1;
                             foreach ($data_sparepart as $s):
-                                $idsparepart = enkripsi($s['idharga']);
+                                $idharga = enkripsi($s['idharga']);
+                                $idkendaraan = $s['idkendaraan'];
+                                $idsparepart = $s['idsparepart'];
+
+                                $detail_kendaraan = query("SELECT * FROM jenis_kendaraan WHERE idkendaraan = $idkendaraan")[0];
+                                $detail_sparepart = query("SELECT * FROM sparepart WHERE idsparepart = $idsparepart")[0];
                                 ?>
                                 <tr>
                                     <th>
                                         <?php echo $i; ?>
                                     </th>
                                     <td>
-                                        <?php echo $s['harga']; ?>
+                                        <?php echo $detail_sparepart['sparepart']; ?>
                                     </td>
                                     <td>
-                                        <?php echo $s['harga']; ?>
+                                        <?php echo $detail_kendaraan['nama_kendaraan']; ?>
                                     </td>
                                     <td>
-                                        <?php echo $s['harga']; ?>
+                                        Rp
+                                        <?= number_format($s['harga']); ?>
                                     </td>
                                     <td>
-                                        <a href="edit_sparepart.php?id=<?= $idsparepart; ?>"><i
-                                                class="bi bi-pencil-fill"></i></a>
+                                        <a href="edit_harga.php?id=<?= $idharga; ?>"><i class="bi bi-pencil-fill"></i></a>
                                         |
                                         <a style="text-decoration: none;"
-                                            href="../controller/controller_sparepart.php?idharga=<?= $idsparepart; ?>"
+                                            href="../controller/controller_harga.php?idharga=<?= $idharga; ?>"
                                             onclick="return confirm('Apakah anda yakin ingin menghapus data?')"><i
                                                 class="bi bi-trash-fill"></i></a>
                                     </td>
@@ -120,35 +144,37 @@ $kendaraan = query("SELECT * FROM jenis_kendaraan");
                         <form action="" method="post">
                             <!-- Modal body -->
                             <div class="modal-body">
-                                <label for="kriteria">Jenis Sparepart</label>
-                                <select class="form-select" id="kriteria" aria-label="Default select example"
-                                    name="kriteria">
+                                <label for="idsparepart">Jenis Sparepart</label>
+                                <select style="border: 0.5px solid black;" class="form-select" id="idsparepart"
+                                    aria-label="Default select example" name="idsparepart">
                                     <option selected hidden value="">-- Pilih Sparepart --</option>
                                     <?php foreach ($sparepart as $s): ?>
                                         <option value="<?= $s['idsparepart']; ?>"><?= $s['sparepart']; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                                 <br>
-                                <label for="kriteria">Jenis Kendaraan</label>
-                                <select class="form-select" id="kriteria" aria-label="Default select example"
-                                    name="kriteria">
+
+                                <label for="idkendaraan">Jenis Kendaraan</label>
+                                <select style="border: 0.5px solid black;" class="form-select" id="idkendaraan"
+                                    aria-label="Default select example" name="idkendaraan">
                                     <option selected hidden value="">-- Pilih Kendaraan --</option>
                                     <?php foreach ($kendaraan as $k): ?>
                                         <option value="<?= $k['idkendaraan']; ?>"><?= $k['nama_kendaraan']; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                                 <br>
-                                <label for="indikator">Harga :</label>
-                                <input class="form-control" id="indikator" name="indikator">
+
+                                <label for="harga">Harga :</label>
+                                <input type="number" class="form-control" id="harga" name="harga">
 
                             </div>
 
                             <!-- Modal footer -->
                             <div class="modal-footer">
 
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                                 <button type="submit" name="submit" class="btn btn-primary" data-bs-dismi
                                     ss="modal">Kirim</button>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                             </div>
                         </form>
 

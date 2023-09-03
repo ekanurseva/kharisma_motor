@@ -9,7 +9,8 @@ function input_servis($data)
 
     $jenis = htmlspecialchars($data['jenis']);
     $harga_jasa = $data['harga_jasa'];
-    $deskripsi = $data['deskripsi'];
+    $deskripsi = htmlspecialchars($data['deskripsi']);
+    $waktu = $data['waktu_pengerjaan'] * 60;
 
     $result = mysqli_query($conn, "SELECT jenis_servis FROM servis WHERE jenis_servis = '$jenis'") or die(mysqli_error($conn));
     if (mysqli_fetch_assoc($result)) {
@@ -20,7 +21,7 @@ function input_servis($data)
         return false;
     }
 
-    mysqli_query($conn, "INSERT INTO servis VALUES (NULL, '$jenis', '$harga_jasa', '$deskripsi')");
+    mysqli_query($conn, "INSERT INTO servis VALUES (NULL, '$jenis', '$harga_jasa', '$deskripsi', '$waktu')");
     return mysqli_affected_rows($conn);
 }
 // Fungsi Input Servis Selesai
@@ -34,7 +35,8 @@ function edit_servis($data)
     $oldjenis = htmlspecialchars($data['oldjenis']);
     $jenis = htmlspecialchars($data['jenis']);
     $harga = $data['harga_jasa'];
-    $deskripsi = $data['deskripsi'];
+    $deskripsi = htmlspecialchars($data['deskripsi']);
+    $waktu = $data['waktu_pengerjaan'] * 60;
 
     if ($jenis !== $oldjenis) {
         $result = mysqli_query($conn, "SELECT jenis_servis FROM servis WHERE jenis_servis = '$jenis'");
@@ -51,7 +53,8 @@ function edit_servis($data)
     $query = "UPDATE servis SET 
                     jenis_servis = '$jenis',
                     harga_jasa = '$harga',
-                    deskripsi = '$deskripsi'
+                    deskripsi = '$deskripsi',
+                    waktu_pengerjaan = '$waktu'
               WHERE idservis = '$idservis'
             ";
     mysqli_query($conn, $query);
@@ -77,7 +80,7 @@ if (isset($_GET['idservis'])) {
     } else {
         echo "
                 <script>
-                    alert('Data Gagal Dihapus');
+                    alert('Data gagal dihapus karena ada data yang berelasi dengan tabel lain');
                     document.location.href='../admin/servis.php';
                 </script>
             ";

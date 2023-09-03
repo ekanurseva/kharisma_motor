@@ -1,22 +1,22 @@
 <?php
-    require_once('../controller/controller_antrian.php');
+require_once('../controller/controller_antrian.php');
 
-    // Seluruh data keluhan dibagi menjadi 2 kolom
-    $id = dekripsi($_COOKIE['KMmz19']);
-    $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
+// Seluruh data keluhan dibagi menjadi 2 kolom
+$id = dekripsi($_COOKIE['KMmz19']);
+$user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
 
-    $data_kendaraan = query("SELECT * FROM jenis_kendaraan");
+$data_kendaraan = query("SELECT * FROM jenis_kendaraan");
 
-    $kode = kode_antrian();
+$kode = kode_antrian();
 
-    if(isset($_POST['submit_antrian'])) {
-        if(input_antrian($_POST) > 0) {
-            $nopol = enkripsi($_POST['nopol']);
-            header("Location: servis.php?key=" . $nopol);
-        } else {
-            header("Location: input_antrian.php");
-        }
+if (isset($_POST['submit_antrian'])) {
+    if (input_antrian($_POST) > 0) {
+        $nopol = enkripsi($_POST['nopol']);
+        header("Location: servis.php?key=" . $nopol);
+    } else {
+        header("Location: input_antrian.php");
     }
+}
 ?>
 
 <!DOCTYPE html>
@@ -65,29 +65,33 @@
                     Anda Di Sini Untuk Mendaftar Antrian dan Mendapat Nomor
                     Antrian
                 </p>
-                
+
                 <form action="" method="post">
                     <input type="hidden" name="no_antrian" value="<?= $kode; ?>">
                     <div class="identitas px-3">
                         <div class="mb-3">
                             <label for="nama" class="form-label">Nama</label>
-                            <?php if($user['level'] == "User") : ?>
-                                <input type="text" class="form-control" style="background-color:gainsboro;" id="nama" value="<?= $user['nama']; ?>" readonly name="nama_pelanggan">
-                            <?php else : ?>
-                                <input type="text" class="form-control" id="nama" placeholder="masukkan nama anda" name="nama_pelanggan" required>
+                            <?php if ($user['level'] == "User"): ?>
+                                <input type="text" class="form-control" style="background-color:gainsboro;" id="nama"
+                                    value="<?= $user['nama']; ?>" readonly name="nama_pelanggan">
+                            <?php else: ?>
+                                <input type="text" class="form-control" id="nama" placeholder="masukkan nama anda"
+                                    name="nama_pelanggan" required>
                             <?php endif; ?>
                         </div>
                         <div class="mb-3">
                             <label for="telepon" class="form-label">No. Handphone</label>
-                            <input type="text" class="form-control" id="telepon" placeholder="masukkan No.Handphone yang bisa dihubungi" name="no_hp" required>
+                            <input type="text" class="form-control" id="telepon"
+                                placeholder="masukkan No.Handphone yang bisa dihubungi" name="no_hp" required>
                         </div>
                         <div class="row">
                             <div class="col-6">
                                 <div class="mb-3">
                                     <label for="kendaraan" class="form-label">Jenis Kendaraan</label>
-                                    <select name="kendaraan" id="" class="form-control" required>
+                                    <select style="border: 0.5px solid black;" name="kendaraan" id=""
+                                        class="form-control" required>
                                         <option value="" selected hidden>--Pilih Jenis Kendaraan Anda--</option>
-                                        <?php foreach($data_kendaraan as $kendaraan) : ?>
+                                        <?php foreach ($data_kendaraan as $kendaraan): ?>
                                             <option value="<?= $kendaraan['idkendaraan']; ?>"><?= $kendaraan['nama_kendaraan']; ?></option>
                                         <?php endforeach; ?>
                                     </select>
@@ -96,13 +100,15 @@
                             <div class="col-6">
                                 <div class="mb-3">
                                     <label for="no_pol" class="form-label">Nomor Polisi</label>
-                                    <input type="text" class="form-control" id="no_pol" placeholder="masukkan no polisi anda" name="nopol" required>
+                                    <input type="text" class="form-control" id="no_pol"
+                                        placeholder="masukkan no polisi anda" name="nopol" required>
                                 </div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="alamat" class="form-label">Alamat</label>
-                            <textarea class="form-control" id="alamat" rows="3" placeholder="masukkan alamat anda" name="alamat" required></textarea>
+                            <textarea class="form-control" id="alamat" rows="3" placeholder="masukkan alamat anda"
+                                name="alamat" required></textarea>
                         </div>
                     </div>
                     <div class="tombol text-center px-3 justify-content-end">

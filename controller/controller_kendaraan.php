@@ -71,7 +71,7 @@ if (isset($_GET['idkendaraan'])) {
     } else {
         echo "
                 <script>
-                    alert('Data Gagal Dihapus');
+                    alert('Data gagal dihapus karena ada data yang berelasi dengan tabel lain');
                     document.location.href='../admin/kendaraan.php';
                 </script>
             ";

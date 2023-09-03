@@ -7,12 +7,20 @@ function input_sparepart($data_sparepart)
 {
     global $conn;
 
-    $idkendaraan = $data_sparepart['kendaraan'];
     $sparepart = htmlspecialchars($data_sparepart['sparepart']);
-    $harga = $data_sparepart['harga'];
     $deskripsi = $data_sparepart['deskripsi'];
 
-    mysqli_query($conn, "INSERT INTO sparepart VALUES (NULL,'$idkendaraan', '$sparepart', '$harga', '$deskripsi')");
+    $result = mysqli_query($conn, "SELECT sparepart FROM sparepart WHERE sparepart = '$sparepart'");
+
+        if (mysqli_fetch_assoc($result)) {
+            echo "<script>
+                alert('Nama Jenis Sparepart Sudah Ada!');
+                document.location.href='sparepart.php';
+            </script>";
+            return false;
+        }
+
+    mysqli_query($conn, "INSERT INTO sparepart VALUES (NULL,'$sparepart','$deskripsi')");
     return mysqli_affected_rows($conn);
 }
 // Fungsi Input Sparepart Selesai
@@ -25,7 +33,6 @@ function edit_sparepart($data_sparepart)
     $idsparepart = $data_sparepart['idsparepart'];
     $oldjenis = htmlspecialchars($data_sparepart['oldjenis']);
     $jenis = htmlspecialchars($data_sparepart['jenis']);
-    $harga = $data_sparepart['harga'];
     $deskripsi = $data_sparepart['deskripsi'];
 
     if ($jenis !== $oldjenis) {
@@ -34,6 +41,7 @@ function edit_sparepart($data_sparepart)
         if (mysqli_fetch_assoc($result)) {
             echo "<script>
                 alert('Nama Jenis Sparepart Sudah Ada!');
+                document.location.href='sparepart.php';
             </script>";
             return false;
         }
@@ -41,7 +49,6 @@ function edit_sparepart($data_sparepart)
 
     $query = "UPDATE sparepart SET 
                     sparepart = '$jenis',
-                    harga = '$harga',
                     deskripsi = '$deskripsi'
               WHERE idsparepart = '$idsparepart'
             ";
@@ -68,7 +75,7 @@ if (isset($_GET['idsparepart'])) {
     } else {
         echo "
                 <script>
-                    alert('Data Gagal Dihapus');
+                    alert('Data gagal dihapus karena ada data yang berelasi dengan tabel lain');
                     document.location.href='../admin/sparepart.php';
                 </script>
             ";

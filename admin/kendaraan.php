@@ -4,6 +4,22 @@ validasi_admin();
 
 $data_kendaraan = query("SELECT * FROM jenis_kendaraan");
 $jumlah_kendaraan = jumlah_data("SELECT * FROM jenis_kendaraan");
+
+if (isset($_POST["submit_kendaraan"])) {
+    if (input_kendaraan($_POST) > 0) {
+        echo "
+        <script>
+        alert('Data Berhasil Ditambah');
+        document.location.href='kendaraan.php';
+        </script>
+        ";
+    } else {
+        echo "<script>
+        alert('Data Gagal Ditambah');
+        document.location.href='kendaraan.php';
+        </script>";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +57,8 @@ $jumlah_kendaraan = jumlah_data("SELECT * FROM jenis_kendaraan");
                 <div class="col-3 me-4 ms-4">
                     <div class="card my-4">
                         <div class="card-body">
-                            <a href="input_kendaraan.php" class="fw-medium text-decoration-none">
+                            <a class="fw-medium text-decoration-none btn text-primary p-0" data-bs-toggle="modal"
+                                data-bs-target="#myModal">
                                 <i class="bi bi-plus-circle"></i>
                                 <span>Input Kendaraan</span>
                             </a>
@@ -95,6 +112,38 @@ $jumlah_kendaraan = jumlah_data("SELECT * FROM jenis_kendaraan");
                 </div>
             </div>
         </div>
+
+        <!-- The Modal -->
+        <div class="modal" id="myModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Input Kendaraan</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form action="" method="post">
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <label for="jkendaraan" class="form-label">Jenis Kendaraan</label>
+                            <input type="text" class="form-control" id="jkendaraan" name="kendaraan"
+                                placeholder="masukkan jenis kendaraan">
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+
+                            <button type="submit" name="submit_kendaraan" class="btn btn-primary" data-bs-dismi
+                                ss="modal">Kirim</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
     </div>
     <!-- Content Selesai -->
 

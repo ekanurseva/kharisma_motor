@@ -2,13 +2,14 @@
     require_once('../controller/controller_transaksi.php');
     validasi();
 
-    if(!isset($_POST)) {
+    if(!isset($_GET['key'])) {
         header("Location: input_antrian.php");
     }
-    $idantrian = $_POST['idantrian'];
-    $servis = $_POST['servis'];
+    $idantrian = dekripsi($_GET['key']);
 
     $data_antrian = query("SELECT * FROM antrian WHERE id_antrian = $idantrian")[0];
+    $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = $idantrian");
+    $jumlah_transaksi = jumlah_data("SELECT * FROM transaksi WHERE idantrian = $idantrian");
 
     $waktu = strftime('%d %B %Y', strtotime($data_antrian['tanggal']));
 
@@ -17,16 +18,40 @@
     $id = dekripsi($_COOKIE['KMmz19']);
     $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
 
+    if($jumlah_transaksi == 0) {
+        if ($user['level'] === "User") {
+            echo "
+                <script>
+                    document.location.href='../user';
+                </script>
+            ";
+        } elseif ($user['level'] === "Admin") {
+            echo "
+                <script>
+                    document.location.href='../admin';
+                </script>
+            ";
+        } elseif ($user['level'] === "Kasir") {
+            echo "
+                <script>
+                    document.location.href='../kasir';
+                </script>
+            ";
+        }
+    }
+
     $total = 0;
 
     $kode_transaksi = kode_transaksi();
 
-    $estimasi_waktu = cek_estimasi_waktu($_POST, $data_antrian);
-
-    $waktu_estimasi = date('Y-m-d H:i:s', $estimasi_waktu);
-
-    if(isset($_POST['cek_estimasi']) && isset($_POST['keluhan'])) {
-        $sparepart = cek_estimasi_sparepart($_POST);
+    
+    
+    if(isset($_POST['cek_estimasi'])) {
+        $estimasi_waktu = estimasi_waktu($data_antrian);
+        $waktu_estimasi = date('Y-m-d H:i:s', $estimasi_waktu);
+        if(isset($_POST['keluhan'])) {
+            $sparepart = cek_estimasi_sparepart($_POST);
+        }
     }
 
     if(isset($_POST['submit_estimasi'])) {
@@ -114,13 +139,13 @@
                             <div class="col">
                                 <div class="keluhan px-3">
                                     <?php 
-                                        for($i = 0; $i < count($servis); $i++) :
-                                            $idservis = $servis[$i];
-                                            $data_servis = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
-                                            $data_keluhan = query("SELECT * FROM jenis_keluhan WHERE idservis = $idservis");
-                                            $jumlah_keluhan = jumlah_data("SELECT * FROM jenis_keluhan WHERE idservis = $idservis");
+                                        foreach($data_transaksi as $daan) :
+                                            if($daan['idservis'] != NULL) :
+                                                $idservis = $daan['idservis'];
+                                                $data_servis = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
+                                                $data_keluhan = query("SELECT * FROM jenis_keluhan WHERE idservis = $idservis");
+                                                $jumlah_keluhan = jumlah_data("SELECT * FROM jenis_keluhan WHERE idservis = $idservis");
                                     ?>
-                                        <input type="hidden" name="servis[]" value="<?= $servis[$i]; ?>">
                                         <?php 
                                             if($jumlah_keluhan > 0) :?>
                                                 <h3 class="mt-3"><?= $data_servis['jenis_servis']; ?></h3>
@@ -173,7 +198,8 @@
                                             endif;
                                         ?>
                                     <?php 
-                                        endfor;
+                                        endif;
+                                        endforeach;
                                     ?>
                                 </div>
                             </div>
@@ -209,18 +235,22 @@
                                         </thead>
                                         <tbody>
                                             <?php 
-                                                for($j = 0; $j < count($_POST['servis']); $j++) :
-                                                    $idservis2 = $_POST['servis'][$j];
+                                                $j = 1;
+                                                foreach($data_transaksi as $dat) :
+                                                    if($dat['idservis'] != NULL) :
+                                                    $idservis2 = $dat['idservis'];
                                                     $data_servis2 = query("SELECT * FROM servis WHERE idservis = $idservis2")[0];
                                             ?>
                                                 <tr>
-                                                    <td><?= $j + 1; ?></td>
+                                                    <td><?= $j; ?></td>
                                                     <td><?= $data_servis2['jenis_servis']; ?></td>
                                                     <td>Rp <?= number_format($data_servis2['harga_jasa']); ?></td>
                                                 </tr>
                                             <?php 
-                                                $total += $data_servis2['harga_jasa'];
-                                                endfor; 
+                                                    $total += $data_servis2['harga_jasa'];
+                                                    $j++;
+                                                    endif;
+                                                endforeach; 
                                             ?>
                                         </tbody>
                                     </table>

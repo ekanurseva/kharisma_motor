@@ -9,17 +9,9 @@ function input_keluhan($data)
 
     $keluhan = htmlspecialchars($data['keluhan']);
     $idservis = $data['idservis'];
+    $idsparepart = $data['idsparepart'];
 
-    // $result = mysqli_query($conn, "SELECT keluhan FROM jenis_keluhan WHERE keluhan = '$keluhan'") or die(mysqli_error($conn));
-    // if (mysqli_fetch_assoc($result)) {
-    //     echo "<script>
-    //             alert('Keluhan Sudah Ada!');
-    //             document.location.href='keluhan.php';
-    //         </script>";
-    //     return false;
-    // }
-
-    mysqli_query($conn, "INSERT INTO jenis_keluhan VALUES (NULL, '$keluhan', '$idservis')");
+    mysqli_query($conn, "INSERT INTO jenis_keluhan VALUES (NULL, '$keluhan', '$idservis', '$idsparepart')");
     return mysqli_affected_rows($conn);
 }
 // Fungsi Input keluhan Selesai
@@ -30,25 +22,14 @@ function edit_keluhan($data)
     global $conn;
 
     $idkeluhan = $data['idkeluhan'];
-    $oldkeluhan = htmlspecialchars($data['oldkeluhan']);
     $idservis = $data['idservis'];
+    $idsparepart = $data['idsparepart'];
     $keluhan = htmlspecialchars($data['keluhan']);
 
-    if ($keluhan !== $oldkeluhan) {
-        $result = mysqli_query($conn, "SELECT keluhan FROM jenis_keluhan WHERE keluhan = '$keluhan'");
-
-        if (mysqli_fetch_assoc($result)) {
-            echo "<script>
-                alert('keluhan Antrian Sudah Ada!');
-                document.location.href='keluhan.php';
-            </script>";
-            return false;
-        }
-    }
-
     $query = "UPDATE jenis_keluhan SET 
+                    keluhan = '$keluhan',
                     idservis = '$idservis',
-                    keluhan = '$keluhan'
+                    idsparepart = '$idsparepart'
               WHERE idkeluhan = '$idkeluhan'
             ";
     mysqli_query($conn, $query);
@@ -74,7 +55,7 @@ if (isset($_GET['idkeluhan'])) {
     } else {
         echo "
                 <script>
-                    alert('Data Gagal Dihapus');
+                    alert('Data gagal dihapus karena ada data yang berelasi dengan tabel lain');
                     document.location.href='../admin/keluhan.php';
                 </script>
             ";

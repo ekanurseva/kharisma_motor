@@ -4,6 +4,21 @@ validasi_admin();
 
 $data_sparepart = query("SELECT * FROM sparepart");
 $jumlah_sparepart = jumlah_data("SELECT * FROM sparepart");
+
+if (isset($_POST["submit_sparepart"])) {
+    if (input_sparepart($_POST) > 0) {
+        echo "
+        <script>
+        alert('Data Berhasil Ditambah');
+        document.location.href='sparepart.php';
+        </script>
+        ";
+    } else {
+        echo "<script>
+        alert('Data Gagal Ditambah');
+        </script>";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +56,8 @@ $jumlah_sparepart = jumlah_data("SELECT * FROM sparepart");
                 <div class="col-3 me-4 ms-4">
                     <div class="card my-4">
                         <div class="card-body">
-                            <a href="input_sparepart.php" class="fw-medium text-decoration-none">
+                            <a class="fw-medium text-decoration-none btn text-primary p-0" data-bs-toggle="modal"
+                                data-bs-target="#myModal">
                                 <i class="bi bi-plus-circle"></i>
                                 <span>Input Sparepart</span>
                             </a>
@@ -95,6 +111,45 @@ $jumlah_sparepart = jumlah_data("SELECT * FROM sparepart");
                 </div>
             </div>
         </div>
+
+        <!-- The Modal -->
+        <div class="modal" id="myModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Input Sparepart</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form action="" method="post">
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="sparepart" class="form-label">Sparepart</label>
+                                <input type="text" name="sparepart" class="form-control" id="sparepart"
+                                    placeholder="masukkan nama sparepart">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="deskripsi" class="form-label">Deskripsi</label>
+                                <textarea class="form-control" name="deskripsi" id="deskripsi" rows="3"
+                                    placeholder="masukkan deskripsi sparepart"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="submit" name="submit_sparepart" class="btn btn-primary" data-bs-dismi
+                                ss="modal">Kirim</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
     </div>
     <!-- Content Selesai -->
 

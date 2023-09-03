@@ -25,11 +25,11 @@
                         <li><a class="dropdown-item" href="../admin/keluhan.php">Data Keluhan</a></li>
                         <li><a class="dropdown-item" href="../admin/sparepart.php">Data Sparepart</a></li>
                         <li><a class="dropdown-item" href="../admin/harga_sparepart.php">Data Harga Sparepart</a></li>
-                        <li><a class="dropdown-item" href="../admin/status_antrian.php">Status Antrian</a></li>
+                        <li><a class="dropdown-item" href="../kelola/transaksi.php">Transaksi</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="admin_kasir.php">Data Admin & Kasir</a></li>
+                        <li><a class="dropdown-item" href="../admin/admin_kasir.php">Data Admin & Kasir</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
