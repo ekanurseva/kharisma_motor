@@ -19,6 +19,12 @@ if ($jumlah_keluhan > 0) {
     $data_keluhan = query("SELECT * FROM transaksi_keluhan WHERE idantrian = $idantrian");
 }
 
+$jumlah_keluhan = jumlah_data("SELECT * FROM transaksi_keluhan WHERE idantrian = $idantrian");
+
+if ($jumlah_keluhan > 0) {
+    $data_keluhan = query("SELECT * FROM transaksi_keluhan WHERE idantrian = $idantrian");
+}
+
 $total = 0;
 
 $estimasi_waktu = estimasi_waktu($data_antrian);
@@ -207,123 +213,119 @@ if (isset($_POST['bayar'])) {
                 <?php endif; ?>
             </div>
 
-            <div style="border: 0.5px solid black; padding: 10px; border-radius: 10px;">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Servis</th>
-                            <th>Sparepart</th>
-                            <th>Total</th>
-                            <?php if ($data_antrian['status'] != "Selesai"): ?>
-                                <th>Aksi</th>
-                            <?php endif; ?>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $i = 1;
-                        foreach ($data_transaksi as $daksi):
-                            if ($daksi['idservis'] != NULL):
-                                $idservis = $daksi['idservis'];
-                                $data_servis = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
-                                $enkripsi_id = enkripsi($daksi['idtransaksi']);
-                                ?>
-                                <tr>
-                                    <th>
-                                        <?= $i; ?>
-                                    </th>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Servis</th>
+                        <th>Sparepart</th>
+                        <th>Total</th>
+                        <?php if ($data_antrian['status'] != "Selesai"): ?>
+                            <th>Aksi</th>
+                        <?php endif; ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $i = 1;
+                    foreach ($data_transaksi as $daksi):
+                        if ($daksi['idservis'] != NULL):
+                            $idservis = $daksi['idservis'];
+                            $data_servis = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
+                            $enkripsi_id = enkripsi($daksi['idtransaksi']);
+                            ?>
+                            <tr>
+                                <th>
+                                    <?= $i; ?>
+                                </th>
+                                <td>
+                                    <?= $data_servis['jenis_servis']; ?>
+                                </td>
+                                <td>-</td>
+                                <td>Rp
+                                    <?= number_format($data_servis['harga_jasa']); ?>
+                                </td>
+                                <?php if ($data_antrian['status'] != "Selesai"): ?>
                                     <td>
-                                        <?= $data_servis['jenis_servis']; ?>
+                                        <a style="text-decoration: none;" href="delete.php?idtransaksi=<?= $enkripsi_id; ?>"
+                                            onclick="return confirm('Apakah anda yakin ingin menghapus data?')">
+                                            <i class="bi bi-trash-fill"></i></a>
                                     </td>
-                                    <td>-</td>
-                                    <td>Rp
-                                        <?= number_format($data_servis['harga_jasa']); ?>
-                                    </td>
-                                    <?php if ($data_antrian['status'] != "Selesai"): ?>
-                                        <td>
-                                            <a style="text-decoration: none;" href="delete.php?idtransaksi=<?= $enkripsi_id; ?>"
-                                                onclick="return confirm('Apakah anda yakin ingin menghapus data?')">
-                                                <i class="bi bi-trash-fill"></i></a>
-                                        </td>
-                                    <?php endif; ?>
-                                    <?php $total += $data_servis['harga_jasa']; ?>
-                                </tr>
-                                <?php
-                                $i++;
-                            endif;
-                        endforeach;
-                        ?>
-
-                        <?php foreach ($data_transaksi as $trans):
-                            if ($trans['idsparepart'] != NULL):
-                                $idsparepart = $trans['idsparepart'];
-                                $data_sparepart = query("SELECT * FROM sparepart WHERE idsparepart = $idsparepart")[0];
-                                $enkripsi_idtrans = enkripsi($trans['idtransaksi']);
-
-                                $data_harga = query("SELECT * FROM harga_sparepart WHERE idkendaraan = $idkendaraan AND idsparepart = $idsparepart")[0];
-                                ?>
-                                <tr>
-                                    <th>
-                                        <?= $i; ?>
-                                    </th>
-                                    <td>-</td>
-                                    <td>
-                                        <?= $data_sparepart['sparepart']; ?>
-                                    </td>
-                                    <td>Rp
-                                        <?= number_format($data_harga['harga']); ?>
-                                    </td>
-                                    <?php if ($data_antrian['status'] != "Selesai"): ?>
-                                        <td>
-                                            <a style="text-decoration: none;"
-                                                href="delete.php?idtransaksi=<?= $enkripsi_idtrans; ?>"
-                                                onclick="return confirm('Apakah anda yakin ingin menghapus data?')">
-                                                <i class="bi bi-trash-fill"></i></a>
-                                        </td>
-                                    <?php endif; ?>
-                                    <?php $total += $data_harga['harga']; ?>
-                                </tr>
-                                <?php
-                                $i++;
-                            endif;
-                        endforeach;
-                        ?>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <th>Total Pembayaran</th>
-                            <th>Rp
-                                <?= number_format($total); ?>
-                            </th>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <?php if ($data_transaksi[0]['status_transaksi'] == "Belum"): ?>
-                <div class="d-flex justify-content-end">
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                        data-bs-target="#bayar">Bayar</button>
-                </div>
-            <?php endif; ?>
-
-            <h3 class="mt-3">Keluhan</h3>
-            <ul>
-                <?php
-                if ($jumlah_keluhan > 0): foreach ($data_keluhan as $dakel):
-                        $idkeluhan = $dakel['idkeluhan'];
-                        $keluhan = query("SELECT * FROM jenis_keluhan WHERE idkeluhan = $idkeluhan")[0];
-                        ?>
-                        <li>
-                            <?= $keluhan['keluhan']; ?>
-                        </li>
-                        <?php
-
+                                <?php endif; ?>
+                            </tr>
+                            <?php
+                            $i++;
+                        endif;
                     endforeach;
-                endif;
-                ?>
-            </ul>
+                    ?>
+
+                    <?php foreach ($data_transaksi as $trans):
+                        if ($trans['idsparepart'] != NULL):
+                            $idsparepart = $trans['idsparepart'];
+                            $data_sparepart = query("SELECT * FROM sparepart WHERE idsparepart = $idsparepart")[0];
+                            $enkripsi_idtrans = enkripsi($trans['idtransaksi']);
+
+                            $data_harga = query("SELECT * FROM harga_sparepart WHERE idkendaraan = $idkendaraan AND idsparepart = $idsparepart")[0];
+                            ?>
+                            <tr>
+                                <th>
+                                    <?= $i; ?>
+                                </th>
+                                <td>-</td>
+                                <td>
+                                    <?= $data_sparepart['sparepart']; ?>
+                                </td>
+                                <td>Rp
+                                    <?= number_format($data_harga['harga']); ?>
+                                </td>
+                                <?php if ($data_antrian['status'] != "Selesai"): ?>
+                                    <td>
+                                        <a style="text-decoration: none;" href="delete.php?idtransaksi=<?= $enkripsi_idtrans; ?>"
+                                            onclick="return confirm('Apakah anda yakin ingin menghapus data?')">
+                                            <i class="bi bi-trash-fill"></i></a>
+                                    </td>
+                                <?php endif; ?>
+                                <?php $total += $data_harga['harga']; ?>
+                            </tr>
+                            <?php
+                            $i++;
+                        endif;
+                    endforeach;
+                    ?>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <th>Total Pembayaran</th>
+                        <th>Rp
+                            <?= number_format($total); ?>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+        <?php if ($data_transaksi[0]['status_transaksi'] == "Belum"): ?>
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#bayar">Bayar</button>
+            </div>
+        <?php endif; ?>
+
+        <h3 class="mt-3">Keluhan</h3>
+        <ul>
+            <?php
+            if ($jumlah_keluhan > 0): foreach ($data_keluhan as $dakel):
+                    $idkeluhan = $dakel['idkeluhan'];
+                    $keluhan = query("SELECT * FROM jenis_keluhan WHERE idkeluhan = $idkeluhan")[0];
+                    ?>
+                    <li>
+                        <?= $keluhan['keluhan']; ?>
+                    </li>
+                <?php
+
+                endforeach;
+            endif;
+            ?>
+        </ul>
+    </div>
     </div>
     <!-- Content Selesai -->
 
