@@ -290,7 +290,6 @@
     }
 
     function cari_antrian($data) {
-        global $conn;
         $dari = $data['dari'];
         $sampai = date('Y-m-d', strtotime($data['sampai']) + 86400);
 

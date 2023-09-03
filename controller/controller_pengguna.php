@@ -18,6 +18,7 @@ function register_admin($data)
     if (mysqli_fetch_assoc($result)) {
         echo "<script>
         alert('Username Sudah Dipakai! Silahkan gunakan username lain');
+        document.location.href='input_admin.php';
     </script>";
         exit();
     }
@@ -25,6 +26,7 @@ function register_admin($data)
     if ($password !== $password2) {
         echo "<script>
         alert('Password Tidak Sesuai!');
+        document.location.href='input_admin.php';
     </script>";
         exit();
     }
@@ -53,6 +55,8 @@ function edit_pengguna($data)
     $password2 = mysqli_real_escape_string($conn, $data["pwd2"]);
     $no_hp = $data['nohp'];
 
+    $id = enkripsi($idpengguna);
+
     if (isset($data['oldlevel'])) {
         $level = $data['oldlevel'];
     } else {
@@ -65,6 +69,7 @@ function edit_pengguna($data)
         if (mysqli_fetch_assoc($result)) {
             echo "<script>
                 alert('Username pengguna Sudah Digunakan! Silahkan pakai username lain.');
+                document.location.href='edit_admin_kasir.php?id=" . $id . "';
             </script>";
             return false;
         }
@@ -74,6 +79,7 @@ function edit_pengguna($data)
         if ($password !== $password2) {
             echo "<script>
                     alert('Password Tidak Sesuai!');
+                    document.location.href='edit_admin_kasir.php?id=" . $id . "';
                   </script>";
             return false;
         }
@@ -111,6 +117,7 @@ function register_kasir($data)
     if (mysqli_fetch_assoc($result)) {
         echo "<script>
         alert('Username Sudah Dipakai! Silahkan gunakan username lain');
+        document.location.href='input_kasir.php';
     </script>";
         exit();
     }
@@ -118,6 +125,7 @@ function register_kasir($data)
     if ($password !== $password2) {
         echo "<script>
         alert('Password Tidak Sesuai!');
+        document.location.href='input_kasir.php';
     </script>";
         exit();
     }
@@ -147,6 +155,7 @@ function register_user($data)
     if (mysqli_fetch_assoc($result)) {
         echo "<script>
         alert('Username Sudah Dipakai! Silahkan gunakan username lain');
+        document.location.href='registrasi.php';
     </script>";
         exit();
     }
@@ -154,6 +163,7 @@ function register_user($data)
     if ($password !== $password2) {
         echo "<script>
         alert('Password Tidak Sesuai!');
+        document.location.href='registrasi.php';
     </script>";
         exit();
     }

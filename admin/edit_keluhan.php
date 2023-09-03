@@ -20,7 +20,7 @@
             echo "
                     <script>
                     alert('Data Gagal Diubah');
-                    document.location.href='keluhan.php';
+                    document.location.href='edit_keluhan.php?id=" . $_GET['id'] . "';
                     </script>
                 ";
         }

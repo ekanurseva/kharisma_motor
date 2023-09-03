@@ -17,7 +17,7 @@
             echo "
                     <script>
                     alert('Data Gagal Diubah');
-                    document.location.href='sparepart.php';
+                    document.location.href='edit_sparepart.php?id=" . $_GET['id'] . "';
                     </script>
                 ";
         }

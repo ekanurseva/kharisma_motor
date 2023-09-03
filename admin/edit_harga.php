@@ -20,7 +20,7 @@
             echo "
                     <script>
                     alert('Data Gagal Diubah');
-                    document.location.href='harga_sparepart.php';
+                    document.location.href='edit_harga.php?id=" . $_GET['id'] . "';
                     </script>
                 ";
         }

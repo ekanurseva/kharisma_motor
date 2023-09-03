@@ -34,6 +34,7 @@ function edit_sparepart($data_sparepart)
     $oldjenis = htmlspecialchars($data_sparepart['oldjenis']);
     $jenis = htmlspecialchars($data_sparepart['jenis']);
     $deskripsi = $data_sparepart['deskripsi'];
+    $id = enkripsi($idsparepart);
 
     if ($jenis !== $oldjenis) {
         $result = mysqli_query($conn, "SELECT sparepart FROM sparepart WHERE sparepart = '$jenis'");
@@ -41,7 +42,7 @@ function edit_sparepart($data_sparepart)
         if (mysqli_fetch_assoc($result)) {
             echo "<script>
                 alert('Nama Jenis Sparepart Sudah Ada!');
-                document.location.href='sparepart.php';
+                document.location.href='edit_admin_kasir.php?id=" . $id . "';
             </script>";
             return false;
         }

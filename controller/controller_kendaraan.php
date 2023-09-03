@@ -32,13 +32,15 @@ function edit_kendaraan($data)
     $oldjenis = htmlspecialchars($data['oldjenis']);
     $jenis = htmlspecialchars($data['jenis']);
 
+    $id = enkripsi($idkendaraan);
+
     if ($jenis !== $oldjenis) {
         $result = mysqli_query($conn, "SELECT nama_kendaraan FROM jenis_kendaraan WHERE nama_kendaraan = '$jenis'");
 
         if (mysqli_fetch_assoc($result)) {
             echo "<script>
                 alert('Nama Jenis kendaraan Sudah Ada!');
-                document.location.href='kendaraan.php';
+                document.location.href='edit_kendaraan.php?id=" . $id . "';
             </script>";
             return false;
         }

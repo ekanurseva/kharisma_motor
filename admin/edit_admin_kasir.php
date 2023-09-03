@@ -17,7 +17,7 @@ if (isset($_POST['submit_pengguna'])) {
         echo "
                 <script>
                 alert('Data Gagal Diubah');
-                document.location.href='admin_kasir.php';
+                document.location.href='edit_admin_kasir.php?id=" . $_GET['id'] . "';
                 </script>
             ";
     }

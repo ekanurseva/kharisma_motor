@@ -17,14 +17,14 @@
             echo "
                 <script>
                     alert('Sparepart berhasil ditambahkan');
-                    document.location.href='antrian.php';
+                    document.location.href='detail_transaksi.php?id=" . $_GET['key'] . "';
                 </script>
             ";
         } else {
             echo "
                 <script>
                     alert('Sparepart gagal ditambahkan');
-                    document.location.href='antrian.php';
+                    document.location.href='detail_transaksi.php?id=" . $_GET['key'] . "';
                 </script>
             ";
         }
@@ -35,14 +35,14 @@
             echo "
                 <script>
                     alert('Servis berhasil ditambahkan');
-                    document.location.href='antrian.php';
+                    document.location.href='detail_transaksi.php?id=" . $_GET['key'] . "';
                 </script>
             ";
         } else {
             echo "
                 <script>
                     alert('Servis gagal ditambahkan');
-                    document.location.href='antrian.php';
+                    document.location.href='detail_transaksi.php?id=" . $_GET['key'] . "';
                 </script>
             ";
         }

@@ -37,6 +37,7 @@ function edit_servis($data)
     $harga = $data['harga_jasa'];
     $deskripsi = htmlspecialchars($data['deskripsi']);
     $waktu = $data['waktu_pengerjaan'] * 60;
+    $id = enkripsi($idservis);
 
     if ($jenis !== $oldjenis) {
         $result = mysqli_query($conn, "SELECT jenis_servis FROM servis WHERE jenis_servis = '$jenis'");
@@ -44,7 +45,7 @@ function edit_servis($data)
         if (mysqli_fetch_assoc($result)) {
             echo "<script>
                 alert('Nama Jenis servis Sudah Ada!');
-                document.location.href='servis.php';
+                document.location.href='edit_servis.php?id=" . $id . "';
             </script>";
             return false;
         }

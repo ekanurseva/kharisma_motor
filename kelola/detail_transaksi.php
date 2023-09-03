@@ -29,21 +29,21 @@ $total = 0;
 
 $estimasi_waktu = estimasi_waktu($data_antrian);
 
-$waktu = date('Y-m-d H:i:s', $estimasi_waktu);
+$waktu = date('d-m-Y H:i:s', $estimasi_waktu);
 
 if (isset($_POST['status_antrian'])) {
     if (ubah_status($_POST) > 0) {
         echo "
                 <script>
                     alert('Status berhasil diubah');
-                    document.location.href='antrian.php';
+                    document.location.href='detail_transaksi.php?id=" . $_GET['id'] . "';
                 </script>
             ";
     } else {
         echo "
                 <script>
                     alert('Status gagal diubah');
-                    document.location.href='antrian.php';
+                    document.location.href='detail_transaksi.php?id=" . $_GET['id'] . "';
                 </script>
             ";
     }
@@ -54,7 +54,7 @@ if (isset($_POST['bayar'])) {
         echo "
                 <script>
                     alert('Jumlah yang dibayarkan kurang');
-                    document.location.href='antrian.php';
+                    document.location.href='detail_transaksi.php?id=" . $_GET['id'] . "';
                 </script>
             ";
     } else {
@@ -62,14 +62,14 @@ if (isset($_POST['bayar'])) {
             echo "
                 <script>
                     alert('Transaksi Berhasil');
-                    document.location.href='antrian.php';
+                    document.location.href='detail_transaksi.php?id=" . $_GET['id'] . "';
                 </script>
             ";
         } else {
             echo "
                 <script>
                     alert('Transaksi Gagal');
-                    document.location.href='antrian.php';
+                    document.location.href='detail_transaksi.php?id=" . $_GET['id'] . "';
                 </script>
             ";
         }
@@ -172,7 +172,7 @@ if (isset($_POST['bayar'])) {
                         </div>
                         <div class="col-7">
                             <h6>:
-                                <?= $data_antrian['tanggal']; ?>
+                                <?= date('d-m-Y H:i:s', strtotime($data_antrian['tanggal'])); ?>
                             </h6>
                         </div>
                     </div>

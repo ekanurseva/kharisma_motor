@@ -4,6 +4,9 @@
 
     if(isset($_GET['idtransaksi'])) {
         $idtransaksi = dekripsi($_GET['idtransaksi']);
+        $antrian = query("SELECT idantrian FROM transaksi WHERE idtransaksi = $idtransaksi")[0];
+
+        $idantrian = enkripsi($antrian['idantrian']);
 
         mysqli_query($conn, "DELETE FROM transaksi WHERE idtransaksi = $idtransaksi");
 
@@ -11,14 +14,14 @@
             echo "
                 <script>
                     alert('Transaksi Berhasil Dihapus');
-                    document.location.href='antrian.php';
+                    document.location.href='detail_transaksi.php?id=" . $idantrian . "';
                 </script>
             ";
         } else {
             echo "
                 <script>
                     alert('Transaksi Gagal Dihapus');
-                    document.location.href='antrian.php';
+                    document.location.href='detail_transaksi.php?id=" . $idantrian . "';
                 </script>
             ";
         }
