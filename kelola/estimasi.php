@@ -1,87 +1,87 @@
 <?php
-    require_once('../controller/controller_transaksi.php');
-    validasi();
+require_once('../controller/controller_transaksi.php');
+validasi();
 
-    if(!isset($_GET['key'])) {
-        header("Location: input_antrian.php");
-    }
-    $idantrian = dekripsi($_GET['key']);
+if (!isset($_GET['key'])) {
+    header("Location: input_antrian.php");
+}
+$idantrian = dekripsi($_GET['key']);
 
-    $data_antrian = query("SELECT * FROM antrian WHERE id_antrian = $idantrian")[0];
-    $data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = $idantrian");
-    $jumlah_transaksi = jumlah_data("SELECT * FROM transaksi WHERE idantrian = $idantrian");
+$data_antrian = query("SELECT * FROM antrian WHERE id_antrian = $idantrian")[0];
+$data_transaksi = query("SELECT * FROM transaksi WHERE idantrian = $idantrian");
+$jumlah_transaksi = jumlah_data("SELECT * FROM transaksi WHERE idantrian = $idantrian");
 
-    $waktu = strftime('%d %B %Y', strtotime($data_antrian['tanggal']));
+$waktu = strftime('%d %B %Y', strtotime($data_antrian['tanggal']));
 
-    $idkendaraan = $data_antrian['id_kendaraan'];
+$idkendaraan = $data_antrian['id_kendaraan'];
 
-    $id = dekripsi($_COOKIE['KMmz19']);
-    $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
+$id = dekripsi($_COOKIE['KMmz19']);
+$user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
 
-    if($jumlah_transaksi == 0) {
-        if ($user['level'] === "User") {
-            echo "
+if ($jumlah_transaksi == 0) {
+    if ($user['level'] === "User") {
+        echo "
                 <script>
                     document.location.href='../user';
                 </script>
             ";
-        } elseif ($user['level'] === "Admin") {
-            echo "
+    } elseif ($user['level'] === "Admin") {
+        echo "
                 <script>
                     document.location.href='../admin';
                 </script>
             ";
-        } elseif ($user['level'] === "Kasir") {
-            echo "
+    } elseif ($user['level'] === "Kasir") {
+        echo "
                 <script>
                     document.location.href='../kasir';
                 </script>
             ";
-        }
     }
+}
 
-    $total = 0;
+$total = 0;
 
-    $kode_transaksi = kode_transaksi();
+$kode_transaksi = kode_transaksi();
 
-    
-    
-    if(isset($_POST['cek_estimasi'])) {
-        $estimasi_waktu = estimasi_waktu($data_antrian);
-        $waktu_estimasi = date('Y-m-d H:i:s', $estimasi_waktu);
-        if(isset($_POST['keluhan'])) {
-            $sparepart = cek_estimasi_sparepart($_POST);
-        }
+
+
+if (isset($_POST['cek_estimasi'])) {
+    $estimasi_waktu = estimasi_waktu($data_antrian);
+    $waktu_estimasi = date('Y-m-d H:i:s', $estimasi_waktu);
+    if (isset($_POST['keluhan'])) {
+        $sparepart = cek_estimasi_sparepart($_POST);
     }
+}
 
-    if(isset($_POST['submit_estimasi'])) {
-        create_transaksi($_POST);
-        echo "
+if (isset($_POST['submit_estimasi'])) {
+    create_transaksi($_POST);
+    echo "
             <script>
                 alert('Antrian sudah terdaftar');
             </script>
         ";
 
-        if ($user['level'] === "User") {
-            echo "
+    if ($user['level'] === "User") {
+        echo "
                 <script>
                     document.location.href='../user';
                 </script>
             ";
-        } elseif ($user['level'] === "Admin") {
-            echo "
+    } elseif ($user['level'] === "Admin") {
+        echo "
                 <script>
                     document.location.href='../admin';
                 </script>
             ";
-        } elseif ($user['level'] === "Kasir") {
-            echo "
+    } elseif ($user['level'] === "Kasir") {
+        echo "
                 <script>
                     document.location.href='../kasir';
                 </script>
             ";
-        }
     }
+}
 
 
 ?>
@@ -130,76 +130,77 @@
             <div class="row">
                 <div class="mt-2">
                     <p style="text-align: justify; padding: 0 13px; margin-top: 10px; margin-bottom: 5px;">Pilih Jenis
-                        Keluhan Mengenai PermasalahanKendaraan Anda, Sistem Akan Mendiagnosa Jenis Servis yang Perlu
-                        Dilakukan yang Ditunjukkan pada Estimasi Nota</p>
+                        Keluhan Mengenai Permasalahan Servis Kendaraan Anda, Sistem Akan Mendiagnosa Jenis Servis yang
+                        Perlu Dilakukan yang Ditunjukkan pada Estimasi Nota</p>
                     <form method="post" action="">
                         <input type="hidden" name="idantrian" value="<?= $idantrian; ?>">
                         <input type="hidden" name="kode_transaksi" value="<?= $kode_transaksi; ?>">
                         <div class="row">
                             <div class="col">
                                 <div class="keluhan px-3">
-                                    <?php 
-                                        foreach($data_transaksi as $daan) :
-                                            if($daan['idservis'] != NULL) :
-                                                $idservis = $daan['idservis'];
-                                                $data_servis = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
-                                                $data_keluhan = query("SELECT * FROM jenis_keluhan WHERE idservis = $idservis");
-                                                $jumlah_keluhan = jumlah_data("SELECT * FROM jenis_keluhan WHERE idservis = $idservis");
-                                    ?>
-                                        <?php 
-                                            if($jumlah_keluhan > 0) :?>
-                                                <h3 class="mt-3"><?= $data_servis['jenis_servis']; ?></h3>
-                                            <?php 
-                                                foreach($data_keluhan as $k2) :
-                                                    
-                                             ?> 
-                                        
-                                        <?php 
-                                                    if(isset($_POST['keluhan'])) :
+                                    <?php
+                                    foreach ($data_transaksi as $daan):
+                                        if ($daan['idservis'] != NULL):
+                                            $idservis = $daan['idservis'];
+                                            $data_servis = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
+                                            $data_keluhan = query("SELECT * FROM jenis_keluhan WHERE idservis = $idservis");
+                                            $jumlah_keluhan = jumlah_data("SELECT * FROM jenis_keluhan WHERE idservis = $idservis");
+                                            ?>
+                                            <?php
+                                            if ($jumlah_keluhan > 0): ?>
+                                                <h3 class="mt-3">
+                                                    <?= $data_servis['jenis_servis']; ?>
+                                                </h3>
+                                                <?php foreach ($data_keluhan as $k2):
+
+                                                    ?>
+
+                                                    <?php
+                                                    if (isset($_POST['keluhan'])):
                                                         $cek = in_array($k2['idkeluhan'], $_POST['keluhan']) ? "checked" : " ";
-                                                        if ($cek == "checked") :
-                                                ?>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="keluhan[]"
-                                                            data-idjkeluhan="<?php echo $k2['idkeluhan']; ?>"
-                                                            id="keluhan<?php echo $k2['idkeluhan']; ?>"
-                                                            value="<?php echo $k2['idkeluhan']; ?>" checked>
-                                                        <label class="form-check-label" for="keluhan<?php echo $k2['idkeluhan']; ?>">
-                                                            <?php echo $k2['keluhan']; ?>
-                                                        </label>
-                                                    </div>
-                                                <?php else : ?> 
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="keluhan[]"
-                                                            data-idjkeluhan="<?php echo $k2['idkeluhan']; ?>"
-                                                            id="keluhan<?php echo $k2['idkeluhan']; ?>"
-                                                            value="<?php echo $k2['idkeluhan']; ?>">
-                                                        <label class="form-check-label" for="keluhan<?php echo $k2['idkeluhan']; ?>">
-                                                            <?php echo $k2['keluhan']; ?>
-                                                        </label>
-                                                    </div>
-                                        <?php 
+                                                        if ($cek == "checked"):
+                                                            ?>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" name="keluhan[]"
+                                                                    data-idjkeluhan="<?php echo $k2['idkeluhan']; ?>"
+                                                                    id="keluhan<?php echo $k2['idkeluhan']; ?>"
+                                                                    value="<?php echo $k2['idkeluhan']; ?>" checked>
+                                                                <label class="form-check-label" for="keluhan<?php echo $k2['idkeluhan']; ?>">
+                                                                    <?php echo $k2['keluhan']; ?>
+                                                                </label>
+                                                            </div>
+                                                        <?php else: ?>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" name="keluhan[]"
+                                                                    data-idjkeluhan="<?php echo $k2['idkeluhan']; ?>"
+                                                                    id="keluhan<?php echo $k2['idkeluhan']; ?>"
+                                                                    value="<?php echo $k2['idkeluhan']; ?>">
+                                                                <label class="form-check-label" for="keluhan<?php echo $k2['idkeluhan']; ?>">
+                                                                    <?php echo $k2['keluhan']; ?>
+                                                                </label>
+                                                            </div>
+                                                            <?php
                                                         endif;
-                                                    
-                                        ?>
-                                            <?php else : ?>
-                                                <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="keluhan[]"
-                                                            data-idjkeluhan="<?php echo $k2['idkeluhan']; ?>"
-                                                            id="keluhan<?php echo $k2['idkeluhan']; ?>"
-                                                            value="<?php echo $k2['idkeluhan']; ?>">
-                                                        <label class="form-check-label" for="keluhan<?php echo $k2['idkeluhan']; ?>">
-                                                            <?php echo $k2['keluhan']; ?>
-                                                        </label>
-                                                    </div>
-                                        <?php 
+
+                                                        ?>
+                                                    <?php else: ?>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" name="keluhan[]"
+                                                                data-idjkeluhan="<?php echo $k2['idkeluhan']; ?>"
+                                                                id="keluhan<?php echo $k2['idkeluhan']; ?>"
+                                                                value="<?php echo $k2['idkeluhan']; ?>">
+                                                            <label class="form-check-label" for="keluhan<?php echo $k2['idkeluhan']; ?>">
+                                                                <?php echo $k2['keluhan']; ?>
+                                                            </label>
+                                                        </div>
+                                                        <?php
                                                     endif;
-                                                endforeach; 
+                                                endforeach;
                                             endif;
-                                        ?>
-                                    <?php 
+                                            ?>
+                                            <?php
                                         endif;
-                                        endforeach;
+                                    endforeach;
                                     ?>
                                 </div>
                             </div>
@@ -216,15 +217,21 @@
                                 <h5 class="px-3 mt-4 d-flex justify-content-center">Estimasi Nota</h5>
                                 <div class="nota px-3 ms-3 me-3">
                                     <p class="fw-semibold mt-3">Kharisma Motor</p>
-                                    <p class="text-end" style="margin-top: -10px;">Playangan, <?= $waktu; ?></p>
+                                    <p class="text-end" style="margin-top: -10px;">Playangan,
+                                        <?= $waktu; ?>
+                                    </p>
                                     <div class="row text-center fw-semibold">
                                         <div class="col-6 text-start fw-bold">
-                                            <p><?= $data_antrian['nama_pelanggan']; ?></p>
+                                            <p>
+                                                <?= $data_antrian['nama_pelanggan']; ?>
+                                            </p>
                                         </div>
                                     </div>
 
-                                    <p class="text-end">Estimasi selesai : <?= $waktu_estimasi; ?></p>
-    
+                                    <p class="text-end">Estimasi selesai :
+                                        <?= $waktu_estimasi; ?>
+                                    </p>
+
                                     <table class="table" id="resultTable">
                                         <thead>
                                             <tr>
@@ -234,28 +241,33 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php 
-                                                $j = 1;
-                                                foreach($data_transaksi as $dat) :
-                                                    if($dat['idservis'] != NULL) :
+                                            <?php
+                                            $j = 1; foreach ($data_transaksi as $dat):
+                                                if ($dat['idservis'] != NULL):
                                                     $idservis2 = $dat['idservis'];
                                                     $data_servis2 = query("SELECT * FROM servis WHERE idservis = $idservis2")[0];
-                                            ?>
-                                                <tr>
-                                                    <td><?= $j; ?></td>
-                                                    <td><?= $data_servis2['jenis_servis']; ?></td>
-                                                    <td>Rp <?= number_format($data_servis2['harga_jasa']); ?></td>
-                                                </tr>
-                                            <?php 
+                                                    ?>
+                                                    <tr>
+                                                        <td>
+                                                            <?= $j; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $data_servis2['jenis_servis']; ?>
+                                                        </td>
+                                                        <td>Rp
+                                                            <?= number_format($data_servis2['harga_jasa']); ?>
+                                                        </td>
+                                                    </tr>
+                                                    <?php
                                                     $total += $data_servis2['harga_jasa'];
                                                     $j++;
-                                                    endif;
-                                                endforeach; 
+                                                endif;
+                                            endforeach;
                                             ?>
                                         </tbody>
                                     </table>
 
-                                    <?php if(isset($_POST['keluhan'])) : ?>
+                                    <?php if (isset($_POST['keluhan'])): ?>
                                         <table class="table" id="resultTable">
                                             <thead>
                                                 <tr>
@@ -265,35 +277,43 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php 
-                                                    for($k = 0; $k < count($sparepart); $k++) :
-                                                        $idsparepart = $sparepart[$k];
-                                                        $data_sparepart = query("SELECT * FROM sparepart WHERE idsparepart = $idsparepart")[0];
+                                                <?php
+                                                for ($k = 0; $k < count($sparepart); $k++):
+                                                    $idsparepart = $sparepart[$k];
+                                                    $data_sparepart = query("SELECT * FROM sparepart WHERE idsparepart = $idsparepart")[0];
 
-                                                        $data_harga = query("SELECT * FROM harga_sparepart WHERE idkendaraan = '$idkendaraan' AND idsparepart = '$idsparepart'")[0];
+                                                    $data_harga = query("SELECT * FROM harga_sparepart WHERE idkendaraan = '$idkendaraan' AND idsparepart = '$idsparepart'")[0];
 
-                                                ?>
+                                                    ?>
                                                     <tr>
-                                                        <td><?= $k + 1; ?></td>
-                                                        <td><?= $data_sparepart['sparepart']; ?></td>
-                                                        <td>Rp <?= number_format($data_harga['harga']); ?></td>
+                                                        <td>
+                                                            <?= $k + 1; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $data_sparepart['sparepart']; ?>
+                                                        </td>
+                                                        <td>Rp
+                                                            <?= number_format($data_harga['harga']); ?>
+                                                        </td>
                                                     </tr>
-                                                <?php 
+                                                    <?php
                                                     $total += $data_harga['harga'];
-                                                    endfor; 
+                                                endfor;
                                                 ?>
                                             </tbody>
                                         </table>
                                     <?php endif; ?>
 
-                                    <h4 class="text-end my-3">Total : Rp <?= number_format($total); ?></h4>
+                                    <h4 class="text-end my-3">Total : Rp
+                                        <?= number_format($total); ?>
+                                    </h4>
                                 </div>
                             <?php endif; ?>
                         </div>
 
                         <div class="tombol text-center px-3 justify-content-end mt-3">
                             <button type="submit" name="submit_estimasi" class="btn py-2 btn-success w-50">
-                                    Daftar
+                                Daftar
                             </button>
                         </div>
                     </form>

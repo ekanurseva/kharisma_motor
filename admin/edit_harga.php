@@ -1,30 +1,30 @@
 <?php
-    require_once('../controller/controller_harga.php');
-    validasi_admin();
+require_once('../controller/controller_harga.php');
+validasi_admin();
 
-    $idharga = dekripsi($_GET['id']);
-    $data = query("SELECT * FROM harga_sparepart WHERE idharga = $idharga")[0];
+$idharga = dekripsi($_GET['id']);
+$data = query("SELECT * FROM harga_sparepart WHERE idharga = $idharga")[0];
 
-    $sparepart = query("SELECT * FROM sparepart");
-    $kendaraan = query("SELECT * FROM jenis_kendaraan");
+$sparepart = query("SELECT * FROM sparepart");
+$kendaraan = query("SELECT * FROM jenis_kendaraan");
 
-    if (isset($_POST['submit_harga'])) {
-        if (edit_harga($_POST) > 0) {
-            echo "
+if (isset($_POST['submit_harga'])) {
+    if (edit_harga($_POST) > 0) {
+        echo "
                     <script>
                     alert('Data Berhasil Diubah');
                     document.location.href='harga_sparepart.php';
                     </script>
                 ";
-        } else {
-            echo "
+    } else {
+        echo "
                     <script>
                     alert('Data Gagal Diubah');
                     document.location.href='edit_harga.php?id=" . $_GET['id'] . "';
                     </script>
                 ";
-        }
     }
+}
 ?>
 
 
@@ -64,15 +64,18 @@
 
                     <div class="mb-3">
                         <label for="idsparepart">Jenis Sparepart</label>
-                        <select class="form-select" id="idsparepart" aria-label="Default select example" name="idsparepart">
+                        <select style="border: 0.5px solid black;" class="form-select" id="idsparepart"
+                            aria-label="Default select example" name="idsparepart">
                             <?php foreach ($sparepart as $s): ?>
-                                <option value="<?= $s['idsparepart']; ?>" <?php echo ($s['idsparepart'] == $data['idsparepart']) ? 'selected' : ''; ?>><?= $s['sparepart']; ?></option>
+                                <option value="<?= $s['idsparepart']; ?>" <?php echo ($s['idsparepart'] == $data['idsparepart']) ? 'selected' : ''; ?>><?= $s['sparepart']; ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="idkendaraan">Jenis Kendaraan</label>
-                        <select class="form-select" id="idkendaraan" aria-label="Default select example" name="idkendaraan">
+                        <select style="border: 0.5px solid black;" class="form-select" id="idkendaraan"
+                            aria-label="Default select example" name="idkendaraan">
                             <?php foreach ($kendaraan as $k): ?>
                                 <option value="<?= $k['idkendaraan']; ?>" <?php echo ($k['idkendaraan'] == $data['idkendaraan']) ? 'selected' : ''; ?>><?= $k['nama_kendaraan']; ?></option>
                             <?php endforeach; ?>
@@ -80,8 +83,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="harga">Harga :</label>
-                        <input class="form-control" id="harga" value="<?= $data['harga']; ?>"
-                            name="harga">
+                        <input class="form-control" id="harga" value="<?= $data['harga']; ?>" name="harga">
                     </div>
 
                     <button type="submit" name="submit_harga" class="btn btn-primary w-100">

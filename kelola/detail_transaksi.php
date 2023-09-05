@@ -306,7 +306,8 @@ if (isset($_POST['bayar'])) {
         </div>
         <?php if ($data_transaksi[0]['status_transaksi'] == "Belum"): ?>
             <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#bayar">Bayar</button>
+                <button type="button" class="btn btn-success p-2" style="width: 200px" data-bs-toggle="modal"
+                    data-bs-target="#bayar">Bayar</button>
             </div>
         <?php endif; ?>
 

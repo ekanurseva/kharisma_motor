@@ -130,12 +130,6 @@ if (isset($_POST["submit_sparepart"])) {
                                 <input type="text" name="sparepart" class="form-control" id="sparepart"
                                     placeholder="masukkan nama sparepart">
                             </div>
-
-                            <div class="mb-3">
-                                <label for="deskripsi" class="form-label">Deskripsi</label>
-                                <textarea class="form-control" name="deskripsi" id="deskripsi" rows="3"
-                                    placeholder="masukkan deskripsi sparepart"></textarea>
-                            </div>
                         </div>
 
                         <!-- Modal footer -->

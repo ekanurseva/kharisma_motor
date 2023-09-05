@@ -1,33 +1,33 @@
 <?php
-    require_once('../controller/controller_transaksi.php');
-    validasi();
-    cek_transaksi();
+require_once('../controller/controller_transaksi.php');
+validasi();
+cek_transaksi();
 
-    // Seluruh data keluhan dibagi menjadi 2 kolom
-    $nopol = dekripsi($_GET['key']);
-    $antrian = query("SELECT * FROM antrian WHERE nopol = '$nopol' AND id_antrian = (SELECT MAX(id_antrian) FROM antrian WHERE nopol = '$nopol')") [0];
-    $idantrian = $antrian['id_antrian'];
+// Seluruh data keluhan dibagi menjadi 2 kolom
+$nopol = dekripsi($_GET['key']);
+$antrian = query("SELECT * FROM antrian WHERE nopol = '$nopol' AND id_antrian = (SELECT MAX(id_antrian) FROM antrian WHERE nopol = '$nopol')")[0];
+$idantrian = $antrian['id_antrian'];
 
-    $idant = enkripsi($idantrian);
+$idant = enkripsi($idantrian);
 
-    $data_servis = jumlah_data("SELECT * FROM servis");
-    $data1 = ceil($data_servis / 2);
-    $data2 = $data_servis - $data1;
-    $kumpul1 = query("SELECT * FROM servis LIMIT $data1");
-    $kumpul2 = query("SELECT * FROM servis LIMIT $data2 OFFSET $data1");
+$data_servis = jumlah_data("SELECT * FROM servis");
+$data1 = ceil($data_servis / 2);
+$data2 = $data_servis - $data1;
+$kumpul1 = query("SELECT * FROM servis LIMIT $data1");
+$kumpul2 = query("SELECT * FROM servis LIMIT $data2 OFFSET $data1");
 
-    $id = dekripsi($_COOKIE['KMmz19']);
-    $user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
+$id = dekripsi($_COOKIE['KMmz19']);
+$user = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
 
-    $kode_transaksi = kode_transaksi();
+$kode_transaksi = kode_transaksi();
 
-    if(isset($_POST['submit'])) {
-        if(create_servis($_POST) > 0) {
-            header("Location: estimasi.php?key=" . $idant);
-        } else {
-            header("Location: servis.php?key=" . $_GET['key']);
-        }
+if (isset($_POST['submit'])) {
+    if (create_servis($_POST) > 0) {
+        header("Location: estimasi.php?key=" . $idant);
+    } else {
+        header("Location: servis.php?key=" . $_GET['key']);
     }
+}
 
 ?>
 
@@ -75,8 +75,7 @@
             <div class="row">
                 <div class="mt-2">
                     <p style="text-align: justify; padding: 0 13px; margin-top: 10px; margin-bottom: 5px;">Pilih Jenis
-                        Keluhan Mengenai PermasalahanKendaraan Anda, Sistem Akan Mendiagnosa Jenis Servis yang Perlu
-                        Dilakukan yang Ditunjukkan pada Estimasi Nota</p>
+                        Servis Yang Ingin Diperbaiki</p>
                     <form method="post" action="">
                         <input type="hidden" name="idantrian" value="<?= $idantrian; ?>">
                         <input type="hidden" name="kode_transaksi" value="<?= $kode_transaksi; ?>">
@@ -87,7 +86,9 @@
                                     foreach ($kumpul1 as $k1):
                                         ?>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="servis[]" id="servis<?php echo $k1['idservis']; ?>" value="<?php echo $k1['idservis']; ?>">
+                                            <input class="form-check-input" type="checkbox" name="servis[]"
+                                                id="servis<?php echo $k1['idservis']; ?>"
+                                                value="<?php echo $k1['idservis']; ?>">
                                             <label class="form-check-label" for="servis<?php echo $k1['idservis']; ?>">
                                                 <?php echo $k1['jenis_servis']; ?>
                                             </label>
@@ -100,7 +101,9 @@
                                     <?php foreach ($kumpul2 as $k2):
                                         ?>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="servis[]" id="servis<?php echo $k2['idservis']; ?>" value="<?php echo $k2['idservis']; ?>">
+                                            <input class="form-check-input" type="checkbox" name="servis[]"
+                                                id="servis<?php echo $k2['idservis']; ?>"
+                                                value="<?php echo $k2['idservis']; ?>">
                                             <label class="form-check-label" for="servis<?php echo $k2['idservis']; ?>">
                                                 <?php echo $k2['jenis_servis']; ?>
                                             </label>
