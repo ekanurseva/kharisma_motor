@@ -4,7 +4,7 @@ body {
 
 /* navbar */
 .navbar {
-  background: #050a30;
+  background: #d03119;
 }
 .container .logo {
   width: 50px;
@@ -19,7 +19,7 @@ body {
   font-weight: bold;
 }
 .dropdown-menu {
-  background: #050a30;
+  background: #d03119;
   border: solid white;
 }
 

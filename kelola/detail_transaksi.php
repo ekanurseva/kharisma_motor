@@ -199,7 +199,7 @@ if (isset($_POST['bayar'])) {
                             </div>
                             <div class="col-7">
                                 <h6>:
-                                    <?= $data_transaksi[0]['tanggal_pelunasan']; ?>
+                                    <?= date('d-m-Y H:i:s', strtotime($data_transaksi[0]['tanggal_pelunasan'])); ?>
                                 </h6>
                             </div>
                         </div>
