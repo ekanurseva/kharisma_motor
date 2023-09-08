@@ -28,21 +28,8 @@ validasi_kasir();
     <!-- Content -->
     <div class="container">
         <div class="content py-3">
-            <div class="title text-center text-uppercase">
+            <div class="title text-center text-uppercase py-5">
                 <h4>SELAMAT DATANG KASIR</h4>
-            </div>
-            <div class="desk mt-4">
-                <div class="bg-image">
-                </div>
-                <h6 class="px-2 py-2" style="text-align: justify">Bengkel Mobil Kharisma Motor berdiri untuk pertama
-                    kalinya
-                    pada tahun 1999 dengan nama Puji Motor yang terletak di jalan Raya Playangan, Gebang, Cirebon.
-                    Bengkel ini merupakan buah dari kerjakeras si pemilik bengkel tersebut yang bernama Bapak Kasmari
-                    yang merintis dari nol hingga saat ini.</h6>
-                <h6 class="px-2">Hubungi kontak ini : 0812-1419-7766</h6>
-                <span class="px-2 fw-semibold" style="color: black; font-size: 16px; text-align: justify">Untuk
-                    menemukan alamat Bengkel Mobil Kharisma Motor <a href="https://maps.app.goo.gl/hKiYp4xWJxwEM4ar7"
-                        style="text-decoration: none;" target="_blank">Klik Di Sini</a></span>
             </div>
         </div>
     </div>

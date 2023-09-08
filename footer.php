@@ -18,8 +18,7 @@
             <p class="text-light fw-bold">Alamat :
                 <a href="https://maps.app.goo.gl/hKiYp4xWJxwEM4ar7"
                     style="text-align: justify; text-decoration: none; color: white;" target="_blank">Jl Raya
-                    Playangan, Kecamatan
-                    Gebang, Kabupaten Cirebon</a>
+                    Playangan, Kecamatan Gebang, Kabupaten Cirebon</a>
             </p>
         </div>
     </div>

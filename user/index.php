@@ -57,29 +57,7 @@ if ($cari_antrian > 0) {
                 <h4>SELAMAT DATANG</h4>
             </div>
             <div class="row">
-                <div class="col-6">
-                    <div class="title text-center text-uppercase mt-3 mb-1">
-                        <h5>BENGKEL MOBIL KHARISMA MOTOR</h5>
-                    </div>
-                    <div class="desk">
-                        <div class="bg-image">
-                        </div>
-                        <h6 class="px-2 py-2" style="text-align: justify">Bengkel Mobil Kharisma Motor berdiri untuk
-                            pertama
-                            kalinya
-                            pada tahun 1999 dengan nama Puji Motor yang terletak di jalan Raya Playangan, Gebang,
-                            Cirebon.
-                            Bengkel ini merupakan buah dari kerjakeras si pemilik bengkel tersebut yang bernama Bapak
-                            Kasmari
-                            yang merintis dari nol hingga saat ini.</h6>
-                        <h6 class="px-2">Hubungi kontak ini : 0812-1419-7766</h6>
-                        <span class="px-2 fw-semibold" style="color: black; font-size: 16px; text-align: justify">Untuk
-                            menemukan alamat Bengkel Mobil Kharisma Motor <a
-                                href="https://maps.app.goo.gl/hKiYp4xWJxwEM4ar7" style="text-decoration: none;"
-                                target="_blank">Klik Di Sini</a></span>
-                    </div>
-                </div>
-                <div class="col-6">
+                <div class="col-5">
                     <div class="title text-center text-uppercase mt-3 mb-1">
                         <h5>DAFTAR ANTRIAN</h5>
                     </div>
@@ -94,33 +72,8 @@ if ($cari_antrian > 0) {
                         </div>
                         <a href="../kelola/input_antrian.php" class="btn btn-primary mx-1 mb-1">Daftar Antrian</a>
                     </div>
-                    <!-- <table class="tabel" id="example">
-                        <thead>
-                            <tr>
-                                <th>No Antrian</th>
-                                <th>Status Antrian</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="text-center">
-                                    1
-                                </td>
-                                <td>
-                                    Dalam Pengerjaan
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">
-                                    2
-                                </td>
-                                <td>
-                                    Menunggu Suku Cadang
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table> -->
-
+                </div>
+                <div class="col-7">
                     <?php if ($cari_antrian > 0): ?>
                         <!-- Muncul ketika sudah daftar -->
                         <div class="title text-center text-uppercase mt-3 mb-1">
@@ -137,7 +90,7 @@ if ($cari_antrian > 0) {
                                         <?= $antrian['no_antrian']; ?>
                                     </h6>
                                 </div>
-                                <div class="text-center mt-3">
+                                <div class="text-center mt-4">
                                     <h6 class="fw-bold">Status Antrian</h6>
                                 </div>
                                 <div class="text-center">
@@ -145,12 +98,12 @@ if ($cari_antrian > 0) {
                                         <?= $antrian['status']; ?>
                                     </span>
                                 </div>
-                                <div class="text-center mt-3">
+                                <div class="text-center mt-4">
                                     <h6 class="fw-bold">Estimasi Waktu Selesai</h6>
                                 </div>
                                 <div class="text-center">
                                     <span style="font-size: 15px; font-weight: 600;">
-                                        11.00
+                                        09-09-2023 | 11.00
                                     </span>
                                 </div>
 

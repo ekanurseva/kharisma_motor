@@ -167,4 +167,32 @@ function validasi_no_user()
     }
 }
 
+function validasi_all()
+{
+    global $conn;
+    if (!isset($_COOKIE['KMmz19'])) {
+        echo "<script>
+                document.location.href='../logout.php';
+              </script>";
+        exit;
+    }
+
+    $id = dekripsi($_COOKIE['KMmz19']);
+
+    $cek = query("SELECT * FROM pengguna WHERE idpengguna = $id")[0];
+
+    $result = mysqli_query($conn, "SELECT * FROM pengguna WHERE idpengguna = '$id'");
+
+    if (mysqli_num_rows($result) !== 1) {
+        echo "<script>
+                document.location.href='../logout.php';
+              </script>";
+        exit;
+    } elseif ($cek['level'] == "User") {
+        echo "<script>
+                document.location.href='../logout.php';
+              </script>";
+        exit;
+    }
+}
 ?>

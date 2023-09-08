@@ -38,7 +38,7 @@ if (isset($_POST["submit_user"])) {
     <!-- Content -->
     <div class="container">
         <div class="boxx mt-5 mb-5"
-            style="border: 0.7px solid black; background: #050a30; border-radius: 12px; margin: 0 100px;">
+            style="border: 0.7px solid black; background: #d03119; border-radius: 12px; margin: 0 100px;">
             <h2 class="text-center text-white mt-2"><img src="../img/KHARISMA MOTOR.png"
                     style="width: 60px; margin-left: 10px">KHARISMA
                 MOTOR</h2>
@@ -81,12 +81,12 @@ if (isset($_POST["submit_user"])) {
 
                         <div class="row text-end mt-4 mb-4 me-1">
                             <span>Sudah Punya Akun?
-                                <a type="submit" href="../login.php" class="text-decoration-none text-info">
+                                <a type="submit" href="../login.php" class="text-decoration-none text-warning">
                                     Login
                                 </a>
                             </span>
                         </div>
-                        <button type="submit" name="submit_user" class="btn btn-primary w-100">
+                        <button type="submit" name="submit_user" class="btn btn-success w-100">
                             Submit
                         </button>
                     </form>

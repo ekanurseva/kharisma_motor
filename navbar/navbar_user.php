@@ -16,6 +16,9 @@
                     <a class="nav-link" href="../kelola/input_antrian.php">Daftar Antrian</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="../tentang">Tentang Bengkel</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="../logout.php">Logout</a>
                 </li>
             </ul>
