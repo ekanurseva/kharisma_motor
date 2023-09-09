@@ -184,24 +184,48 @@
         200000,
         215000
     );
-
-    $cek = in_array(215000, $prices1) ? "Ada" : "Gk";
-
-    var_dump($cek);
-    
-    
     
 
     // for($i = 0; $i < count($data); $i++) {
     //     $sparepart = $data[$i];
     //     mysqli_query($conn, "INSERT INTO sparepart VALUES (NULL, '$sparepart', 'asdasdasd')");
     // }
-    for($i = 0; $i < count($data); $i++) {
-        $idsparepart = $i + 1;
-        for($j = 1; $j <= 2; $j++) {
-            $harga = ${'prices' . $j}[$i];
-            // $query = "INSERT INTO harga_sparepart VALUES (NULL, '$j', '$idsparepart', '$harga')";
-            // mysqli_query($conn, "INSERT INTO harga_sparepart VALUES (NULL, '$j', '$idsparepart', '$harga')");
+    // for($i = 0; $i < count($data); $i++) {
+    //     $idsparepart = $i + 1;
+    //     for($j = 1; $j <= 2; $j++) {
+    //         $harga = ${'prices' . $j}[$i];
+    //         // $query = "INSERT INTO harga_sparepart VALUES (NULL, '$j', '$idsparepart', '$harga')";
+    //         // mysqli_query($conn, "INSERT INTO harga_sparepart VALUES (NULL, '$j', '$idsparepart', '$harga')");
+    //     }
+    // }
+
+    $harga = [
+        1500000, 300000, 117000, 1760000, 755000, 470050, 450000, 289500, 410000, 850000,
+        38000, 910000, 1620000, 195000, 290000, 187000, 109000, 820000, 190000, 250000,
+        150000, 100000, 698000, 25000, 550000, 85000, 181000, 350000, 900000, 215000,
+        400000, 225000, 80000, 250000, 950000, 300000, 75000, 50000, 2500000, 15000,
+        250000, 700000, 1500000, 500000, 800000, 450000, 80000, 300000, 150000, 200000,
+        200000, 215000
+    ];
+
+    // for($i = 0; $i < count($harga); $i++) {
+    //     $har = $harga[$i];
+    //     $idsparepart = $i + 1;
+    //     mysqli_query($conn, "INSERT INTO harga_sparepart VALUES (NULL, '3', '$idsparepart', '$har')");
+    // }
+
+    $idsparepart = [53, 54, 55, 57];
+    $data_kendaraan = query("SELECT * FROM jenis_kendaraan");
+
+    foreach($data_kendaraan as $dk) {
+        $idkendaraan = $dk['idkendaraan'];
+        foreach($idsparepart as $id) {
+            $cari_harga = jumlah_data("SELECT * FROM harga_sparepart WHERE idkendaraan = $idkendaraan AND idsparepart = $id");
+
+            if($cari_harga == 0) {
+                echo "Belum ada data dari kendaraan " . $dk['nama_kendaraan'] . " dan sparepartnya " . $id . "<br>";
+                // mysqli_query($conn, "INSERT INTO harga_sparepart VALUES (NULL, '$idkendaraan', '$id', '100000')");
+            }
         }
     }
 ?>

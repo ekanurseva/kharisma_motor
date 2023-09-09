@@ -281,6 +281,7 @@ if (isset($_POST['submit_estimasi'])) {
                                                 for ($k = 0; $k < count($sparepart); $k++):
                                                     $idsparepart = $sparepart[$k];
                                                     $data_sparepart = query("SELECT * FROM sparepart WHERE idsparepart = $idsparepart")[0];
+                                                    echo $idkendaraan . " " . $idsparepart . "<br>";
 
                                                     $data_harga = query("SELECT * FROM harga_sparepart WHERE idkendaraan = '$idkendaraan' AND idsparepart = '$idsparepart'")[0];
 

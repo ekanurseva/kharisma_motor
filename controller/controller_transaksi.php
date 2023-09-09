@@ -232,18 +232,12 @@
                 }
             }
         }
-        $data_transaksi2 = query("SELECT * FROM transaksi WHERE idantrian = $idantrian");
-
-        foreach($data_transaksi2 as $data_trans) {
-            if($data_trans['idservis'] != NULL) {
-                $idservis = $data_trans['idservis'];
-                $data_servis2 = query("SELECT * FROM servis WHERE idservis = $idservis")[0];
-    
-                $waktu += $data_servis2['waktu_pengerjaan'];
-            }
-        }
 
         $waktu += $waktu_sekarang;
+
+        $tunggu_sparepart = jumlah_data("SELECT * FROM antrian WHERE id_antrian <= $idantrian AND status = 'Menunggu Suku Cadang'");
+
+        $waktu += $tunggu_sparepart * 7200;
 
         return $waktu;
     }

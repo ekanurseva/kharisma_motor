@@ -16,6 +16,9 @@ if ($cari_antrian > 0) {
     $idantrian = $antrian['id_antrian'];
     $idkendaraan = $antrian['id_kendaraan'];
     $nopol = enkripsi($antrian['nopol']);
+    
+    $estimasi_waktu = estimasi_waktu($antrian);
+    $waktu = date('d-m-Y | H:i:s', $estimasi_waktu);
 
     $cari_transaksi = jumlah_data("SELECT * FROM transaksi WHERE idantrian = $idantrian");
     if ($cari_transaksi > 0) {
@@ -103,7 +106,7 @@ if ($cari_antrian > 0) {
                                 </div>
                                 <div class="text-center">
                                     <span style="font-size: 15px; font-weight: 600;">
-                                        09-09-2023 | 11.00
+                                        <?= $waktu; ?>
                                     </span>
                                 </div>
 

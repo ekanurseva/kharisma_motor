@@ -91,9 +91,17 @@ if (isset($_POST['submit_antrian'])) {
                                     <select style="border: 0.5px solid black;" name="kendaraan" id=""
                                         class="form-control" required>
                                         <option value="" selected hidden>--Pilih Jenis Kendaraan Anda--</option>
-                                        <?php foreach ($data_kendaraan as $kendaraan): ?>
+                                        <?php 
+                                            foreach ($data_kendaraan as $kendaraan): 
+                                                $idkendaraan = $kendaraan['idkendaraan'];
+                                                $jumlah_harga = jumlah_data("SELECT * FROM harga_sparepart WHERE idkendaraan = $idkendaraan");
+                                                if($jumlah_harga > 0) :
+                                        ?>
                                             <option value="<?= $kendaraan['idkendaraan']; ?>"><?= $kendaraan['nama_kendaraan']; ?></option>
-                                        <?php endforeach; ?>
+                                        <?php 
+                                                endif;
+                                            endforeach; 
+                                        ?>
                                     </select>
                                 </div>
                             </div>

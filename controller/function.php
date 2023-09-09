@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Asia/Jakarta');
 //koneksi ke database mysql, isi parameter sesuai web server masing-masing
 $conn = mysqli_connect("localhost", "root", "", "kharisma_motor");
 
